@@ -11,7 +11,7 @@ import okhttp3.HttpUrl;
 public abstract class UnselectTask extends NetworkTask {
 
     @Override
-    protected String getURL() {
+    protected HttpUrl getURL() {
         return null;
     }
 
