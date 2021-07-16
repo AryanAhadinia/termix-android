@@ -1,8 +1,13 @@
 package android.termix.ssc.ce.sharif.edu.network;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
@@ -12,39 +17,38 @@ import okhttp3.Request;
  * @since 1
  */
 public abstract class NetworkTask implements Runnable {
-    private static final String serverURL = "";
+    private static final String SERVER_URL = "";
+    private static OkHttpClient okHttpClient;
 
-    private static String token;
-    private static long expiry;
-
-    public static String getToken() {
-        return token;
+    public static String getServerUrl() {
+        return SERVER_URL;
     }
 
-    public static void setToken(String token) {
-        NetworkTask.token = token;
-    }
+    public static OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar() {
+                private final HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();
 
-    public static boolean hasCredential() {
-        if (token == null) {
-            return false;
+                @Override
+                public List<Cookie> loadForRequest(HttpUrl httpUrl) {
+                    List<Cookie> cookies = cookieStore.get(httpUrl);
+                    return cookies != null ? cookies : new ArrayList<>();
+                }
+
+                @Override
+                public void saveFromResponse(HttpUrl httpUrl, List<Cookie> list) {
+                    cookieStore.put(httpUrl, list);
+                }
+            }).build();
         }
-        return System.currentTimeMillis() < expiry;
+        return okHttpClient;
     }
 
-    protected abstract String getURL();
+    protected abstract HttpUrl getURL();
 
     protected Request getRequest() {
         return new Request.Builder().url(getURL()).build();
     }
-
-    protected Request getRequestWithCredential() {
-        return new Request.Builder()
-                .url(serverURL + getURL())
-                .addHeader("Cookie", String.format(Locale.US, "token=%s", getToken()))
-                .build();
-    }
-
 
     public abstract void onResult(Object o);
 
