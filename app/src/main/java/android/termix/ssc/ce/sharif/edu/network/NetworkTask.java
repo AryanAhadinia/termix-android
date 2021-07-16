@@ -1,5 +1,7 @@
 package android.termix.ssc.ce.sharif.edu.network;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,7 @@ import okhttp3.Request;
  * @since 1
  */
 public abstract class NetworkTask implements Runnable {
-    private static final String SERVER_URL = "";
+    private static final String SERVER_URL = "http://b93f64cc3b77.ngrok.io";
     private static OkHttpClient okHttpClient;
 
     public static String getServerUrl() {
@@ -29,14 +31,15 @@ public abstract class NetworkTask implements Runnable {
             okHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar() {
                 private final HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();
 
+                @NotNull
                 @Override
-                public List<Cookie> loadForRequest(HttpUrl httpUrl) {
+                public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
                     List<Cookie> cookies = cookieStore.get(httpUrl);
                     return cookies != null ? cookies : new ArrayList<>();
                 }
 
                 @Override
-                public void saveFromResponse(HttpUrl httpUrl, List<Cookie> list) {
+                public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
                     cookieStore.put(httpUrl, list);
                 }
             }).build();
@@ -51,6 +54,8 @@ public abstract class NetworkTask implements Runnable {
     }
 
     public abstract void onResult(Object o);
+
+    public abstract void onUnexpected(NetworkException e);
 
     public abstract void onError(Exception e);
 }
