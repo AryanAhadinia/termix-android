@@ -25,17 +25,12 @@ public abstract class GetAllCoursesTask extends NetworkTask {
         getOkHttpClient().newCall(getRequest()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                onError(e);
+
             }
 
             @Override
             public void onResponse(Call call, Response response) {
-                try {
-                    String result = response.body().string();
-                    // TODO
-                } catch (IOException e) {
-                    onError(e);
-                }
+
             }
         });
     }
