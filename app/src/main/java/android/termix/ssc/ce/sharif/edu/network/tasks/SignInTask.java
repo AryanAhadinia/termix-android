@@ -1,16 +1,10 @@
 package android.termix.ssc.ce.sharif.edu.network.tasks;
 
-import android.termix.ssc.ce.sharif.edu.model.Course;
-import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.NetworkTask;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;

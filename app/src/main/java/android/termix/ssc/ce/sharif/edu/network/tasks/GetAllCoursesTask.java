@@ -45,15 +45,18 @@ public abstract class GetAllCoursesTask extends NetworkTask {
                         HashMap<Integer, ArrayList<Course>> courses = new HashMap<>();
                         resultJSON.keys().forEachRemaining(s -> {
                             try {
-                                courses.put(Integer.parseInt(s),
-                                        Course.parseCourseArray(resultJSON.getJSONArray(s)));
+                                courses.put(Integer.parseInt(s), Course.parseCourseArray(resultJSON.getJSONArray(s)));
                             } catch (JSONException e) {
                                 onError(e);
                             }
                         });
                         onResult(courses);
                     } else {
-                        onException(new NetworkException(response.body().string(), response.code()));
+                        final HashMap<Integer, String> errorMessages = new HashMap<>();
+                        errorMessages.put(500, "مشکلات داخلی سرور، لطفا مجددا تلاش کنید.");
+                        onException(new NetworkException(errorMessages.getOrDefault(response.code(),
+                                "دوباره تلاش کنید."),
+                                response.code()));
                     }
                 } catch (IOException | JSONException e) {
                     onError(e);

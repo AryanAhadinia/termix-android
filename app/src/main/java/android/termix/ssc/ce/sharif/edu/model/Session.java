@@ -1,13 +1,10 @@
 package android.termix.ssc.ce.sharif.edu.model;
 
-import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
+/**
+ * @author AryanAhadinia
+ * @since 1
+ */
 public class Session implements Comparable<Session> {
-    private static HashMap<Integer, String> weekdays;
-
     private final int day;
     private final int startHour;
     private final int startMin;
@@ -20,24 +17,6 @@ public class Session implements Comparable<Session> {
         this.startMin = startMin;
         this.endHour = endHour;
         this.endMin = endMin;
-    }
-
-    public static ArrayList<Session> parseClassTimeArray(JSONArray classTimeArray) {
-        return null;
-    }
-
-    public static HashMap<Integer, String> getWeekdays() {
-        if (weekdays == null) {
-            weekdays = new HashMap<>();
-            weekdays.put(0, "شنبه");
-            weekdays.put(1, "یکشنبه");
-            weekdays.put(2, "دوشنبه");
-            weekdays.put(3, "سه شنبه");
-            weekdays.put(4, "چهارشنبه");
-            weekdays.put(5, "پنج شنبه");
-            weekdays.put(6, "جمعه");
-        }
-        return weekdays;
     }
 
     @Override

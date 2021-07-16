@@ -7,6 +7,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author AryanAhadinia
+ * @since 1
+ */
 public class Course implements Comparable<Course> {
     private static HashMap<Integer, String> departments;
 
@@ -18,12 +22,13 @@ public class Course implements Comparable<Course> {
     private final int capacity;
     private final String instructor;
     private final String examTime;
-    private final ArrayList<Session> sessions;
+    private final SessionParser sessionParser;
     private final String infoMessage;
     private final String onRegisterMessage;
 
+
     private Course(int depId, int courseId, int groupId, int unit, String title, int capacity,
-                   String instructor, String examTime, ArrayList<Session> classTime,
+                   String instructor, String examTime, SessionParser sessionParser,
                    String infoMessage, String onRegisterMessage) {
         this.depId = depId;
         this.courseId = courseId;
@@ -33,7 +38,7 @@ public class Course implements Comparable<Course> {
         this.capacity = capacity;
         this.instructor = instructor;
         this.examTime = examTime;
-        this.sessions = classTime;
+        this.sessionParser = sessionParser;
         this.infoMessage = infoMessage;
         this.onRegisterMessage = onRegisterMessage;
     }
@@ -47,7 +52,7 @@ public class Course implements Comparable<Course> {
                 courseJSON.getInt("capacity"),
                 courseJSON.getString("instructor"),
                 courseJSON.getString("examTime"),
-                Session.parseClassTimeArray(courseJSON.getJSONArray("classTimeArray")),
+                new SessionParser(courseJSON.getJSONArray("classTimeArray")),
                 courseJSON.getString("info"),
                 courseJSON.getString("onRegister"));
     }
@@ -60,6 +65,32 @@ public class Course implements Comparable<Course> {
         }
         courses.sort(Course::compareTo);
         return courses;
+    }
+
+    public static HashMap<Integer, String> getDepartments() {
+        if (departments == null) {
+            departments = new HashMap<>();
+            departments.put(20, "مهندسی عمران");
+            departments.put(21, "مهندسی صنایع");
+            departments.put(22, "علوم ریاضی");
+            departments.put(23, "شیمی");
+            departments.put(24, "فیزیک");
+            departments.put(25, "مهندسی برق");
+            departments.put(26, "مهندسی شیمی و نفت");
+            departments.put(27, "مهندسی و علم مواد");
+            departments.put(28, "مهندسی مکانیک");
+            departments.put(30, "مرکز تربیت بدنی");
+            departments.put(31, "مرکز زیان ها و زبان شناسی");
+            departments.put(33, "مرکز کارگاه ها");
+            departments.put(35, "مرکز گرافیک");
+            departments.put(37, "مرکز معارف اسلامی");
+            departments.put(40, "مهندسی کامپیوتر");
+            departments.put(42, "گروه فلسفه علم");
+            departments.put(44, "مدیریت و اقتصاد");
+            departments.put(45, "مهندسی هوافضا");
+            departments.put(46, "مهندسی انرژی");
+        }
+        return departments;
     }
 
     public int getDepId() {
@@ -94,8 +125,20 @@ public class Course implements Comparable<Course> {
         return examTime;
     }
 
-    public ArrayList<Session> getClassTime() {
-        return sessions;
+    public ArrayList<Session> getSessions() {
+        try {
+            return sessionParser.getSessions();
+        } catch (JSONException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public String getSessionsString() {
+        try {
+            return sessionParser.getSessionsSting();
+        } catch (JSONException e) {
+            return "";
+        }
     }
 
     public String getInfoMessage() {
@@ -104,32 +147,6 @@ public class Course implements Comparable<Course> {
 
     public String getOnRegisterMessage() {
         return onRegisterMessage;
-    }
-
-    public static HashMap<Integer, String> getDepartments() {
-        if (departments == null) {
-            departments = new HashMap<>();
-            departments.put(20, "مهندسی عمران");
-            departments.put(21, "مهندسی صنایع");
-            departments.put(22, "علوم ریاضی");
-            departments.put(23, "شیمی");
-            departments.put(24, "فیزیک");
-            departments.put(25, "مهندسی برق");
-            departments.put(26, "مهندسی شیمی و نفت");
-            departments.put(27, "مهندسی و علم مواد");
-            departments.put(28, "مهندسی مکانیک");
-            departments.put(30, "مرکز تربیت بدنی");
-            departments.put(31, "مرکز زیان ها و زبان شناسی");
-            departments.put(33, "مرکز کارگاه ها");
-            departments.put(35, "مرکز گرافیک");
-            departments.put(37, "مرکز معارف اسلامی");
-            departments.put(40, "مهندسی کامپیوتر");
-            departments.put(42, "گروه فلسفه علم");
-            departments.put(44, "مدیریت و اقتصاد");
-            departments.put(45, "مهندسی هوافضا");
-            departments.put(46, "مهندسی انرژی");
-        }
-        return departments;
     }
 
     @Override
@@ -144,5 +161,23 @@ public class Course implements Comparable<Course> {
             return 1;
         }
         return 0;
+    }
+
+    public static class CourseIdentifier {
+        private final int courseId;
+        private final int groupId;
+
+        public CourseIdentifier(int courseId, int groupId) {
+            this.courseId = courseId;
+            this.groupId = groupId;
+        }
+
+        public int getCourseId() {
+            return courseId;
+        }
+
+        public int getGroupId() {
+            return groupId;
+        }
     }
 }

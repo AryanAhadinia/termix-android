@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new SignUpTask("aryanahadinia24@gmail.com", "123456789") {
+        new GetAllCoursesTask() {
             @Override
             public void onResult(Object o) {
 
