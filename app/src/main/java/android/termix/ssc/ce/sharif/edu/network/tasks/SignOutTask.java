@@ -12,7 +12,7 @@ public abstract class SignOutTask extends NetworkTask {
 
     @Override
     protected HttpUrl getURL() {
-        return null;
+        return HttpUrl.parse(getServerUrl().concat("/api/user/sign_out")).newBuilder().build();
     }
 
     @Override

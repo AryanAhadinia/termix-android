@@ -11,6 +11,7 @@ import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * An abstract class for networking.
@@ -19,7 +20,7 @@ import okhttp3.Request;
  * @since 1
  */
 public abstract class NetworkTask implements Runnable {
-    private static final String SERVER_URL = "http://b93f64cc3b77.ngrok.io";
+    private static final String SERVER_URL = "http://219a625bb33b.ngrok.io";
     private static OkHttpClient okHttpClient;
 
     public static String getServerUrl() {
@@ -53,9 +54,13 @@ public abstract class NetworkTask implements Runnable {
         return new Request.Builder().url(getURL()).build();
     }
 
+    protected Request getRequest(RequestBody requestBody) {
+        return new Request.Builder().url(getURL()).post(requestBody).build();
+    }
+
     public abstract void onResult(Object o);
 
-    public abstract void onUnexpected(NetworkException e);
+    public abstract void onException(NetworkException e);
 
     public abstract void onError(Exception e);
 }

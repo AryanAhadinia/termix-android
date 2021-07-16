@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,7 +53,7 @@ public abstract class GetAllCoursesTask extends NetworkTask {
                         });
                         onResult(courses);
                     } else {
-                        onUnexpected(new NetworkException(response.body().string(), response.code()));
+                        onException(new NetworkException(response.body().string(), response.code()));
                     }
                 } catch (IOException | JSONException e) {
                     onError(e);
