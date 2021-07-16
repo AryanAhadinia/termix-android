@@ -12,6 +12,8 @@ import okhttp3.Request;
  * @since 1
  */
 public abstract class NetworkTask implements Runnable {
+    private static final String serverURL = "";
+
     private static String token;
     private static long expiry;
 
@@ -30,7 +32,7 @@ public abstract class NetworkTask implements Runnable {
         return System.currentTimeMillis() < expiry;
     }
 
-    protected abstract HttpUrl getURL();
+    protected abstract String getURL();
 
     protected Request getRequest() {
         return new Request.Builder().url(getURL()).build();
@@ -38,7 +40,7 @@ public abstract class NetworkTask implements Runnable {
 
     protected Request getRequestWithCredential() {
         return new Request.Builder()
-                .url(getURL())
+                .url(serverURL + getURL())
                 .addHeader("Cookie", String.format(Locale.US, "token=%s", getToken()))
                 .build();
     }
