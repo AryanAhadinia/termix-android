@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Termix</string>
+    <string name="content_description_end_icon">VoiceSearch</string>
+    <string name="search_hint">جستجو کن</string>
 </resources>
