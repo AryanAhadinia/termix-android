@@ -11,4 +11,8 @@
     <string name="confirm_password_hint">confirm password</string>
     <string name="login">LOGIN</string>
     <string name="sign_up">SIGN UP</string>
+    <string name="notification">اعلانات</string>
+    <string name="notification_time">زمان اعلانات</string>
+    <string name="change_email">تغییر ایمیل</string>
+    <string name="change_password">تغییر رمز</string>
 </resources>
