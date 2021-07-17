@@ -16,7 +16,6 @@ import okhttp3.Response;
  * @since 1
  */
 public abstract class SignOutTask extends NetworkTask {
-
     @Override
     protected HttpUrl getURL() {
         return HttpUrl.parse(getServerUrl().concat("/api/user/sign_out")).newBuilder().build();
