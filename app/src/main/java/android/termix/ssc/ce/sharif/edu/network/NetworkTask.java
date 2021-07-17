@@ -36,6 +36,14 @@ public abstract class NetworkTask implements Runnable {
         return new Request.Builder().url(getURL()).post(requestBody).build();
     }
 
+    protected Request getPutRequest(RequestBody requestBody) {
+        return new Request.Builder().url(getURL()).put(requestBody).build();
+    }
+
+    protected Request getDeleteRequest(RequestBody requestBody) {
+        return new Request.Builder().url(getURL()).delete(requestBody).build();
+    }
+
     public abstract void onResult(Object o);
 
     public abstract void onException(NetworkException e);
