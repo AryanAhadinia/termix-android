@@ -27,9 +27,9 @@ public class Course implements Comparable<Course> {
     private final String onRegisterMessage;
 
 
-    private Course(int depId, int courseId, int groupId, int unit, String title, int capacity,
-                   String instructor, String examTime, SessionParser sessionParser,
-                   String infoMessage, String onRegisterMessage) {
+    public Course(int depId, int courseId, int groupId, int unit, String title, int capacity,
+                  String instructor, String examTime, SessionParser sessionParser,
+                  String infoMessage, String onRegisterMessage) {
         this.depId = depId;
         this.courseId = courseId;
         this.groupId = groupId;
@@ -139,6 +139,10 @@ public class Course implements Comparable<Course> {
         } catch (JSONException e) {
             return "";
         }
+    }
+
+    public String getSessionJSON() {
+        return sessionParser.getSessionJsonArray().toString();
     }
 
     public String getInfoMessage() {
