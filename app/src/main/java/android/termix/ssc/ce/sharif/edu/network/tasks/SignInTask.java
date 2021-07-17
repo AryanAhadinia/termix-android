@@ -1,10 +1,13 @@
 package android.termix.ssc.ce.sharif.edu.network.tasks;
 
+import android.termix.ssc.ce.sharif.edu.model.Account;
+import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.NetworkTask;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,12 +43,26 @@ public abstract class SignInTask extends NetworkTask {
         getOkHttpClient().newCall(getRequest(requestBody)).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("F");
+                onError(e);
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-                System.out.println("R");
+                try {
+                    if (response.isSuccessful()) {
+                        onResult(new Account(email, Account.getRole(response.body().string()), true));
+                    } else {
+                        final HashMap<Integer, String> errorMessages = new HashMap<>();
+                        errorMessages.put(400, "درخواست شما معتبر نیست.");
+                        errorMessages.put(500, "مشکلات داخلی سرور، لطفا مجددا تلاش کنید.");
+                        errorMessages.put(401, "گذرواژه معتبر نیست.");
+                        errorMessages.put(403, "حساب کاربری تایید شده نیست.");
+                        errorMessages.put(404, "چنین حسابی وجود ندارد.");
+                        onException(new NetworkException(errorMessages.get(response.code()), response.code()));
+                    }
+                } catch (IOException e) {
+                    onError(e);
+                }
             }
         });
     }
