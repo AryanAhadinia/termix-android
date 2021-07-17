@@ -3,7 +3,6 @@ package android.termix.ssc.ce.sharif.edu.network;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Cookie;
@@ -30,18 +29,17 @@ public abstract class NetworkTask implements Runnable {
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar() {
-                private final HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();
+                private List<Cookie> cookies;
 
                 @NotNull
                 @Override
                 public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
-                    List<Cookie> cookies = cookieStore.get(httpUrl);
                     return cookies != null ? cookies : new ArrayList<>();
                 }
 
                 @Override
                 public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
-                    cookieStore.put(httpUrl, list);
+                    cookies = list;
                 }
             }).build();
         }
