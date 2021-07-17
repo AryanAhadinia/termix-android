@@ -1,6 +1,5 @@
 package android.termix.ssc.ce.sharif.edu.network.tasks;
 
-import android.termix.ssc.ce.sharif.edu.model.Account;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.NetworkTask;
 

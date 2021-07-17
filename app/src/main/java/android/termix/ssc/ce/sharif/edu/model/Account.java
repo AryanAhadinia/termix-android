@@ -2,6 +2,9 @@ package android.termix.ssc.ce.sharif.edu.model;
 
 import java.io.IOException;
 
+/**
+ * @author AryanAhadinia
+ */
 public class Account {
     private final String email;
     private final Role role;
