@@ -25,7 +25,7 @@ public class Account {
         return verified;
     }
 
-    enum Role {
+    public enum Role {
         ADMIN,
         STUDENT
     }

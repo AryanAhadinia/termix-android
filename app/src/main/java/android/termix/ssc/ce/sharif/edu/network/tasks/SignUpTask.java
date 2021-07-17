@@ -48,18 +48,16 @@ public abstract class SignUpTask extends NetworkTask {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-                try {
-                    if (response.isSuccessful()) {
-                        onResult(new Account(email, Account.getRole(response.body().string()), true));
-                    } else {
-                        final HashMap<Integer, String> errorMessages = new HashMap<>();
-                        errorMessages.put(400, "درخواست شما معتبر نیست.");
-                        errorMessages.put(409, "قبلا ثبت نام کرده اید.");
-                        errorMessages.put(500, "مشکلات داخلی سرور، لطفا مجددا تلاش کنید.");
-                        onException(new NetworkException(errorMessages.get(response.code()), response.code()));
-                    }
-                } catch (IOException e) {
-                    onError(e);
+                if (response.isSuccessful()) {
+                    onResult(new Account(email, Account.Role.STUDENT, false));
+                } else {
+                    final HashMap<Integer, String> errorMessages = new HashMap<>();
+                    errorMessages.put(400, "درخواست شما معتبر نیست.");
+                    errorMessages.put(409, "قبلا ثبت نام کرده اید.");
+                    errorMessages.put(500, "مشکلات داخلی سرور، لطفا مجددا تلاش کنید.");
+                    onException(new NetworkException(errorMessages.getOrDefault(response.code(),
+                            "دوباره تلاش کنید."),
+                            response.code()));
                 }
             }
         });
