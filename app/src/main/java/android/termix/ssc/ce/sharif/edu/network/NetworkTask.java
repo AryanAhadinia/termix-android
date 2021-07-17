@@ -32,7 +32,7 @@ public abstract class NetworkTask implements Runnable {
         return new Request.Builder().url(getURL()).build();
     }
 
-    protected Request getRequest(RequestBody requestBody) {
+    protected Request getPostRequest(RequestBody requestBody) {
         return new Request.Builder().url(getURL()).post(requestBody).build();
     }
 
