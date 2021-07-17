@@ -19,7 +19,7 @@ import okhttp3.RequestBody;
  * @since 1
  */
 public abstract class NetworkTask implements Runnable {
-    private static final String SERVER_URL = "http://75740544d1c4.ngrok.io";
+    private static final String SERVER_URL = "http://cb67bdd8aecb.ngrok.io";
     private static OkHttpClient okHttpClient;
 
     public static String getServerUrl() {
@@ -28,20 +28,7 @@ public abstract class NetworkTask implements Runnable {
 
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar() {
-                private List<Cookie> cookies;
-
-                @NotNull
-                @Override
-                public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
-                    return cookies != null ? cookies : new ArrayList<>();
-                }
-
-                @Override
-                public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
-                    cookies = list;
-                }
-            }).build();
+            okHttpClient = new OkHttpClient.Builder().cookieJar(CookieManager.getInstance()).build();
         }
         return okHttpClient;
     }
