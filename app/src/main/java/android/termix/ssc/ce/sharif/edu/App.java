@@ -1,6 +1,7 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.app.Application;
+import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 
 /**
@@ -12,5 +13,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         CookieManager.init(getApplicationContext());
+        DatabaseManager.init(getApplicationContext());
     }
 }
