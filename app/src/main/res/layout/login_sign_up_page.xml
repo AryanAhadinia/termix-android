@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/termix_logo" />
+        tools:srcCompat="@drawable/untitled" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/signup_login_tablayout"
