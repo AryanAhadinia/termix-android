@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragment_container_view, LoadingFragment.class, null).commit();
         }
         setContentView(R.layout.activity_main);
-        setContentView(R.layout.activity_main);
         new GetAllCoursesTask() {
             @Override
             public void onResult(Object o) {
