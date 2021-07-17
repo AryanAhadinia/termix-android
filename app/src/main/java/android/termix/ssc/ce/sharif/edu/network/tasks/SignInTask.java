@@ -40,7 +40,7 @@ public abstract class SignInTask extends NetworkTask {
                 .add("email", email)
                 .add("password", password)
                 .build();
-        getOkHttpClient().newCall(getRequest(requestBody)).enqueue(new Callback() {
+        getOkHttpClient().newCall(getPostRequest(requestBody)).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 onError(e);
