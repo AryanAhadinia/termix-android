@@ -7,14 +7,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="234dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="50dp"
-        android:contentDescription="@string/application_logo_description"
+        android:layout_width="253dp"
+        android:layout_height="123dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/untitled" />
+        app:srcCompat="@drawable/untitled" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/signup_login_tablayout"
