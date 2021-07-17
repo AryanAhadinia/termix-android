@@ -26,7 +26,10 @@ public class SessionParser {
         this.sessionJsonArray = sessionJsonArray;
     }
 
-    private void parse() throws JSONException {
+    private synchronized void parse() throws JSONException {
+        if (sessions != null) {
+            return;
+        }
         sessions = new ArrayList<>();
         ArrayList<String> sessionsArray = new ArrayList<>();
         for (int i = 0; i < sessionJsonArray.length(); i++) {
