@@ -19,12 +19,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
     public final static int REQUEST_ALL = 0;
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
         setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         new GetAllCoursesTask() {
             @Override
             public void onResult(Object o) {
@@ -77,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.constraint_layout);
         setUpVoiceSearch();
         setUpSettings();
+        Intent intent = new Intent(this, LoginSignupActivity.class);
+        startActivity(intent);
     }
 
     private void setUpVoiceSearch() {
