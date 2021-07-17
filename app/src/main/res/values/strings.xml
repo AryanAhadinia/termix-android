@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Termix</string>
     <string name="content_description_end_icon">VoiceSearch</string>
+    <string name="content_description_start_icon">Settings</string>
     <string name="search_hint">جستجو کن</string>
     <string name="sign_in_button">sign in</string>
     <string name="login_button">login</string>
@@ -11,9 +12,9 @@
     <string name="confirm_password_hint">confirm password</string>
     <string name="login">LOGIN</string>
     <string name="sign_up">SIGN UP</string>
-    <string name="notification">اعلانات</string>
-    <string name="notification_time">زمان اعلانات</string>
-    <string name="change_email">تغییر ایمیل</string>
-    <string name="change_password">تغییر رمز</string>
-    <string name="logout">خروج از حساب</string>
+    <string name="notification">آگهی‌ها</string>
+    <string name="notification_time">زمان آگهی</string>
+    <string name="change_email">دگرش رایانامه</string>
+    <string name="change_password">دگرش گذرواژه</string>
+    <string name="logout">برون‌رفت از رایشگری</string>
 </resources>

@@ -4,8 +4,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -24,11 +27,14 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+    public final static int REQUEST_ALL = 0;
+    public final static String[] PERMISSIONS = {Manifest.permission.INTERNET,
+            Manifest.permission.RECORD_AUDIO};
     private AutoCompleteTextView searchBar;
     private TextInputLayout textInputLayout;
     private ConstraintLayout constraintLayout;
 
-    ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
+    private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
             ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             if (result.getData() != null) {
@@ -42,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragment_container_view, LoadingFragment.class, null)
+                    .commit();
+        }
         setContentView(R.layout.activity_main);
         new GetAllCoursesTask() {
             @Override

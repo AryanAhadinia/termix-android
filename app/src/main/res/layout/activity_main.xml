@@ -16,7 +16,7 @@
         app:endIconContentDescription="@string/content_description_end_icon"
         app:endIconDrawable="@drawable/ic_baseline_mic_24"
         app:endIconMode="custom"
-        app:startIconContentDescription="@string/content_description_end_icon"
+        app:startIconContentDescription="@string/content_description_start_icon"
         app:startIconDrawable="@drawable/ic_baseline_settings_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,5 +32,10 @@
             android:hint="@string/search_hint" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
