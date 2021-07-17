@@ -1,6 +1,5 @@
 package android.termix.ssc.ce.sharif.edu.network.tasks;
 
-import android.termix.ssc.ce.sharif.edu.model.Account;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.NetworkTask;
@@ -8,7 +7,6 @@ import android.termix.ssc.ce.sharif.edu.network.NetworkTask;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +22,6 @@ import okhttp3.Response;
  * @since 1
  */
 public abstract class GetMySelectionsTask extends NetworkTask {
-
     @Override
     protected HttpUrl getURL() {
         return HttpUrl.parse(getServerUrl().concat("/api/schedule/my_selections")).newBuilder().build();
