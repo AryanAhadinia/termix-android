@@ -1,5 +1,7 @@
 package android.termix.ssc.ce.sharif.edu.model;
 
+import android.termix.ssc.ce.sharif.edu.model.Session;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +56,10 @@ public class SessionParser {
             sessionsArray.add(stringBuilder.toString());
         }
         sessionsSting = String.join(" و ", sessionsArray);
+    }
+
+    public JSONArray getSessionJsonArray() {
+        return sessionJsonArray;
     }
 
     public ArrayList<Session> getSessions() throws JSONException {

@@ -15,10 +15,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "edu.sharif.ce.ssc.termix";
 
-    public static final String DEPARTMENT_TABLE = "department";
-    public static final String DEPARTMENT_ID = "depId";
-    public static final String DEPARTMENT_NAME = "depName";
-
     public static final String SELECTION_TABLE = "selection";
     public static final String SELECTION_COURSE_ID = "depId";
     public static final String SELECTION_GROUP_ID = "groupId";
@@ -33,7 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COURSE_INSTRUCTOR = "instructor";
     public static final String COURSE_EXAM_TIME = "examTime";
     public static final String COURSE_SESSIONS_JSON = "classTimeJSON";
-    public static final String COURSE_SESSIONS_STRING = "sessionsString";
     public static final String COURSE_INFO_MESSAGE = "infoMessage";
     public static final String COURSE_ON_REGISTER_MESSAGE = "onRegisterMessage";
 
@@ -43,16 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createDepartmentTable(db);
         createSelectionTable(db);
         createCourseTable(db);
-    }
-
-    public void createDepartmentTable(SQLiteDatabase db) {
-        db.execSQL("create table if not exists " + DEPARTMENT_TABLE + " (" +
-                DEPARTMENT_ID + " INTEGER constraint " + DEPARTMENT_TABLE + "_pk primary key autoincrement," +
-                DEPARTMENT_NAME + " TEXT" +
-                ");");
     }
 
     public void createSelectionTable(SQLiteDatabase db) {
@@ -79,14 +66,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void rebase(SQLiteDatabase db) {
-        dropDepartmentTable(db);
         dropSelectionTable(db);
         dropCourseTable(db);
         onCreate(db);
-    }
-
-    public void dropDepartmentTable(SQLiteDatabase db) {
-        db.execSQL("drop table if exists " + DEPARTMENT_TABLE);
     }
 
     public void dropSelectionTable(SQLiteDatabase db) {
