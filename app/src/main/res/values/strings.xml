@@ -15,4 +15,5 @@
     <string name="notification_time">زمان اعلانات</string>
     <string name="change_email">تغییر ایمیل</string>
     <string name="change_password">تغییر رمز</string>
+    <string name="logout">خروج از حساب</string>
 </resources>

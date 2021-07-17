@@ -17,7 +17,7 @@
         app:endIconDrawable="@drawable/ic_baseline_mic_24"
         app:endIconMode="custom"
         app:startIconContentDescription="@string/content_description_end_icon"
-        app:startIconDrawable="@drawable/ic_settings_black_24dp"
+        app:startIconDrawable="@drawable/ic_baseline_settings_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

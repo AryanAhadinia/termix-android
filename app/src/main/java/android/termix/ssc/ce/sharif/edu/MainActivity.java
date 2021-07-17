@@ -81,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
         textInputLayout.setStartIconOnClickListener(v -> {
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.settings_popup, null);
-            PopupWindow popup = new PopupWindow(popupView, 300, 600, true);
+            final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+            PopupWindow popup = new PopupWindow(popupView, (int) (200 * scale + 0.5f),
+                    (int) (200 * scale + 0.5f), true);
             popup.showAtLocation(constraintLayout, Gravity.CENTER, 0, 0);
         });
     }
