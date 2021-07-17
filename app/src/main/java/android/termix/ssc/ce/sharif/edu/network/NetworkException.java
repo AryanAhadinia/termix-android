@@ -1,5 +1,9 @@
 package android.termix.ssc.ce.sharif.edu.network;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Locale;
+
 /**
  * NetworkException
  * Indicate an error on http status code.
@@ -17,5 +21,11 @@ public class NetworkException extends Exception {
 
     public int getStatusCode() {
         return statusCode;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return String.format(Locale.US, "%d: %s", getStatusCode(), getMessage());
     }
 }
