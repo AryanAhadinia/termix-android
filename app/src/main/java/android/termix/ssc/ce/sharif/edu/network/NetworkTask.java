@@ -1,12 +1,5 @@
 package android.termix.ssc.ce.sharif.edu.network;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,7 +12,7 @@ import okhttp3.RequestBody;
  * @since 1
  */
 public abstract class NetworkTask implements Runnable {
-    private static final String SERVER_URL = "http://cb67bdd8aecb.ngrok.io";
+    private static final String SERVER_URL = "http://b37b7f119293.ngrok.io";
     private static OkHttpClient okHttpClient;
 
     public static String getServerUrl() {
