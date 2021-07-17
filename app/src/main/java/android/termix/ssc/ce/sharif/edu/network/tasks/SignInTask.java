@@ -58,8 +58,9 @@ public abstract class SignInTask extends NetworkTask {
                         errorMessages.put(401, "گذرواژه معتبر نیست.");
                         errorMessages.put(403, "حساب کاربری تایید شده نیست.");
                         errorMessages.put(404, "چنین حسابی وجود ندارد.");
-                        onException(new NetworkException(errorMessages.get(response.code()), response.code()));
-                    }
+                        onException(new NetworkException(errorMessages.getOrDefault(response.code(),
+                                "دوباره تلاش کنید."),
+                                response.code()));                    }
                 } catch (IOException e) {
                     onError(e);
                 }
