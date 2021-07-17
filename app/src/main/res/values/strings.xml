@@ -3,15 +3,15 @@
     <string name="content_description_end_icon">VoiceSearch</string>
     <string name="content_description_start_icon">Settings</string>
     <string name="search_hint">جستجو کن</string>
-    <string name="sign_in_button">نام نویسی</string>
-    <string name="login_button">درون شد</string>
+    <string name="sign_in_button">نام‌نویسی</string>
+    <string name="login_button">درون‌شد</string>
     <string name="application_logo_description">application logo</string>
     <string name="password_hint">گذرواژه</string>
     <string name="email_hint">رایانامه</string>
     <string name="terms_of_service_consent">من با شرایط استفاده از برنامه موافقم.</string>
     <string name="confirm_password_hint">confirm password</string>
-    <string name="login">درون شد</string>
-    <string name="sign_up">نام نویسی</string>
+    <string name="login">درون‌شد</string>
+    <string name="sign_up">نام‌نویسی</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notification">آگهی‌ها</string>

@@ -9,6 +9,7 @@
         android:id="@+id/imageView"
         android:layout_width="253dp"
         android:layout_height="123dp"
+        android:contentDescription="@string/application_logo_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +36,7 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/login_signup_pager"
-        android:layout_width="410dp"
+        android:layout_width="match_parent"
         android:layout_height="499dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
