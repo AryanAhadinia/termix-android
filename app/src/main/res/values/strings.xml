@@ -20,11 +20,11 @@
     <string name="change_password">دگرش گذرواژه</string>
     <string name="logout">برون‌رفت از رایشگری</string>
     <string name="saturday">شنبه</string>
-    <string name="sunday">یک شنبه</string>
+    <string name="sunday">یک‌شنبه</string>
     <string name="monday">دوشنبه</string>
-    <string name="tuesday">سه شنبه</string>
+    <string name="tuesday">سه‌شنبه</string>
     <string name="wednesday">چهارشنبه</string>
-    <string name="thursday">پنج شنبه</string>
+    <string name="thursday">پنج‌شنبه</string>
     <string name="departments">دانشکده ها</string>
     <string name="course_title">برنامه سازی پیشرفته</string>
     <string name="course_instructor">علی چکاه</string>
@@ -33,4 +33,5 @@
     <string name="course_time">یک شنبه و سه شنبه 7:30 الی 9:00</string>
     <string name="delete">حذف</string>
     <string name="recycle_bin">حذف</string>
+    <string name="sign_out">برون شد</string>
 </resources>

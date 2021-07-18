@@ -50,7 +50,7 @@
                 android:fontFamily="@font/mj_ghalam"
                 android:text="@string/saturday"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                 android:fontFamily="@font/mj_ghalam"
                 android:text="@string/sunday"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                 android:fontFamily="@font/mj_ghalam"
                 android:text="@string/monday"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -122,7 +122,7 @@
                 android:fontFamily="@font/mj_ghalam"
                 android:text="@string/tuesday"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                 android:fontFamily="@font/mj_ghalam"
                 android:text="@string/wednesday"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -171,7 +171,7 @@
                 android:fontFamily="@font/mj_ghalam"
                 android:text="@string/thursday"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
             <View
                 android:layout_width="match_parent"
