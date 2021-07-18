@@ -9,7 +9,7 @@
     <string name="password_hint">گذرواژه</string>
     <string name="email_hint">رایانامه</string>
     <string name="terms_of_service_consent">من با شرایط استفاده از برنامه موافقم.</string>
-    <string name="confirm_password_hint">confirm password</string>
+    <string name="confirm_password_hint">تکرار گذرواژه</string>
     <string name="login">درون‌شد</string>
     <string name="sign_up">نام‌نویسی</string>
     <!-- TODO: Remove or change this placeholder text -->
