@@ -21,7 +21,7 @@ import okhttp3.Response;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class GetAllCoursesTask extends NetworkTask {
+public abstract class GetAllCoursesTask extends NetworkTask<HashMap<Integer, ArrayList<Course>>> {
     @Override
     protected HttpUrl getURL() {
         return HttpUrl.parse(getServerUrl().concat("/api/schedule/all_courses")).newBuilder().build();

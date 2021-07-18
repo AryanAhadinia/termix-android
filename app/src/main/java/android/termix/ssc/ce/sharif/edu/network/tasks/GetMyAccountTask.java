@@ -20,7 +20,7 @@ import okhttp3.Response;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class GetMyAccountTask extends NetworkTask {
+public abstract class GetMyAccountTask extends NetworkTask<Account> {
     @Override
     protected HttpUrl getURL() {
         return HttpUrl.parse(getServerUrl().concat("/api/user/my_account")).newBuilder().build();

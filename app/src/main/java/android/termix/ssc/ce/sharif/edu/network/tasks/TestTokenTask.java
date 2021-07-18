@@ -15,7 +15,7 @@ import okhttp3.Response;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class TestTokenTask extends NetworkTask {
+public abstract class TestTokenTask extends NetworkTask<Object> {
     @Override
     protected HttpUrl getURL() {
         return HttpUrl.parse(getServerUrl().concat("/test/token")).newBuilder().build();

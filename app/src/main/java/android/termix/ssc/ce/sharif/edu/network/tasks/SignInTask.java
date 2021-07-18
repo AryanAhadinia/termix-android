@@ -20,7 +20,7 @@ import okhttp3.Response;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class SignInTask extends NetworkTask {
+public abstract class SignInTask extends NetworkTask<Account> {
     private final String email;
     private final String password;
 

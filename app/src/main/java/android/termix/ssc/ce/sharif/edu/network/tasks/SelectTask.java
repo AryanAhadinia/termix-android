@@ -19,7 +19,7 @@ import okhttp3.Response;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class SelectTask extends NetworkTask {
+public abstract class SelectTask extends NetworkTask<Object> {
     private final int courseId;
     private final int groupId;
 

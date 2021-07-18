@@ -19,7 +19,7 @@ import okhttp3.Response;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class ChangePasswordTask extends NetworkTask {
+public abstract class ChangePasswordTask extends NetworkTask<Object> {
     private final String newPassword;
 
     public ChangePasswordTask(String newPassword) {

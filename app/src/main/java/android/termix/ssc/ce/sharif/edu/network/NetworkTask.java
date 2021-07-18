@@ -11,7 +11,7 @@ import okhttp3.RequestBody;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class NetworkTask implements Runnable {
+public abstract class NetworkTask<T> implements Runnable {
     private static final String SERVER_URL = "http://34b35ec9a3c1.ngrok.io";
     private static OkHttpClient okHttpClient;
 
@@ -44,7 +44,7 @@ public abstract class NetworkTask implements Runnable {
         return new Request.Builder().url(getURL()).delete(requestBody).build();
     }
 
-    public abstract void onResult(Object o);
+    public abstract void onResult(T o);
 
     public abstract void onException(NetworkException e);
 
