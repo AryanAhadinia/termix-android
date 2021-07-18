@@ -19,6 +19,26 @@ public class Session implements Comparable<Session> {
         this.endMin = endMin;
     }
 
+    public int getDay() {
+        return day;
+    }
+
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public int getStartMin() {
+        return startMin;
+    }
+
+    public int getEndHour() {
+        return endHour;
+    }
+
+    public int getEndMin() {
+        return endMin;
+    }
+
     @Override
     public int compareTo(Session o) {
         if (this.day < o.day) {
