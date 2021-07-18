@@ -35,16 +35,16 @@ public class CourseSession implements Comparable<CourseSession> {
         return courseSessions;
     }
 
-    public static HashMap<Integer, ArrayList<CourseSession>> getWeekdayCourseSessionsMap(ArrayList<Course> courses) {
-        HashMap<Integer, ArrayList<CourseSession>> map = new HashMap<>();
-        for (int i = 0; i < 7; i++) {
-            map.put(i, new ArrayList<>());
+    public static ArrayList<ArrayList<CourseSession>> getWeekdayCourseSessionsMap(ArrayList<Course> courses) {
+        ArrayList<ArrayList<CourseSession>> list = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            list.add(new ArrayList<>());
         }
         for (Course course : courses) {
             for (Session session : course.getSessions()) {
-                map.get(session.getDay()).add(new CourseSession(course, session));
+                list.get(session.getDay()).add(new CourseSession(course, session));
             }
         }
-        return map;
+        return list;
     }
 }
