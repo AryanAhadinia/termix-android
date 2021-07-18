@@ -61,8 +61,12 @@ public abstract class AllCoursesLoader extends Loader<HashMap<Integer, ArrayList
         } else {
             try {
                 HashMap<Integer, ArrayList<Course>> result = DatabaseManager.getInstance().loadCourses();
-                postResult(Source.LOCAL, result, Source.LOCAL);
-                cachedResult = result;
+                if (result.keySet().size() != 0) {
+                    postResult(Source.LOCAL, result, Source.LOCAL);
+                    cachedResult = result;
+                } else {
+                    onFail(new NullPointerException());
+                }
             } catch (JSONException e) {
                 onFail(e);
             }

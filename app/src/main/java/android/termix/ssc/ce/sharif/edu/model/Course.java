@@ -26,7 +26,6 @@ public class Course implements Comparable<Course> {
     private final String infoMessage;
     private final String onRegisterMessage;
 
-
     public Course(int depId, int courseId, int groupId, int unit, String title, int capacity,
                   String instructor, String examTime, SessionParser sessionParser,
                   String infoMessage, String onRegisterMessage) {
