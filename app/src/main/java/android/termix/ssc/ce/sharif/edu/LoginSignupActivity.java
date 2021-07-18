@@ -26,7 +26,7 @@ public class LoginSignupActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private LinearLayout stripes;
 
-    private String[] titles = new String[]{"Login", "SignUp"};
+    private String[] titles = new String[]{"نام‌نویسی", "درون‌شد"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
