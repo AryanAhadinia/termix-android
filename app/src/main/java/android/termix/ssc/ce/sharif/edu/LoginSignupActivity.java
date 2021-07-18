@@ -1,9 +1,15 @@
 package android.termix.ssc.ce.sharif.edu;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -14,9 +20,11 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class LoginSignupActivity extends AppCompatActivity {
 
-    TabLayout tabLayout;
-    TabLayoutMediator tabLayoutMediator;
-    ViewPager2 viewPager;
+    private TabLayout tabLayout;
+    private TabLayoutMediator tabLayoutMediator;
+    private ViewPager2 viewPager;
+    private ConstraintLayout constraintLayout;
+    private LinearLayout stripes;
 
     private String[] titles = new String[]{"Login", "SignUp"};
 
@@ -25,7 +33,16 @@ public class LoginSignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_sign_up_page);
         // removing toolbar elevation
-        getSupportActionBar().setElevation(0);
+//        getSupportActionBar().setElevation(0);
+        constraintLayout = findViewById(R.id.root_layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(0);
+        animationDrawable.setExitFadeDuration(2000);
+        animationDrawable.start();
+
+        stripes = findViewById(R.id.stripes);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.stripe_anim);
+        stripes.startAnimation(animation);
 
         viewPager = findViewById(R.id.login_signup_pager);
         viewPager.setAdapter(new ViewPagerFragmentAdapter(this));
