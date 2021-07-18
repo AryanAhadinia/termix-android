@@ -29,7 +29,7 @@ public class LoginSignupActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.login_signup_pager);
         viewPager.setAdapter(new ViewPagerFragmentAdapter(this));
-        tabLayout = findViewById(R.id.signup_login_tablayout);
+        tabLayout = findViewById(R.id.signup_login_tab_layout);
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> tab.setText(titles[position])).attach();
     }
