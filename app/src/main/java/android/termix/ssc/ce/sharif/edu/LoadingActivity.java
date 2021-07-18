@@ -33,7 +33,12 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void onResult(Object o) {
                 // Network Ok, Token OK
-                Intent intent = new Intent(LoadingActivity.this, MainActivity.class);
+//                Intent intent = new Intent(LoadingActivity.this, MainActivity.class);
+//                startActivity(intent);
+
+                //TODO
+
+                Intent intent = new Intent(LoadingActivity.this, LoginSignupActivity.class);
                 startActivity(intent);
             }
 
