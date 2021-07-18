@@ -40,10 +40,6 @@ public class LoginSignupActivity extends AppCompatActivity {
         animationDrawable.setExitFadeDuration(2000);
         animationDrawable.start();
 
-        stripes = findViewById(R.id.stripes);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.stripe_anim);
-        stripes.startAnimation(animation);
-
         viewPager = findViewById(R.id.login_signup_pager);
         viewPager.setAdapter(new ViewPagerFragmentAdapter(this));
         tabLayout = findViewById(R.id.signup_login_tab_layout);
