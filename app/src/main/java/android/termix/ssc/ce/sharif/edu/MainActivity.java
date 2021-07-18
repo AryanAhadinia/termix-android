@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
+import android.termix.ssc.ce.sharif.edu.scheduleUI.AllCoursesDialogFragment;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,6 +20,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,12 +63,7 @@ public class MainActivity extends AppCompatActivity {
             DayAdapter adapter = new DayAdapter();
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this) {
-                @Override
-                public boolean canScrollVertically() {
-                    return false;
-                }
-            });
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
             adapters.add(adapter);
         }
 
@@ -80,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
 
         searchBar.setOnLongClickListener(e -> {
-            // TODO: all courses dialog
+            DialogFragment dialog = new AllCoursesDialogFragment();
+            dialog.show(getSupportFragmentManager(), "Courses");
             return true;
         });
 

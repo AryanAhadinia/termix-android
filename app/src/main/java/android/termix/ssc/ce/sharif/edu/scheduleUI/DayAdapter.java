@@ -30,7 +30,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
     public CourseTileViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View courseView = inflater.inflate(R.layout.layout_course_tile, parent, false);
+        View courseView = inflater.inflate(R.layout.layout_course_frame, parent, false);
         return new CourseTileViewHolder(courseView);
     }
 

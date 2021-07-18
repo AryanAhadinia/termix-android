@@ -26,4 +26,11 @@
     <string name="wednesday">چهارشنبه</string>
     <string name="thursday">پنج شنبه</string>
     <string name="departments">دانشکده ها</string>
+    <string name="course_title">برنامه سازی پیشرفته</string>
+    <string name="course_instructor">علی چکاه</string>
+    <string name="course_unit">3</string>
+    <string name="course_identifier">40153, 4</string>
+    <string name="course_time">یک شنبه و سه شنبه 7:30 الی 9:00</string>
+    <string name="delete">حذف</string>
+    <string name="recycle_bin">حذف</string>
 </resources>

@@ -1,7 +1,6 @@
 package android.termix.ssc.ce.sharif.edu.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CourseSession implements Comparable<CourseSession> {
     private final Course course;
