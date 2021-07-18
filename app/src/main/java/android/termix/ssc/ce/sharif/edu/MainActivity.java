@@ -1,41 +1,55 @@
 package android.termix.ssc.ce.sharif.edu;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.termix.ssc.ce.sharif.edu.network.NetworkException;
-import android.termix.ssc.ce.sharif.edu.network.tasks.GetAllCoursesTask;
-import android.termix.ssc.ce.sharif.edu.network.tasks.SignUpTask;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.PopupWindow;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
-    public final static String[] PERMISSIONS = {Manifest.permission.INTERNET,
-            Manifest.permission.RECORD_AUDIO};
-    private AutoCompleteTextView searchBar;
-    private TextInputLayout textInputLayout;
+    public final static String[] PERMISSIONS = {Manifest.permission.INTERNET, Manifest.permission.RECORD_AUDIO};
+
     private ConstraintLayout constraintLayout;
+    private TextInputLayout textInputLayout;
+    private AutoCompleteTextView searchBar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        constraintLayout = findViewById(R.id.constraint_layout);
+        textInputLayout = findViewById(R.id.text_input_layout);
+        searchBar = findViewById(R.id.search_bar);
+
+        textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
+
+        searchBar.setOnLongClickListener(e -> {
+            // TODO: all courses dialog
+            return true;
+        });
+
+        //        setUpSettings(); // TODO
+
+    }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
             ActivityResultContracts.StartActivityForResult(), result -> {
@@ -48,52 +62,18 @@ public class MainActivity extends AppCompatActivity {
         }
     });
 
-    private final ActivityResultLauncher<String[]> mPermissionResult = registerForActivityResult(
-            new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-                try {
-                    if (result.get(Manifest.permission.RECORD_AUDIO)) {
-                        setUpVoiceSearch();
-                    } else {
-                        Log.e(TAG, "onActivityResult: RECORD AUDIO PERMISSION REJECTED!");
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "onActivityResult: PERMISSION FAILED! (NULL)");
-                }
-            });
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, LoadingFragment.class, null).commit();
+    private final ActivityResultLauncher<String[]> mPermissionResult = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+        try {
+            if (result.get(Manifest.permission.RECORD_AUDIO)) {
+                setUpVoiceSearch();
+            } else {
+                Log.e(TAG, "onActivityResult: RECORD AUDIO PERMISSION REJECTED!");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "onActivityResult: PERMISSION FAILED! (NULL)");
         }
-        setContentView(R.layout.activity_main);
-        new GetAllCoursesTask() {
-            @Override
-            public void onResult(Object o) {
+    });
 
-            }
-
-            @Override
-            public void onException(NetworkException e) {
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        }.run();
-
-        textInputLayout = findViewById(R.id.text_input_layout);
-        searchBar = findViewById(R.id.search_bar);
-        constraintLayout = findViewById(R.id.constraint_layout);
-        textInputLayout.setEndIconOnClickListener(v -> mPermissionResult.launch(PERMISSIONS));
-        setUpSettings();
-        Intent intent = new Intent(this, LoginSignupActivity.class);
-        startActivity(intent);
-    }
 
     private void setUpVoiceSearch() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -104,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpSettings() {
-        textInputLayout.setStartIconOnClickListener(v -> {
+        textInputLayout.setEndIconOnClickListener(v -> {
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.settings_popup, null);
             final float scale = getApplicationContext().getResources().getDisplayMetrics().density;

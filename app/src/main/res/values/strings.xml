@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Termix</string>
-    <string name="content_description_end_icon">VoiceSearch</string>
-    <string name="content_description_start_icon">Settings</string>
+    <string name="content_description_start_icon">VoiceSearch</string>
+    <string name="content_description_end_icon">Settings</string>
     <string name="search_hint">جستجو کن</string>
     <string name="sign_in_button">نام‌نویسی</string>
     <string name="login_button">درون‌شد</string>
@@ -19,4 +19,10 @@
     <string name="change_email">دگرش رایانامه</string>
     <string name="change_password">دگرش گذرواژه</string>
     <string name="logout">برون‌رفت از رایشگری</string>
+    <string name="saturday">شنبه</string>
+    <string name="sunday">یک شنبه</string>
+    <string name="monday">دوشنبه</string>
+    <string name="tuesday">سه شنبه</string>
+    <string name="wednesday">چهارشنبه</string>
+    <string name="thursday">پنج شنبه</string>
 </resources>
