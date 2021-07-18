@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
+import android.termix.ssc.ce.sharif.edu.network.NetworkException;
+import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.AllCoursesDialogFragment;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
@@ -44,6 +46,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        new TestTokenTask() {
+            @Override
+            public void onResult(Object o) {
+                System.out.println("salam");
+            }
+
+            @Override
+            public void onException(NetworkException e) {
+                System.out.println("salam");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                System.out.println("salam");
+            }
+        }.run();
+
         setContentView(R.layout.activity_main);
 
         constraintLayout = findViewById(R.id.constraint_layout);
