@@ -7,49 +7,59 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="rtl"
-        android:padding="8dp"
-        android:textDirection="rtl"
-        app:endIconContentDescription="@string/content_description_end_icon"
-        app:endIconDrawable="@drawable/ic_baseline_settings_24dp"
-        app:endIconMode="custom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startIconContentDescription="@string/content_description_start_icon"
-        app:startIconDrawable="@drawable/ic_baseline_mic_24">
-
-        <AutoCompleteTextView
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/search_hint"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:textDirection="rtl" />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/text_input_layout">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
+                android:textDirection="rtl"
+                app:endIconContentDescription="@string/content_description_end_icon"
+                app:endIconDrawable="@drawable/ic_baseline_settings_24dp"
+                app:endIconMode="custom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:startIconContentDescription="@string/content_description_start_icon"
+                app:startIconDrawable="@drawable/ic_baseline_mic_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/search_hint"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:textDirection="rtl" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/text_saturday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/saturday" />
+                android:fontFamily="@font/mj_ghalam"
+                android:text="@string/saturday"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/night_mode_button" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_saturday"
@@ -61,7 +71,18 @@
                 android:id="@+id/text_sunday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/sunday" />
+                android:fontFamily="@font/mj_ghalam"
+                android:text="@string/sunday"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/night_mode_button" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_sunday"
@@ -73,7 +94,18 @@
                 android:id="@+id/text_monday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/monday" />
+                android:fontFamily="@font/mj_ghalam"
+                android:text="@string/monday"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/night_mode_button" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_monday"
@@ -85,19 +117,42 @@
                 android:id="@+id/text_tuesday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tuesday" />
+                android:fontFamily="@font/mj_ghalam"
+                android:text="@string/tuesday"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/night_mode_button" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_tuesday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:isScrollContainer="false"
                 android:overScrollMode="never" />
 
             <TextView
                 android:id="@+id/text_wednesday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/wednesday" />
+                android:fontFamily="@font/mj_ghalam"
+                android:text="@string/wednesday"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/night_mode_button" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_wednesday"
@@ -109,7 +164,18 @@
                 android:id="@+id/text_thursday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/thursday" />
+                android:fontFamily="@font/mj_ghalam"
+                android:text="@string/thursday"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/night_mode_button" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_thursday"

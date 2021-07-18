@@ -3,6 +3,7 @@ package android.termix.ssc.ce.sharif.edu.scheduleUI;
 import android.content.Context;
 import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.model.Course;
+import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHolder> {
-    private final ArrayList<Course> courses;
+    private final ArrayList<CourseSession> sessions;
 
     public DayAdapter() {
-        this.courses = new ArrayList<>();
-    }
-
-    public DayAdapter(ArrayList<Course> courses) {
-        this.courses = courses;
+        this.sessions = new ArrayList<>();
     }
 
     @NonNull
@@ -39,23 +36,44 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CourseTileViewHolder holder, int position) {
-        Course course = courses.get(position);
-
-
+        CourseSession session = sessions.get(position);
+        holder.setCourseSession(session);
     }
 
     @Override
     public int getItemCount() {
-        return this.courses.size();
+        return this.sessions.size();
     }
 
-    public static class CourseTileViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
-        private Course course;
-        private TextView unitTextView;
-        private TextView idTextView;
-        private TextView titleTextView;
-        private TextView instructorTextView;
-        private TextView timesTextView;
+    public void insertCourseSessionAndNotify(CourseSession courseSession) {
+        notifyItemInserted(insertCourseSession(courseSession));
+    }
+
+    public int insertCourseSession(CourseSession courseSession) {
+        sessions.add(courseSession);
+        sessions.sort(CourseSession::compareTo);
+        return sessions.indexOf(courseSession);
+    }
+
+    public void insertCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+        insertCourseSessions(courseSessions);
+        notifyDataSetChanged();
+    }
+
+    public void insertCourseSessions(ArrayList<CourseSession> courseSessions) {
+        sessions.addAll(courseSessions);
+        sessions.sort(CourseSession::compareTo);
+    }
+
+    public static class CourseTileViewHolder extends RecyclerView.ViewHolder
+            implements View.OnLongClickListener {
+        private CourseSession courseSession;
+
+        private final TextView unitTextView;
+        private final TextView idTextView;
+        private final TextView titleTextView;
+        private final TextView instructorTextView;
+        private final TextView timesTextView;
 
         public CourseTileViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -67,10 +85,12 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
             itemView.setOnLongClickListener(this);
         }
 
-        public void setCourse(Course course) {
-            this.course = course;
+        public void setCourseSession(CourseSession courseSession) {
+            this.courseSession = courseSession;
+            Course course = courseSession.getCourse();
             this.unitTextView.setText(String.valueOf(course.getUnit()));
-            this.idTextView.setText(String.format(Locale.US,"%d, %d", course.getCourseId(), course.getGroupId()));
+            this.idTextView.setText(String.format(Locale.US, "%d, %d", course.getCourseId(),
+                    course.getGroupId()));
             this.titleTextView.setText(course.getTitle());
             this.instructorTextView.setText(course.getInstructor());
             this.timesTextView.setText(course.getSessionsString());

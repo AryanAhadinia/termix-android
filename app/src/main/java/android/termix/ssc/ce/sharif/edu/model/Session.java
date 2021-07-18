@@ -39,6 +39,10 @@ public class Session implements Comparable<Session> {
         return endMin;
     }
 
+    public float getLength() {
+        return (((endHour * 60) + endMin) - ((startHour * 60) + startMin)) /(float) 60;
+    }
+
     @Override
     public int compareTo(Session o) {
         if (this.day < o.day) {

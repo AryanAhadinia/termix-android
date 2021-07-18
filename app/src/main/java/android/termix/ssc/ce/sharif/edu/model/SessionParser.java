@@ -50,9 +50,9 @@ public class SessionParser {
             }
             stringBuilder.append(String.join(" و ", daysArray))
                     .append(" ")
-                    .append(String.format(Locale.US, "%d:%d", startHour, startMin))
+                    .append(String.format(Locale.US, "%d:%02d", startHour, startMin))
                     .append(" تا ")
-                    .append(String.format(Locale.US, "%d:%d", endHour, endMin));
+                    .append(String.format(Locale.US, "%d:%02d", endHour, endMin));
             sessionsArray.add(stringBuilder.toString());
         }
         sessionsSting = String.join(" و ", sessionsArray);

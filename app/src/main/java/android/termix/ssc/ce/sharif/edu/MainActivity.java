@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.termix.ssc.ce.sharif.edu.model.Course;
+import android.termix.ssc.ce.sharif.edu.model.CourseSession;
+import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +19,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -30,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView searchBar;
+    private ArrayList<RecyclerView> recyclerViews;
+    private ArrayList<DayAdapter> adapters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,36 @@ public class MainActivity extends AppCompatActivity {
         textInputLayout = findViewById(R.id.text_input_layout);
         searchBar = findViewById(R.id.search_bar);
 
+        recyclerViews = new ArrayList<>();
+        recyclerViews.add(findViewById(R.id.recycler_saturday));
+        recyclerViews.add(findViewById(R.id.recycler_sunday));
+        recyclerViews.add(findViewById(R.id.recycler_monday));
+        recyclerViews.add(findViewById(R.id.recycler_tuesday));
+        recyclerViews.add(findViewById(R.id.recycler_wednesday));
+        recyclerViews.add(findViewById(R.id.recycler_thursday));
+
+        adapters = new ArrayList<>();
+        for (RecyclerView recyclerView : recyclerViews) {
+            DayAdapter adapter = new DayAdapter();
+            recyclerView.setAdapter(adapter);
+            recyclerView.setNestedScrollingEnabled(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            });
+            adapters.add(adapter);
+        }
+
+
+        ArrayList<Course> test = Course.getTestList();
+        ArrayList<ArrayList<CourseSession>> testMap = CourseSession.getWeekdayCourseSessionsMap(test);
+        for (int i = 0; i < adapters.size(); i++) {
+            adapters.get(i).insertCourseSessionsAndNotify(testMap.get(i));
+        }
+
+
         textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
 
         searchBar.setOnLongClickListener(e -> {
@@ -48,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //        setUpSettings(); // TODO
+
 
     }
 
