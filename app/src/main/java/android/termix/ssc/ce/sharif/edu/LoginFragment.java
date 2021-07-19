@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() < 32 && password.length() > 8;
+        return password.length() < 33 && password.length() > 7;
     }
 
     private void makeToastAndStartFadeIn(String message) {

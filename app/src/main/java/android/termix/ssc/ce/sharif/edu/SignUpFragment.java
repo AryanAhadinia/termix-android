@@ -23,26 +23,43 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.regex.Pattern;
 
 public class SignUpFragment extends Fragment {
+    TextInputEditText emailText;
+    TextInputEditText passwordText;
+    TextInputEditText repeatPasswordText;
+    Button signUpButton;
+    CheckBox checkBox;
+    ProgressBar progressBar;
+    Animation animFadeOut, animFadeIn;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sign_up_fragment, container, false);
-        TextInputEditText emailText = root.findViewById(R.id.email_new);
-        TextInputEditText passwordText = root.findViewById(R.id.password_new);
-        TextInputEditText repeatPasswordText = root.findViewById(R.id.password_repeat);
-        Button signUpButton = root.findViewById(R.id.signup);
-        CheckBox checkBox = root.findViewById(R.id.checkBox);
+
+        emailText = root.findViewById(R.id.email_new);
+        passwordText = root.findViewById(R.id.password_new);
+        repeatPasswordText = root.findViewById(R.id.password_repeat);
+        signUpButton = root.findViewById(R.id.signup);
+        checkBox = root.findViewById(R.id.checkBox);
+        progressBar = root.findViewById(R.id.progress_signup);
 
         emailText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
         passwordText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
         repeatPasswordText.setOnFocusChangeListener(LoginSignupActivity
                 .getEditTextFocusChangeListener());
 
-        Handler handler = new Handler();
+        setUpButtonAnimations();
+        setUpSignUpButton();
+        return root;
+    }
 
-        ProgressBar progressBar = root.findViewById(R.id.progress_signup);
+    private void setUpButtonAnimations() {
+        setUpFadeInAnimation();
+        setUpFadeOutAnimation();
+    }
 
-        Animation animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in);
+    private void setUpFadeInAnimation() {
+        animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in);
         animFadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation arg0) {
@@ -58,7 +75,10 @@ public class SignUpFragment extends Fragment {
             public void onAnimationEnd(Animation arg0) {
             }
         });
-        Animation animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out);
+    }
+
+    private void setUpFadeOutAnimation() {
+        animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out);
         animFadeOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation arg0) {
@@ -74,76 +94,78 @@ public class SignUpFragment extends Fragment {
                 signUpButton.setAlpha(0);
             }
         });
+    }
+
+    private boolean isEmailValid(String email) {
+        return Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+" +
+                ")*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01" +
+                "-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z" +
+                "0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-" +
+                "9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:" +
+                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0" +
+                "b\\x0c\\x0e-\\x7f])+)])").matcher(email).matches();
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password.length() < 33 && password.length() > 7;
+    }
+
+    private void makeToastAndStartFadeIn(String message) {
+        Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+        signUpButton.startAnimation(animFadeIn);
+    }
+
+    private void runSignUpTask(String email, String password, Handler handler) {
+        new SignUpTask(email, password) {
+            @Override
+            public void onResult(Account o) {
+                LoginSignupActivity loginSignupActivity = LoginSignupActivity.getLoginSignupActivityWeakReference().get();
+                if (loginSignupActivity != null) {
+                    loginSignupActivity.goToMainActivity();
+                }
+            }
+
+            @Override
+            public void onException(NetworkException e) {
+                Log.e("SIGN_IN_EXCEPT: ", e.getMessage());
+                handler.post(() -> makeToastAndStartFadeIn(e.getMessage()));
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e("SIGN_IN_ERROR: ", e.getMessage());
+                handler.post(() -> makeToastAndStartFadeIn("اینترنت در دسترس نیست."));
+            }
+        }.run();
+    }
+
+    private void setUpSignUpButton() {
+        Handler handler = new Handler();
 
         signUpButton.setOnClickListener(v -> {
             signUpButton.startAnimation(animFadeOut);
             String email = emailText.getText().toString();
             String password = passwordText.getText().toString();
             String repeatPassword = repeatPasswordText.getText().toString();
-            if (!Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-" +
-                    "]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\" +
-                    "[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])" +
-                    "?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][" +
-                    "0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[" +
-                    "a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f" +
-                    "]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])").matcher(email).matches()) {
-                Toast toast = Toast.makeText(requireContext(), "رایانامه معتبر نیست.",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-                signUpButton.startAnimation(animFadeIn);
+
+            if (!isEmailValid(email)) {
+                makeToastAndStartFadeIn("رایانامه معتبر نیست.");
                 return;
             }
-            if (password.length() < 8 || password.length() > 32) {
-                Toast toast = Toast.makeText(requireContext(), "گذرواژه باید بین ۸ تا ۳۲ " +
-                        "نویسه باشد.", Toast.LENGTH_SHORT);
-                toast.show();
-                signUpButton.startAnimation(animFadeIn);
+            if (!isPasswordValid(password)) {
+                makeToastAndStartFadeIn("گذرواژه باید بین ۸ تا ۳۲ نویسه باشد.");
                 return;
             }
             if (!repeatPassword.equals(password)) {
-                Toast toast = Toast.makeText(requireContext(), "گذرواژه و تکرارش برابر نیستند.",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-                signUpButton.startAnimation(animFadeIn);
+                makeToastAndStartFadeIn("گذرواژه و تکرارش برابر نیستند.");
                 return;
             }
             if (!checkBox.isChecked()) {
-                Toast toast = Toast.makeText(requireContext(), "لطفا با شرایط استقاده از برنامه موافقت کنید.",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-                signUpButton.startAnimation(animFadeIn);
+                makeToastAndStartFadeIn("لطفا با شرایط استقاده از برنامه موافقت کنید.");
                 return;
             }
-            new SignUpTask(email, password) {
-                @Override
-                public void onResult(Account o) {
-                    LoginSignupActivity loginSignupActivity = LoginSignupActivity.getLoginSignupActivityWeakReference().get();
-                    if (loginSignupActivity != null) {
-                        loginSignupActivity.goToMainActivity();
-                    }
-                }
-
-                @Override
-                public void onException(NetworkException e) {
-                    Log.e("SIGN_IN_EXCEPT: ", e.getMessage());
-                    handler.post(() -> {
-                        Toast toast = Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT);
-                        toast.show();
-                        signUpButton.startAnimation(animFadeIn);
-                    });
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    Log.e("SIGN_IN_ERROR: ", e.getMessage());
-                    handler.post(() -> {
-                        Toast toast = Toast.makeText(requireContext(), "اینترنت در دسترس نیست.", Toast.LENGTH_SHORT);
-                        toast.show();
-                        signUpButton.startAnimation(animFadeIn);
-                    });
-                }
-            }.run();
+            runSignUpTask(email, password, handler);
         });
-        return root;
     }
 }
