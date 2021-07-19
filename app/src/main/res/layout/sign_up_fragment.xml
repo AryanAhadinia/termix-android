@@ -22,10 +22,11 @@
             android:layout_marginEnd="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/email_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="student@sharif.edu"
+                android:fontFamily="@font/yekan"
                 android:hint="@string/email_hint"
                 android:inputType="textEmailAddress"
                 android:textDirection="rtl" />
@@ -41,7 +42,7 @@
             android:layout_marginEnd="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextTextPassword2"
+                android:id="@+id/password_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
@@ -60,7 +61,7 @@
             android:layout_marginEnd="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextTextPassword3"
+                android:id="@+id/password_repeat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password_hint"
@@ -83,16 +84,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/yekan"
                 android:text="@string/terms_of_service_consent"
                 android:textDirection="rtl" />
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/yekan"
             android:layout_margin="10dp"
             android:text="@string/sign_up" />
 
