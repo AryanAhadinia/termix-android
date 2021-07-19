@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -37,7 +40,43 @@ public class SignUpFragment extends Fragment {
 
         Handler handler = new Handler();
 
+        ProgressBar progressBar = root.findViewById(R.id.progress_signup);
+
+        Animation animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in);
+        animFadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                signUpButton.setAlpha(1);
+                progressBar.setAlpha(0);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+            }
+        });
+        Animation animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out);
+        animFadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                progressBar.setAlpha(1);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                signUpButton.setAlpha(0);
+            }
+        });
+
         signUpButton.setOnClickListener(v -> {
+            signUpButton.startAnimation(animFadeOut);
             String email = emailText.getText().toString();
             String password = passwordText.getText().toString();
             String repeatPassword = repeatPasswordText.getText().toString();
@@ -51,24 +90,28 @@ public class SignUpFragment extends Fragment {
                 Toast toast = Toast.makeText(requireContext(), "رایانامه معتبر نیست.",
                         Toast.LENGTH_SHORT);
                 toast.show();
+                signUpButton.startAnimation(animFadeIn);
                 return;
             }
             if (password.length() < 8 || password.length() > 32) {
                 Toast toast = Toast.makeText(requireContext(), "گذرواژه باید بین ۸ تا ۳۲ " +
                         "نویسه باشد.", Toast.LENGTH_SHORT);
                 toast.show();
+                signUpButton.startAnimation(animFadeIn);
                 return;
             }
             if (!repeatPassword.equals(password)) {
                 Toast toast = Toast.makeText(requireContext(), "گذرواژه و تکرارش برابر نیستند.",
                         Toast.LENGTH_SHORT);
                 toast.show();
+                signUpButton.startAnimation(animFadeIn);
                 return;
             }
             if (!checkBox.isChecked()) {
                 Toast toast = Toast.makeText(requireContext(), "لطفا با شرایط استقاده از برنامه موافقت کنید.",
                         Toast.LENGTH_SHORT);
                 toast.show();
+                signUpButton.startAnimation(animFadeIn);
                 return;
             }
             new SignUpTask(email, password) {
@@ -86,6 +129,7 @@ public class SignUpFragment extends Fragment {
                     handler.post(() -> {
                         Toast toast = Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT);
                         toast.show();
+                        signUpButton.startAnimation(animFadeIn);
                     });
                 }
 
@@ -95,6 +139,7 @@ public class SignUpFragment extends Fragment {
                     handler.post(() -> {
                         Toast toast = Toast.makeText(requireContext(), "اینترنت در دسترس نیست.", Toast.LENGTH_SHORT);
                         toast.show();
+                        signUpButton.startAnimation(animFadeIn);
                     });
                 }
             }.run();
