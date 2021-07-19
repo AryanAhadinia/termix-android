@@ -51,6 +51,7 @@ public class DatabaseManager {
         values.put(DatabaseHelper.COURSE_SESSIONS_JSON, new Gson().toJson(course.getSessions()));
         values.put(DatabaseHelper.COURSE_INFO_MESSAGE, course.getInfoMessage());
         values.put(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE, course.getOnRegisterMessage());
+        values.put(DatabaseHelper.COURSE_IS_SELECTED, false);
         database.insert(DatabaseHelper.COURSE_TABLE, null, values);
     }
 
@@ -115,4 +116,14 @@ public class DatabaseManager {
                 cursor.getColumnIndex(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE));
         return indexes;
     }
+
+    public void selectCourse(Course course) {
+
+    }
+
+    public void unselectCourse(Course course) {
+
+    }
+
+    
 }
