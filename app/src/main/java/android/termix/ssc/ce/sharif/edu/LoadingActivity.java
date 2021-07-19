@@ -15,8 +15,6 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, LoginSignupActivity.class);
-        startActivity(intent);
         setContentView(R.layout.activity_loading);
 
         ImageView logo = findViewById(R.id.logo);
