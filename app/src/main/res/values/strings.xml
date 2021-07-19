@@ -18,13 +18,14 @@
     <string name="notification_time">زمان آگهی</string>
     <string name="change_email">دگرش رایانامه</string>
     <string name="change_password">دگرش گذرواژه</string>
-    <string name="logout">برون‌رفت از رایشگری</string>
+    <string name="logout">برون‌رفت از حساب</string>
     <string name="saturday">شنبه</string>
     <string name="sunday">یک‌شنبه</string>
     <string name="monday">دوشنبه</string>
     <string name="tuesday">سه‌شنبه</string>
     <string name="wednesday">چهارشنبه</string>
     <string name="thursday">پنج‌شنبه</string>
+    <string name="friday">جمعه</string>
     <string name="departments">دانشکده ها</string>
     <string name="course_title">برنامه سازی پیشرفته</string>
     <string name="course_instructor">علی چکاه</string>
@@ -34,4 +35,7 @@
     <string name="delete">حذف</string>
     <string name="recycle_bin">حذف</string>
     <string name="sign_out">برون شد</string>
+    <string name="settings">تنظیمات</string>
+    <string name="save">ذخیره</string>
+    <string name="cancel">لغو</string>
 </resources>
