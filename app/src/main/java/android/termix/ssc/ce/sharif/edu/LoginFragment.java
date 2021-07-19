@@ -145,17 +145,13 @@ public class LoginFragment extends Fragment {
             @Override
             public void onException(NetworkException e) {
                 Log.e("SIGN_IN_EXCEPT: ", e.getMessage());
-                handler.post(() -> {
-                    makeToastAndStartFadeIn(e.getMessage());
-                });
+                handler.post(() -> makeToastAndStartFadeIn(e.getMessage()));
             }
 
             @Override
             public void onError(Exception e) {
                 Log.e("SIGN_IN_ERROR: ", e.getMessage());
-                handler.post(() -> {
-                    makeToastAndStartFadeIn("اینترنت در دسترس نیست.");
-                });
+                handler.post(() -> makeToastAndStartFadeIn("اینترنت در دسترس نیست."));
             }
         }.run();
     }
