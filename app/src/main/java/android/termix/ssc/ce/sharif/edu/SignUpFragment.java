@@ -120,10 +120,13 @@ public class SignUpFragment extends Fragment {
         new SignUpTask(email, password) {
             @Override
             public void onResult(Account o) {
-                LoginSignupActivity loginSignupActivity = LoginSignupActivity.getLoginSignupActivityWeakReference().get();
-                if (loginSignupActivity != null) {
-                    loginSignupActivity.goToMainActivity();
-                }
+//                LoginSignupActivity loginSignupActivity = LoginSignupActivity.getLoginSignupActivityWeakReference().get();
+//                if (loginSignupActivity != null) {
+//                    loginSignupActivity.goToMainActivity();
+//                }
+                //TODO: I think this is better
+                handler.post(() -> makeToastAndStartFadeIn("ایمیل خود را تأیید کرده و سپس از صفحه" +
+                        " درون‌شد، وارد برنامه شوید."));
             }
 
             @Override

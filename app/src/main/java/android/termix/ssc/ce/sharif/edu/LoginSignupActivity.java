@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 
 public class LoginSignupActivity extends AppCompatActivity {
     private static WeakReference<LoginSignupActivity> loginSignupActivityWeakReference;
-    private static final String[] titles = new String[]{"نام‌نویسی", "درون‌شد"};
+    private static final String[] titles = new String[]{"درون‌شد" ,"نام‌نویسی"};
 
     private ImageView logo;
 
@@ -56,11 +56,11 @@ public class LoginSignupActivity extends AppCompatActivity {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return new SignUpFragment();
-                case 1:
                     return new LoginFragment();
+                case 1:
+                    return new SignUpFragment();
             }
-            return new SignUpFragment();
+            return new LoginFragment();
         }
 
         @Override

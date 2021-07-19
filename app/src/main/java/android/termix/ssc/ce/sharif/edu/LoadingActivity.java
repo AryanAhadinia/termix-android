@@ -25,8 +25,6 @@ public class LoadingActivity extends AppCompatActivity {
         scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
         scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
         scaleDown.start();
-        Intent intent = new Intent(LoadingActivity.this, LoginSignupActivity.class);
-        startActivity(intent);
 
         App.getExecutorService().execute(new TestTokenTask() {
             @Override
