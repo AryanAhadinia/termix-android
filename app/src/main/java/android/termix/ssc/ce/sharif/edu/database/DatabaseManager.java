@@ -91,28 +91,51 @@ public class DatabaseManager {
         return courses;
     }
 
-    public void selectCourse(Course course) {
+    public void selectCourse(int courseId, int groupId) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COURSE_IS_SELECTED, true);
         String where = String.format(Locale.US, "%s=? AND %s=?",
                 DatabaseHelper.COURSE_ID, DatabaseHelper.COURSE_GROUP_ID);
-        String[] whereArgs = new String[]{String.valueOf(course.getCourseId()),
-                String.valueOf(course.getGroupId())};
+        String[] whereArgs = new String[]{String.valueOf(courseId), String.valueOf(groupId)};
         database.update(DatabaseHelper.COURSE_TABLE, values, where, whereArgs);
     }
 
-    public void unselectCourse(Course course) {
+    public void unselectCourse(int courseId, int groupId) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COURSE_IS_SELECTED, false);
         String where = String.format(Locale.US, "%s=? AND %s=?",
                 DatabaseHelper.COURSE_ID, DatabaseHelper.COURSE_GROUP_ID);
-        String[] whereArgs = new String[]{String.valueOf(course.getCourseId()),
-                String.valueOf(course.getGroupId())};
+        String[] whereArgs = new String[]{String.valueOf(courseId), String.valueOf(groupId)};
         database.update(DatabaseHelper.COURSE_TABLE, values, where, whereArgs);
     }
 
-    public ArrayList<Course> getSelectedCourses() {
-        return null;
+    public ArrayList<Course> getSelectedCourses() throws JSONException {
+        String where = String.format(Locale.US, "%s=?", DatabaseHelper.COURSE_IS_SELECTED);
+        String[] whereArgs = new String[]{String.valueOf(true)};
+        String orderBy = DatabaseHelper.COURSE_ID + ", " + DatabaseHelper.COURSE_GROUP_ID;
+        Cursor cursor = database.query(DatabaseHelper.COURSE_TABLE, null, where, whereArgs,
+                null, null, orderBy);
+        ArrayList<Course> selectedCourses = new ArrayList<>();
+        cursor.moveToFirst();
+        HashMap<String, Integer> indexes = getCourseIndexes(cursor);
+        while (!cursor.isAfterLast()) {
+            Course course = new Course(
+                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_DEP_ID)),
+                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_ID)),
+                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_GROUP_ID)),
+                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_UNIT)),
+                    cursor.getString(indexes.get(DatabaseHelper.COURSE_TITLE)),
+                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_CAPACITY)),
+                    cursor.getString(indexes.get(DatabaseHelper.COURSE_INSTRUCTOR)),
+                    cursor.getString(indexes.get(DatabaseHelper.COURSE_EXAM_TIME)),
+                    new SessionParser(new JSONArray(cursor.getString(indexes.get(DatabaseHelper.COURSE_SESSIONS_JSON)))),
+                    cursor.getString(indexes.get(DatabaseHelper.COURSE_INFO_MESSAGE)),
+                    cursor.getString(indexes.get(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE)));
+            selectedCourses.add(course);
+        }
+        cursor.close();
+        return selectedCourses;
+
     }
 
     private HashMap<String, Integer> getCourseIndexes(Cursor cursor) {
