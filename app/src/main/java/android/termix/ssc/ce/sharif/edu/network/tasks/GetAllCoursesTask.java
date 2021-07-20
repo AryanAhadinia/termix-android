@@ -21,7 +21,7 @@ import okhttp3.Response;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class GetAllCoursesTask extends NetworkTask<HashMap<Integer, ArrayList<Course>>> {
+public abstract class GetAllCoursesTask extends NetworkTask<String> {
     @Override
     protected HttpUrl getURL() {
         return HttpUrl.parse(getServerUrl().concat("/api/schedule/all_courses")).newBuilder().build();
@@ -40,16 +40,7 @@ public abstract class GetAllCoursesTask extends NetworkTask<HashMap<Integer, Arr
                 try {
                     if (response.isSuccessful()) {
                         String result = response.body().string();
-                        JSONObject resultJSON = new JSONObject(result);
-                        HashMap<Integer, ArrayList<Course>> courses = new HashMap<>();
-                        resultJSON.keys().forEachRemaining(s -> {
-                            try {
-                                courses.put(Integer.parseInt(s), Course.parseCourseArray(resultJSON.getJSONArray(s)));
-                            } catch (JSONException e) {
-                                onError(e);
-                            }
-                        });
-                        onResult(courses);
+                        onResult(result);
                     } else {
                         final HashMap<Integer, String> errorMessages = new HashMap<>();
                         errorMessages.put(500, "مشکلات داخلی سرور، لطفا مجددا تلاش کنید.");
@@ -57,10 +48,11 @@ public abstract class GetAllCoursesTask extends NetworkTask<HashMap<Integer, Arr
                                 "دوباره تلاش کنید."),
                                 response.code()));
                     }
-                } catch (IOException | JSONException e) {
+                } catch (IOException e) {
                     onError(e);
                 }
             }
         });
     }
 }
+
