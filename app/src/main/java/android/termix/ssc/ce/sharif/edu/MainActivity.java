@@ -13,14 +13,18 @@ import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.AllCoursesDialogFragment;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;

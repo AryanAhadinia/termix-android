@@ -15,19 +15,22 @@ import java.util.HashMap;
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class AllCoursesLoader extends Loader<HashMap<Integer, ArrayList<Course>>> {
-    private static HashMap<Integer, ArrayList<Course>> cachedResult;
+public abstract class AllCoursesLoader implements Runnable,
+        LoaderCallback<HashMap<Integer, ArrayList<Course>>> {
+    private static final HashMap<Integer, ArrayList<Course>> cachedResult = new HashMap<>();
+    private static int cacheSubscribers = 0;
 
-    public AllCoursesLoader(Source[] sources) {
-        super(sources);
+    private final Source source;
+
+    public AllCoursesLoader(Source source) {
+        this.source = source;
     }
 
     @Override
     public void run() {
-        if (sources.contains(Source.NETWORK)) {
+        if (source.equals(Source.NETWORK)) {
             App.getExecutorService().execute(this::fromNetwork);
-        }
-        if (sources.contains(Source.LOCAL)) {
+        } else { // source == Source.LOCAL
             App.getExecutorService().execute(this::fromLocal);
         }
     }
@@ -36,10 +39,21 @@ public abstract class AllCoursesLoader extends Loader<HashMap<Integer, ArrayList
         new GetAllCoursesTask() {
             @Override
             public void onResult(HashMap<Integer, ArrayList<Course>> o) {
-                postResult(Source.NETWORK, o, Source.NETWORK, Source.LOCAL);
-                cachedResult = o;
-                for (Integer depId : o.keySet()) {
-                    DatabaseManager.getInstance().insertCourses(o.get(depId));
+                // call callback
+                onPriorLoad(o);
+                // cache result and notify waiters
+                synchronized (cachedResult) {
+                    cachedResult.clear();
+                    cachedResult.putAll(o);
+                    if (cacheSubscribers != 0) {
+                        cacheSubscribers = 0;
+                        cachedResult.notifyAll();
+                    }
+                }
+                // insert fetched data in database
+                DatabaseManager.getInstance().deleteData();
+                for (ArrayList<Course> courses : o.values()) {
+                    DatabaseManager.getInstance().insertCourses(courses);
                 }
             }
 
@@ -56,20 +70,42 @@ public abstract class AllCoursesLoader extends Loader<HashMap<Integer, ArrayList
     }
 
     public void fromLocal() {
-        if (cachedResult != null) {
-            postResult(Source.LOCAL, cachedResult, Source.LOCAL);
+        if (!cachedResult.isEmpty()) {
+            onPriorLoad(cachedResult);
         } else {
             try {
                 HashMap<Integer, ArrayList<Course>> result = DatabaseManager.getInstance().loadCourses();
                 if (result.keySet().size() != 0) {
-                    postResult(Source.LOCAL, result, Source.LOCAL);
-                    cachedResult = result;
+                    onPriorLoad(result);
+                    synchronized (cachedResult) {
+                        cachedResult.clear();
+                        cachedResult.putAll(result);
+                        if (cacheSubscribers != 0) {
+                            cacheSubscribers = 0;
+                            cachedResult.notifyAll();
+                        }
+                    }
                 } else {
                     onFail(new NullPointerException());
                 }
             } catch (JSONException e) {
                 onFail(e);
             }
+        }
+    }
+
+    public static HashMap<Integer, ArrayList<Course>> getCachedResult() {
+        if (!cachedResult.isEmpty()) {
+            return cachedResult;
+        }
+        try {
+            synchronized (cachedResult) {
+                cacheSubscribers++;
+                cachedResult.wait();
+                return cachedResult;
+            }
+        } catch (InterruptedException e) {
+            return null;
         }
     }
 }
