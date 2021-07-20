@@ -1,16 +1,18 @@
 package android.termix.ssc.ce.sharif.edu.loader;
 
+import android.termix.ssc.ce.sharif.edu.model.Course;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * @author AryanAhadinia
  * @since 1
  */
-public abstract class Loader<T> implements Runnable {
+public abstract class Loader<T> implements Runnable, LoaderCallback<T> {
     protected List<Source> sources;
-
     private final ArrayList<Source> outOfControlSources;
     private boolean waitingForPrior;
 
@@ -31,10 +33,4 @@ public abstract class Loader<T> implements Runnable {
             outOfControlSources.addAll(Arrays.asList(revokeControlsFrom));
         }
     }
-
-    public abstract void onPriorLoad(T loaded);
-
-    public abstract void onPosteriorLoad(T loaded);
-
-    public abstract void onFail(Exception e);
 }
