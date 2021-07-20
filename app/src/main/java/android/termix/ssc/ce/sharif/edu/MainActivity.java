@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.dark_red));
 
         new TestTokenTask() {
             @Override

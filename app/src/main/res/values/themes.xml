@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
-<!--        <item name="android:windowLightStatusBar">true</item>-->
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="colorPrimaryDark">@color/dark_red</item>
         <item name="colorAccent">@color/orange</item>
         <!-- Customize your theme here. -->
