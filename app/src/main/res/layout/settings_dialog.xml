@@ -4,7 +4,8 @@
     android:layout_width="200dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:focusable="true">
+    android:focusable="true"
+    android:padding="8dp">
 
     <LinearLayout
         android:id="@+id/notification_item"
@@ -26,6 +27,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_weight="1"
+            android:fontFamily="@font/yekan"
             android:gravity="center_vertical"
             android:text="@string/notification"
             app:drawableEndCompat="@drawable/ic_baseline_timer_24" />
@@ -45,6 +47,7 @@
         android:layout_gravity="end"
         android:background="@drawable/background_popup_textview"
         android:clickable="true"
+        android:fontFamily="@font/yekan"
         android:gravity="center_vertical"
         android:text="@string/notification_time"
         app:drawableEndCompat="@drawable/ic_baseline_timer_24"
@@ -66,6 +69,7 @@
         android:layout_gravity="end"
         android:background="@drawable/background_popup_textview"
         android:clickable="true"
+        android:fontFamily="@font/yekan"
         android:gravity="center_vertical"
         android:text="@string/change_email"
         app:drawableEndCompat="@drawable/ic_baseline_alternate_email_24"
@@ -87,6 +91,7 @@
         android:layout_gravity="end"
         android:background="@drawable/background_popup_textview"
         android:clickable="true"
+        android:fontFamily="@font/yekan"
         android:gravity="center_vertical"
         android:text="@string/change_password"
         app:drawableEndCompat="@drawable/ic_baseline_lock_24"
@@ -107,6 +112,7 @@
         android:layout_gravity="end"
         android:background="@drawable/background_popup_textview"
         android:clickable="true"
+        android:fontFamily="@font/yekan"
         android:gravity="center_vertical"
         android:text="@string/logout"
         app:drawableEndCompat="@drawable/ic_baseline_exit_to_app_24"

@@ -3,6 +3,7 @@ package android.termix.ssc.ce.sharif.edu;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.termix.ssc.ce.sharif.edu.model.Course;
@@ -12,18 +13,17 @@ import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.AllCoursesDialogFragment;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
-import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         new TestTokenTask() {
             @Override
@@ -103,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        //        setUpSettings(); // TODO
-
-
+        setUpSettings(); // TODO
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
@@ -142,12 +144,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpSettings() {
         textInputLayout.setEndIconOnClickListener(v -> {
-            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.settings_popup, null);
-            final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
-            PopupWindow popup = new PopupWindow(popupView, (int) (200 * scale + 0.5f),
-                    (int) (200 * scale + 0.5f), true);
-            popup.showAtLocation(constraintLayout, Gravity.CENTER, 0, 0);
+            DialogFragment dialog = new SettingsDialog();
+            dialog.show(getSupportFragmentManager(), "SettingsDialogFragment");
         });
     }
 }
