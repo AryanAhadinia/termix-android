@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COURSE_SESSIONS_JSON + " TEXT," +
                 COURSE_INFO_MESSAGE + " TEXT," +
                 COURSE_ON_REGISTER_MESSAGE + " TEXT," +
-                COURSE_IS_SELECTED + "TEXT" +
+                COURSE_IS_SELECTED + " BOOLEAN" +
                 ");");
     }
 

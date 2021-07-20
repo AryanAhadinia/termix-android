@@ -14,6 +14,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class DatabaseManager {
     private static DatabaseManager instance;
@@ -90,6 +91,30 @@ public class DatabaseManager {
         return courses;
     }
 
+    public void selectCourse(Course course) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COURSE_IS_SELECTED, true);
+        String where = String.format(Locale.US, "%s=? AND %s=?",
+                DatabaseHelper.COURSE_ID, DatabaseHelper.COURSE_GROUP_ID);
+        String[] whereArgs = new String[]{String.valueOf(course.getCourseId()),
+                String.valueOf(course.getGroupId())};
+        database.update(DatabaseHelper.COURSE_TABLE, values, where, whereArgs);
+    }
+
+    public void unselectCourse(Course course) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COURSE_IS_SELECTED, false);
+        String where = String.format(Locale.US, "%s=? AND %s=?",
+                DatabaseHelper.COURSE_ID, DatabaseHelper.COURSE_GROUP_ID);
+        String[] whereArgs = new String[]{String.valueOf(course.getCourseId()),
+                String.valueOf(course.getGroupId())};
+        database.update(DatabaseHelper.COURSE_TABLE, values, where, whereArgs);
+    }
+
+    public ArrayList<Course> getSelectedCourses() {
+        return null;
+    }
+
     private HashMap<String, Integer> getCourseIndexes(Cursor cursor) {
         HashMap<String, Integer> indexes = new HashMap<>();
         indexes.put(DatabaseHelper.COURSE_DEP_ID,
@@ -114,16 +139,8 @@ public class DatabaseManager {
                 cursor.getColumnIndex(DatabaseHelper.COURSE_INFO_MESSAGE));
         indexes.put(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE,
                 cursor.getColumnIndex(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE));
+        indexes.put(DatabaseHelper.COURSE_IS_SELECTED,
+                cursor.getColumnIndex(DatabaseHelper.COURSE_IS_SELECTED));
         return indexes;
     }
-
-    public void selectCourse(Course course) {
-
-    }
-
-    public void unselectCourse(Course course) {
-
-    }
-
-    
 }

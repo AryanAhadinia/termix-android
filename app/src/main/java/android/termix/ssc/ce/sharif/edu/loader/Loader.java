@@ -14,7 +14,7 @@ public abstract class Loader<T> implements Runnable {
     private final ArrayList<Source> outOfControlSources;
     private boolean waitingForPrior;
 
-    public Loader(Source[] sources) {
+    public Loader(Source... sources) {
         this.sources = Arrays.asList(sources);
         this.outOfControlSources = new ArrayList<>();
         this.waitingForPrior = true;

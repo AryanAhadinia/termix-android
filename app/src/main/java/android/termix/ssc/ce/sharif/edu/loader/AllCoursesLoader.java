@@ -18,7 +18,7 @@ import java.util.HashMap;
 public abstract class AllCoursesLoader extends Loader<HashMap<Integer, ArrayList<Course>>> {
     private static HashMap<Integer, ArrayList<Course>> cachedResult;
 
-    public AllCoursesLoader(Source[] sources) {
+    public AllCoursesLoader(Source... sources) {
         super(sources);
     }
 
