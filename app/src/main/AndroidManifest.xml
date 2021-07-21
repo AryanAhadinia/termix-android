@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Termix"
         android:usesCleartextTraffic="true">
         <activity android:name=".ChangePasswordActivity"></activity>
-        <activity android:name=".ForgetPassRequestEmailActivity" />
+        <activity android:name=".ForgetPasswordRequestEmailActivity" />
 
         <receiver android:name=".CollectionWidget">
             <intent-filter>

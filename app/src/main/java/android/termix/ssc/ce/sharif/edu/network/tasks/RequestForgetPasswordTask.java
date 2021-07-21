@@ -18,7 +18,7 @@ import okhttp3.Response;
 public abstract class RequestForgetPasswordTask extends NetworkTask<Object> {
     private final String email;
 
-    public RequestForgetPasswordTask(String email, String password) {
+    public RequestForgetPasswordTask(String email) {
         this.email = email;
     }
 
