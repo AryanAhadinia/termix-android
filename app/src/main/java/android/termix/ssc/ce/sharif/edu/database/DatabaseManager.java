@@ -52,7 +52,6 @@ public class DatabaseManager {
         values.put(DatabaseHelper.COURSE_SESSIONS_JSON, new Gson().toJson(course.getSessions()));
         values.put(DatabaseHelper.COURSE_INFO_MESSAGE, course.getInfoMessage());
         values.put(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE, course.getOnRegisterMessage());
-        values.put(DatabaseHelper.COURSE_IS_SELECTED, false);
         database.insert(DatabaseHelper.COURSE_TABLE, null, values);
     }
 
@@ -60,6 +59,17 @@ public class DatabaseManager {
         for (Course course : courses) {
             insertCourse(course);
         }
+    }
+
+    public boolean deleteCourse(int courseId, int groupId) {
+        String where = String.format(Locale.US, "%s=? AND %s=?", DatabaseHelper.COURSE_ID,
+                DatabaseHelper.COURSE_GROUP_ID);
+        String[] whereArgs = new String[]{String.valueOf(courseId), String.valueOf(groupId)};
+        return database.delete(DatabaseHelper.COURSE_TABLE, where, whereArgs) > 0;
+    }
+
+    public boolean deleteCourse(Course course) {
+        return deleteCourse(course.getCourseId(), course.getGroupId());
     }
 
     public HashMap<Integer, ArrayList<Course>> loadCourses() throws JSONException {
@@ -91,53 +101,6 @@ public class DatabaseManager {
         return courses;
     }
 
-    public void selectCourse(int courseId, int groupId) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COURSE_IS_SELECTED, true);
-        String where = String.format(Locale.US, "%s=? AND %s=?",
-                DatabaseHelper.COURSE_ID, DatabaseHelper.COURSE_GROUP_ID);
-        String[] whereArgs = new String[]{String.valueOf(courseId), String.valueOf(groupId)};
-        database.update(DatabaseHelper.COURSE_TABLE, values, where, whereArgs);
-    }
-
-    public void unselectCourse(int courseId, int groupId) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COURSE_IS_SELECTED, false);
-        String where = String.format(Locale.US, "%s=? AND %s=?",
-                DatabaseHelper.COURSE_ID, DatabaseHelper.COURSE_GROUP_ID);
-        String[] whereArgs = new String[]{String.valueOf(courseId), String.valueOf(groupId)};
-        database.update(DatabaseHelper.COURSE_TABLE, values, where, whereArgs);
-    }
-
-    public ArrayList<Course> getSelectedCourses() throws JSONException {
-        String where = String.format(Locale.US, "%s=?", DatabaseHelper.COURSE_IS_SELECTED);
-        String[] whereArgs = new String[]{String.valueOf(true)};
-        String orderBy = DatabaseHelper.COURSE_ID + ", " + DatabaseHelper.COURSE_GROUP_ID;
-        Cursor cursor = database.query(DatabaseHelper.COURSE_TABLE, null, where, whereArgs,
-                null, null, orderBy);
-        ArrayList<Course> selectedCourses = new ArrayList<>();
-        cursor.moveToFirst();
-        HashMap<String, Integer> indexes = getCourseIndexes(cursor);
-        while (!cursor.isAfterLast()) {
-            Course course = new Course(
-                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_DEP_ID)),
-                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_ID)),
-                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_GROUP_ID)),
-                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_UNIT)),
-                    cursor.getString(indexes.get(DatabaseHelper.COURSE_TITLE)),
-                    cursor.getInt(indexes.get(DatabaseHelper.COURSE_CAPACITY)),
-                    cursor.getString(indexes.get(DatabaseHelper.COURSE_INSTRUCTOR)),
-                    cursor.getString(indexes.get(DatabaseHelper.COURSE_EXAM_TIME)),
-                    new SessionParser(new JSONArray(cursor.getString(indexes.get(DatabaseHelper.COURSE_SESSIONS_JSON)))),
-                    cursor.getString(indexes.get(DatabaseHelper.COURSE_INFO_MESSAGE)),
-                    cursor.getString(indexes.get(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE)));
-            selectedCourses.add(course);
-        }
-        cursor.close();
-        return selectedCourses;
-
-    }
-
     private HashMap<String, Integer> getCourseIndexes(Cursor cursor) {
         HashMap<String, Integer> indexes = new HashMap<>();
         indexes.put(DatabaseHelper.COURSE_DEP_ID,
@@ -162,8 +125,6 @@ public class DatabaseManager {
                 cursor.getColumnIndex(DatabaseHelper.COURSE_INFO_MESSAGE));
         indexes.put(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE,
                 cursor.getColumnIndex(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE));
-        indexes.put(DatabaseHelper.COURSE_IS_SELECTED,
-                cursor.getColumnIndex(DatabaseHelper.COURSE_IS_SELECTED));
         return indexes;
     }
 }
