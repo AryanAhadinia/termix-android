@@ -56,8 +56,6 @@
         <activity android:name=".LoginSignupActivity" />
 
         <activity android:name=".AccountVerificationActivity" />
-
-        <activity android:name=".ChangePasswordActivity" />
     </application>
 
 </manifest>
