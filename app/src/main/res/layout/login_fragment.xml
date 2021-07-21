@@ -65,10 +65,9 @@
             android:clickable="true"
             android:fontFamily="@font/yekan"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="13dp"
             android:text="@string/password_forgot"
-            android:textColor="#3366BB"
-            android:textSize="20sp" />
+            android:textColor="#3366BB" />
 
         <Button
             android:id="@+id/login"
