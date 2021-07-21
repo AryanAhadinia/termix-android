@@ -2,6 +2,7 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.app.Application;
 import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
+import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 
 import java.sql.Time;
@@ -21,6 +22,7 @@ public class App extends Application {
         super.onCreate();
         CookieManager.init(getApplicationContext());
         DatabaseManager.init(getApplicationContext());
+        AllCoursesLoader.init(getApplicationContext());
     }
 
     public static ThreadPoolExecutor getExecutorService() {
