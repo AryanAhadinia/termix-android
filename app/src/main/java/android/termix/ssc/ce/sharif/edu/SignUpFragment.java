@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 public class SignUpFragment extends Fragment {
     TextInputEditText emailText;
     TextInputEditText passwordText;
-    TextInputEditText repeatPasswordText;
     Button signUpButton;
     CheckBox checkBox;
     ProgressBar progressBar;
@@ -38,15 +37,12 @@ public class SignUpFragment extends Fragment {
 
         emailText = root.findViewById(R.id.email_new);
         passwordText = root.findViewById(R.id.password_new);
-        repeatPasswordText = root.findViewById(R.id.password_repeat);
         signUpButton = root.findViewById(R.id.signup);
         checkBox = root.findViewById(R.id.checkBox);
         progressBar = root.findViewById(R.id.progress_signup);
 
         emailText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
         passwordText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
-        repeatPasswordText.setOnFocusChangeListener(LoginSignupActivity
-                .getEditTextFocusChangeListener());
 
         setUpButtonAnimations();
         setUpSignUpButton();
@@ -150,7 +146,6 @@ public class SignUpFragment extends Fragment {
             signUpButton.startAnimation(animFadeOut);
             String email = emailText.getText().toString();
             String password = passwordText.getText().toString();
-            String repeatPassword = repeatPasswordText.getText().toString();
 
             if (!isEmailValid(email)) {
                 makeToastAndStartFadeIn("رایانامه معتبر نیست.");
@@ -158,10 +153,6 @@ public class SignUpFragment extends Fragment {
             }
             if (!isPasswordValid(password)) {
                 makeToastAndStartFadeIn("گذرواژه باید بین ۸ تا ۳۲ نویسه باشد.");
-                return;
-            }
-            if (!repeatPassword.equals(password)) {
-                makeToastAndStartFadeIn("گذرواژه و تکرارش برابر نیستند.");
                 return;
             }
             if (!checkBox.isChecked()) {

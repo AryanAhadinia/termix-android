@@ -38,5 +38,6 @@
     <string name="settings">تنظیمات</string>
     <string name="save">ذخیره</string>
     <string name="cancel">لغو</string>
+    <string name="password_forgot">آیا گذرواژه خود را فراموش کرده‌اید؟</string>
     <string name="your_next_courses">کلاس های بعدی شما:</string>
 </resources>
