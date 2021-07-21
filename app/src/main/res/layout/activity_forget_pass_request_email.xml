@@ -33,6 +33,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/yekan"
+                android:gravity="center"
                 android:text="@string/forget_password_request_email_prompt"
                 android:textDirection="rtl"
                 android:textSize="18sp" />
@@ -83,13 +84,13 @@
         android:id="@+id/email_sent_anim"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="@+id/linearLayout"
         app:layout_constraintTop_toTopOf="@+id/linearLayout"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/email_sent_10245"
-        android:visibility="gone"/>
+        app:lottie_rawRes="@raw/email_sent_10245" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
