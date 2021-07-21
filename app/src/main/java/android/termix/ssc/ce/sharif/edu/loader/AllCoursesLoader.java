@@ -22,15 +22,25 @@ public class AllCoursesLoader implements Runnable {
     private static final String SHARED_PREFERENCE_LABEL = "allCourses";
     private static final String SHARED_PREFERENCE_NAME = "allCourses";
 
-    private static final HashMap<Integer, ArrayList<Course>> fromNetwork = new HashMap<>();
-    private static int networkCacheSubscriber = 0;
-    private static final HashMap<Integer, ArrayList<Course>> fromLocal = new HashMap<>();
-    private static int localCacheSubscribers = 0;
+    private static AllCoursesLoader instance;
+
+    private final HashMap<Integer, ArrayList<Course>> fromNetwork = new HashMap<>();
+    private int networkCacheSubscriber = 0;
+    private final HashMap<Integer, ArrayList<Course>> fromLocal = new HashMap<>();
+    private int localCacheSubscribers = 0;
 
     private final Context context;
 
     public AllCoursesLoader(Context context) {
         this.context = context;
+    }
+
+    public static void init(Context context) {
+        instance = new AllCoursesLoader(context);
+    }
+
+    public static AllCoursesLoader getInstance() {
+        return instance;
     }
 
     @Override
@@ -128,7 +138,7 @@ public class AllCoursesLoader implements Runnable {
         }
     }
 
-    public static HashMap<Integer, ArrayList<Course>> getFromNetwork() {
+    public HashMap<Integer, ArrayList<Course>> getFromNetwork() {
         if (!fromNetwork.isEmpty()) {
             return fromNetwork;
         }
@@ -143,7 +153,7 @@ public class AllCoursesLoader implements Runnable {
         }
     }
 
-    public static HashMap<Integer, ArrayList<Course>> getFromLocal() {
+    public HashMap<Integer, ArrayList<Course>> getFromLocal() {
         if (!fromLocal.isEmpty()) {
             return fromLocal;
         }

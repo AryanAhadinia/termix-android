@@ -2,6 +2,10 @@ package android.termix.ssc.ce.sharif.edu.model;
 
 import java.util.ArrayList;
 
+/**
+ * @author AryanAhadinia
+ * @since 1
+ */
 public class CourseSession implements Comparable<CourseSession> {
     private final Course course;
     private final Session session;

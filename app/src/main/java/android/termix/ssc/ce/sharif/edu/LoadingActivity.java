@@ -2,7 +2,13 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
+import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
+import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
+import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
 import android.view.View;
@@ -33,26 +39,39 @@ public class LoadingActivity extends AppCompatActivity {
         scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
         scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
         scaleDown.start();
-        // Check network and token
-        App.getExecutorService().execute(new TestTokenTask() {
+        // Handler
+        Handler handler = new Handler();
+        // Async tasks
+        App.getExecutorService().execute(() -> {
+            // Check network and token
+            new TestTokenTask() {
+                // Call when both network and token are OK
+                @Override
+                public void onResult(Object o) {
+                    App.getExecutorService().execute(MySelectionsLoader.getInstance());
+                    handler.post(() -> {
+                        Intent intent = new Intent(LoadingActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    });
+                }
 
-            // Call when both network and token are OK
-            @Override
-            public void onResult(Object o) {
-                // TODO: go to main activity immediately, show process bar while loading
-            }
+                // Call when network is OK but token is not accepted
+                @Override
+                public void onException(NetworkException e) {
+                    handler.post(() -> {
+                        Intent intent = new Intent(LoadingActivity.this, LoginSignupActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    });
+                }
 
-            // Call when network is OK but token is not accepted
-            @Override
-            public void onException(NetworkException e) {
-                // TODO: load all courses, go to login activity, In login activity, wait while course are loading
-            }
-
-            // Call when server is unreachable
-            @Override
-            public void onError(Exception e) {
-                // TODO: fallback to local database. show error if data is not reachable
-            }
+                // Call when server is unreachable
+                @Override
+                public void onError(Exception e) {
+                    // TODO: fallback to local database. show error if data is not reachable
+                }
+            }.run();
         });
     }
 }

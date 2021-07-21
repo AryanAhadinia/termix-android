@@ -27,7 +27,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COURSE_SESSIONS_JSON = "classTimeJSON";
     public static final String COURSE_INFO_MESSAGE = "infoMessage";
     public static final String COURSE_ON_REGISTER_MESSAGE = "onRegisterMessage";
-    public static final String COURSE_IS_SELECTED = "selected";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, version);
@@ -50,8 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COURSE_EXAM_TIME + " TEXT," +
                 COURSE_SESSIONS_JSON + " TEXT," +
                 COURSE_INFO_MESSAGE + " TEXT," +
-                COURSE_ON_REGISTER_MESSAGE + " TEXT," +
-                COURSE_IS_SELECTED + " BOOLEAN" +
+                COURSE_ON_REGISTER_MESSAGE + " TEXT" +
                 ");");
     }
 
