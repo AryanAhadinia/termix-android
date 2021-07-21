@@ -11,7 +11,6 @@ import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -44,12 +43,6 @@ public class LoadingActivity extends AppCompatActivity {
         Handler handler = new Handler();
         // Async tasks
         App.getExecutorService().execute(() -> {
-            // initializing
-            CookieManager.init(getApplicationContext());
-            DatabaseManager.init(getApplicationContext());
-            AllCoursesLoader.init(getApplicationContext());
-            // loading all courses immediately
-            AllCoursesLoader.getInstance().run();
             // Check network and token
             new TestTokenTask() {
                 // Call when both network and token are OK
@@ -58,6 +51,7 @@ public class LoadingActivity extends AppCompatActivity {
                     App.getExecutorService().execute(MySelectionsLoader.getInstance());
                     handler.post(() -> {
                         Intent intent = new Intent(LoadingActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     });
                 }
@@ -67,6 +61,7 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onException(NetworkException e) {
                     handler.post(() -> {
                         Intent intent = new Intent(LoadingActivity.this, LoginSignupActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     });
                 }

@@ -20,6 +20,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // initializing
+        CookieManager.init(getApplicationContext());
+        DatabaseManager.init(getApplicationContext());
+        AllCoursesLoader.init(getApplicationContext());
+        // loading all courses immediately
+        AllCoursesLoader.getInstance().run();
     }
 
     public static ThreadPoolExecutor getExecutorService() {

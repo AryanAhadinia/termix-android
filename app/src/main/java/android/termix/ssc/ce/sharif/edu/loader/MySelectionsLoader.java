@@ -66,7 +66,7 @@ public class MySelectionsLoader implements Runnable {
 
             @Override
             public void onException(NetworkException e) {
-
+                System.out.println("sa");
             }
 
             @Override

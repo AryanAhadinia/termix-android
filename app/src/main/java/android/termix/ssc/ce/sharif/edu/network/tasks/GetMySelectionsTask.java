@@ -46,6 +46,7 @@ public abstract class GetMySelectionsTask extends NetworkTask<ArrayList<Course.C
                                     resultJsonArray.getJSONObject(i).getInt("courseId"),
                                     resultJsonArray.getJSONObject(i).getInt("groupId")));
                         }
+                        onResult(courseIdentifiers);
                     } else {
                         final HashMap<Integer, String> errorMessages = new HashMap<>();
                         errorMessages.put(403, "دسترسی لازم را ندارید.");
