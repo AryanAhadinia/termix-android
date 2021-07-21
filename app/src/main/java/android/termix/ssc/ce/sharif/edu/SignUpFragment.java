@@ -61,6 +61,7 @@ public class SignUpFragment extends Fragment {
             public void onAnimationStart(Animation arg0) {
                 signUpButton.setAlpha(1);
                 progressBar.setAlpha(0);
+                signUpButton.setClickable(true);
             }
 
             @Override
@@ -79,6 +80,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onAnimationStart(Animation arg0) {
                 progressBar.setAlpha(1);
+                signUpButton.setClickable(false);
             }
 
             @Override

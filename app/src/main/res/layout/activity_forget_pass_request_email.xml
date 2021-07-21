@@ -62,9 +62,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/yekan"
                 android:text="@string/send_email_button" />
+
+            <ProgressBar
+                android:id="@+id/progress_forget"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:alpha="0"
+                android:indeterminate="true" />
 
         </LinearLayout>
 
