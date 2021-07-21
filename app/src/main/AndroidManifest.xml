@@ -50,8 +50,14 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MainActivity" />
+
         <activity android:name=".LoginSignupActivity" />
+
+        <activity android:name=".AccountVerificationActivity" />
+
+        <activity android:name=".ChangePasswordActivity" />
     </application>
 
 </manifest>
