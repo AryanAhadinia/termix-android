@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Termix"
         android:usesCleartextTraffic="true">
+
         <receiver android:name=".CollectionWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -21,6 +22,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/collection_widget_info" />
         </receiver>
+
         <service
             android:name=".WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
@@ -32,8 +34,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".LoginSignupActivity"></activity>
+
+        <activity android:name=".MainActivity" />
+
+        <activity android:name=".LoginSignupActivity" />
+
+        <activity android:name=".AccountVerificationActivity" />
+
+        <activity android:name=".ChangePasswordActivity" />
     </application>
 
 </manifest>
