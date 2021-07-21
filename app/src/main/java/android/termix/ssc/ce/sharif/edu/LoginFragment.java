@@ -1,5 +1,6 @@
 package android.termix.ssc.ce.sharif.edu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.termix.ssc.ce.sharif.edu.model.Account;
@@ -27,6 +28,7 @@ public class LoginFragment extends Fragment {
     private TextInputEditText passwordText;
     private Button loginButton;
     private ProgressBar progressBar;
+    private View forgetPasswordTV;
     Animation animFadeIn, animFadeOut;
 
     @Override
@@ -38,12 +40,14 @@ public class LoginFragment extends Fragment {
         passwordText = root.findViewById(R.id.password);
         loginButton = root.findViewById(R.id.login);
         progressBar = root.findViewById(R.id.progress_login);
+        forgetPasswordTV = root.findViewById(R.id.forget_password_textview);
         setUpButtonAnimations();
 
         emailText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
         passwordText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
 
         setUpLoginButton();
+        setUpForgetPasswordTV();
         return root;
     }
 
@@ -129,6 +133,13 @@ public class LoginFragment extends Fragment {
             }
 
             runSignInTask(email, password, handler);
+        });
+    }
+
+    private void setUpForgetPasswordTV(){
+        forgetPasswordTV.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), ForgetPassRequestEmailActivity.class);
+            startActivity(intent);
         });
     }
 

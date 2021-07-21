@@ -2,7 +2,9 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
@@ -14,6 +16,7 @@ import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,5 +76,18 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }.run();
         });
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
+        if (appLinkData != null){
+            String token = appLinkData.getLastPathSegment();
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, token, duration);
+            toast.show();
+            System.out.println(token);
+        }
     }
 }

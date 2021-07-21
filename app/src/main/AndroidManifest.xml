@@ -13,27 +13,45 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Termix"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ChangePasswordActivity"></activity>
+        <activity android:name=".ForgetPassRequestEmailActivity" />
+
         <receiver android:name=".CollectionWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/collection_widget_info" />
         </receiver>
+
         <service
             android:name=".WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity android:name=".LoadingActivity">
+        <activity
+            android:name=".LoadingActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="f606516dc5cb.ngrok.io"
+                    android:pathPrefix="/api/user/forget_password/serve"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".LoginSignupActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginSignupActivity" />
     </application>
 
 </manifest>
