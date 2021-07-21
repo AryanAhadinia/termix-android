@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+/**
+ * @author AryanAhadinia
+ * @since 1
+ */
 public class DatabaseManager {
     private static DatabaseManager instance;
 
