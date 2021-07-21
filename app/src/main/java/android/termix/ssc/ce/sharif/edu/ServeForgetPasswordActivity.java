@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.termix.ssc.ce.sharif.edu.network.CookieManager;
+import android.termix.ssc.ce.sharif.edu.network.NetworkException;
+import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,9 +24,7 @@ public class ServeForgetPasswordActivity extends AppCompatActivity {
         String appLinkAction = appLinkIntent.getAction();
         Uri appLinkData = appLinkIntent.getData();
         if (appLinkAction != null){
-            String token = appLinkData.getLastPathSegment();
-            Toast toast = Toast.makeText(getApplicationContext(), "token: "+ token, Toast.LENGTH_LONG);
-            toast.show();
+            CookieManager.getInstance().setCookie(appLinkData.getHost(), appLinkData.getLastPathSegment());
         }
     }
 }

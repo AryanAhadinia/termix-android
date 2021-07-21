@@ -76,4 +76,16 @@ public class CookieManager implements CookieJar {
             }
         }
     }
+
+    public void setCookie(String domain, String tokenValue) {
+        ArrayList<Cookie> newCookies = new ArrayList<>();
+        newCookies.add(new Cookie.Builder()
+                .name("token")
+                .value(tokenValue)
+                .expiresAt(System.currentTimeMillis() + 50000000L)
+                .hostOnlyDomain(domain)
+                .path("/")
+                .build());
+        cookies = newCookies;
+    }
 }
