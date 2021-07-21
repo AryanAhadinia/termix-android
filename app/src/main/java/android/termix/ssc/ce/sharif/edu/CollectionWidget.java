@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-
+//com
 public class CollectionWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.list_widget);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list);
         setRemoteAdapter(context, views);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

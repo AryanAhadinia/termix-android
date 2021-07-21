@@ -8,9 +8,7 @@ import android.widget.RemoteViewsService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.id.text1;
-import static android.R.layout.simple_list_item_1;
-
+//com
 public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     List<String> myListView = new ArrayList<>();
     Context mContext = null;
@@ -41,8 +39,9 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews view = new RemoteViews(mContext.getPackageName(), simple_list_item_1);
-        view.setTextViewText(text1, myListView.get(position));
+        RemoteViews view = new RemoteViews(mContext.getPackageName(), R.layout.widget_single_schedule_item);
+        view.setTextViewText(R.id.widget_course_remaining_to_start, myListView.get(position));
+        //view.setTextViewText(R.id.widget_course_name, myListView.get(position));
         return view;
     }
 
