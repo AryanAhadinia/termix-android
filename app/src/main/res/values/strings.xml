@@ -42,5 +42,5 @@
     <string name="your_next_courses">کلاس های بعدی شما:</string>
     <string name="forget_password_request_email_prompt">لطفا رایانامه خود را وارد کنید که پیوند بازنشانی گذرواژه برای شما فرستاده شود.</string>
     <string name="set_new_password_prompt">لطفا گذرواژه جدید خود را وارد و سپس آن را تائید کنید.</string>
-    <string name="send_email_button">ارسال رایانامه</string>
+    <string name="send_email_button">فرستادن</string>
 </resources>
