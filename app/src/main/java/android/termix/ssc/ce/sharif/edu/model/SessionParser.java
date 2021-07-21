@@ -1,7 +1,5 @@
 package android.termix.ssc.ce.sharif.edu.model;
 
-import android.termix.ssc.ce.sharif.edu.model.Session;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

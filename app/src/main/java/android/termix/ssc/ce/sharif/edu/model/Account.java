@@ -4,6 +4,7 @@ import java.io.IOException;
 
 /**
  * @author AryanAhadinia
+ * @since 1
  */
 public class Account {
     private final String email;
