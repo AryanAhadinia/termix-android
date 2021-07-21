@@ -5,12 +5,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.RequestForgetPasswordTask;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -34,7 +37,10 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
         TextInputEditText email = findViewById(R.id.email_new);
         Button requestSend = findViewById(R.id.request_send_email);
 
+        Handler handler = new Handler();
+
         requestSend.setOnClickListener(v -> {
+//            hideKeyboard(this);
             String emailText = email.getText().toString();
             if (!LoginSignupActivity.isEmailValid(emailText)) {
                 Log.i("ForgetPass", "Email is not valid");
@@ -45,6 +51,13 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                 public void onResult(Object o) {
                     // TODO
                     System.out.println("email sent");
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast toast = Toast.makeText(getBaseContext(), "agsdfhghm", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    });
                 }
 
                 @Override
@@ -60,5 +73,16 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    public static void hideKeyboard(AppCompatActivity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
