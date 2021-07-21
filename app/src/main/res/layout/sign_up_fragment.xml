@@ -28,8 +28,7 @@
                 android:autofillHints="student@sharif.edu"
                 android:fontFamily="@font/yekan"
                 android:hint="@string/email_hint"
-                android:inputType="textEmailAddress"
-                android:textDirection="rtl" />
+                android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
