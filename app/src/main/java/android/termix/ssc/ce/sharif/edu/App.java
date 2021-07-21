@@ -20,14 +20,11 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CookieManager.init(getApplicationContext());
-        DatabaseManager.init(getApplicationContext());
-        AllCoursesLoader.init(getApplicationContext());
     }
 
     public static ThreadPoolExecutor getExecutorService() {
         if (executorService == null) {
-            executorService = new ThreadPoolExecutor(4, 8, 1,
+            executorService = new ThreadPoolExecutor(4, 8, 10,
                     TimeUnit.SECONDS, new LinkedBlockingQueue<>());
         }
         return executorService;
