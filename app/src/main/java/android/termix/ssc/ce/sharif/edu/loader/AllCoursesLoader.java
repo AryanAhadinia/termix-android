@@ -22,14 +22,14 @@ public class AllCoursesLoader implements Runnable {
     private static final String SHARED_PREFERENCE_LABEL = "allCourses";
     private static final String SHARED_PREFERENCE_NAME = "allCourses";
 
+    private static AllCoursesLoader instance;
+
     private final HashMap<Integer, ArrayList<Course>> fromNetwork = new HashMap<>();
     private int networkCacheSubscriber = 0;
     private final HashMap<Integer, ArrayList<Course>> fromLocal = new HashMap<>();
     private int localCacheSubscribers = 0;
 
     private final Context context;
-
-    private static AllCoursesLoader instance;
 
     public AllCoursesLoader(Context context) {
         this.context = context;

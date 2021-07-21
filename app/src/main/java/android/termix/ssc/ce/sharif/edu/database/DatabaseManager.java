@@ -76,8 +76,8 @@ public class DatabaseManager {
         return deleteCourse(course.getCourseId(), course.getGroupId());
     }
 
-    public HashMap<Integer, ArrayList<Course>> loadCourses() throws JSONException {
-        HashMap<Integer, ArrayList<Course>> courses = new HashMap<>();
+    public ArrayList<Course> loadCourses() throws JSONException {
+        ArrayList<Course> courses = new ArrayList<>();
         Cursor cursor = this.database.query(DatabaseHelper.COURSE_TABLE, null, null,
                 new String[]{}, null, null,
                 DatabaseHelper.COURSE_ID + ", " + DatabaseHelper.COURSE_GROUP_ID);
@@ -96,10 +96,7 @@ public class DatabaseManager {
                     new SessionParser(new JSONArray(cursor.getString(indexes.get(DatabaseHelper.COURSE_SESSIONS_JSON)))),
                     cursor.getString(indexes.get(DatabaseHelper.COURSE_INFO_MESSAGE)),
                     cursor.getString(indexes.get(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE)));
-            if (!courses.containsKey(course.getDepId())) {
-                courses.put(course.getDepId(), new ArrayList<>());
-            }
-            courses.get(course.getDepId()).add(course);
+            courses.add(course);
         }
         cursor.close();
         return courses;
