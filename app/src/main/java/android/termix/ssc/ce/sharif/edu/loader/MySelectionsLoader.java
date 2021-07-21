@@ -66,7 +66,12 @@ public class MySelectionsLoader implements Runnable {
 
             @Override
             public void onException(NetworkException e) {
-                System.out.println("sa");
+                synchronized (fromNetwork) {
+                    if (networkCacheSubscriber != 0) {
+                        networkCacheSubscriber = 0;
+                        fromNetwork.notifyAll();
+                    }
+                }
             }
 
             @Override

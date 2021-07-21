@@ -84,7 +84,12 @@ public class AllCoursesLoader implements Runnable {
 
             @Override
             public void onException(NetworkException e) {
-
+                synchronized (fromNetwork) {
+                    if (networkCacheSubscriber != 0) {
+                        networkCacheSubscriber = 0;
+                        fromNetwork.notifyAll();
+                    }
+                }
             }
 
             @Override
