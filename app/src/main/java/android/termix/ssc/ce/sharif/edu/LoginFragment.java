@@ -28,7 +28,7 @@ public class LoginFragment extends Fragment {
     private Button loginButton;
     private ProgressBar progressBar;
     private View forgetPasswordTV;
-    Animation animFadeIn, animFadeOut;
+    private Animation animFadeIn, animFadeOut;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +57,7 @@ public class LoginFragment extends Fragment {
             public void onAnimationStart(Animation arg0) {
                 loginButton.setAlpha(1);
                 progressBar.setAlpha(0);
+                loginButton.setClickable(true);
             }
 
             @Override
@@ -75,6 +76,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onAnimationStart(Animation arg0) {
                 progressBar.setAlpha(1);
+                loginButton.setClickable(false);
             }
 
             @Override
