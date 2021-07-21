@@ -75,6 +75,8 @@ public class LoadingActivity extends AppCompatActivity {
                     // TODO: fallback to local database. show error if data is not reachable
                 }
             }.run();
+            //Intent intent = new Intent(LoadingActivity.this, ForgetPassRequestEmailActivity.class);
+            //startActivity(intent);
         });
         // ATTENTION: This was auto-generated to handle app links.
         Intent appLinkIntent = getIntent();
