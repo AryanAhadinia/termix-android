@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,10 +20,10 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout"
-                android:layout_marginTop="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layoutDirection="rtl"
                 android:textDirection="rtl"
                 app:endIconContentDescription="@string/content_description_end_icon"
@@ -191,5 +192,17 @@
                 android:overScrollMode="never" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading_animation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loader_34279" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

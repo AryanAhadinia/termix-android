@@ -19,10 +19,12 @@ import android.widget.AutoCompleteTextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -70,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         // initial for loading
         selectionsLoadSource = LoadSource.NOT_LOADED;
         Handler handler = new Handler();
+        // get required views
+        LottieAnimationView loadingAnimation = findViewById(R.id.loading_animation);
+        NestedScrollView scrollView = findViewById(R.id.nestedScrollView);
         // load my selections from local
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
@@ -102,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         // Get views
         textInputLayout = findViewById(R.id.text_input_layout);
         searchBar = findViewById(R.id.search_bar);

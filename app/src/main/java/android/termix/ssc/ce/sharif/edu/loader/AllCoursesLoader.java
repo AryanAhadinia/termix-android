@@ -24,11 +24,15 @@ public class AllCoursesLoader implements Runnable {
 
     private static AllCoursesLoader instance;
 
-    private final HashMap<Integer, ArrayList<Course>> fromNetwork = new HashMap<>();
+    private HashMap<Integer, ArrayList<Course>> fromNetwork;
     private int networkCacheSubscriber = 0;
-    private final HashMap<Integer, ArrayList<Course>> fromLocal = new HashMap<>();
+    private final Object fromNetworkLock = new Object();
+    private boolean isNetworkLoading;
+    private HashMap<Integer, ArrayList<Course>> fromLocal;
     private int localCacheSubscribers = 0;
-
+    private final Object fromLocalLock = new Object();
+    private boolean isLocalLoading;
+    private final Object LocalCacheLock = new Object();
     private final Context context;
 
     public AllCoursesLoader(Context context) {
@@ -45,6 +49,8 @@ public class AllCoursesLoader implements Runnable {
 
     @Override
     public void run() {
+        this.isNetworkLoading = true;
+        this.isLocalLoading = true;
         App.getExecutorService().execute(this::fromNetwork);
         App.getExecutorService().execute(this::fromLocal);
     }
@@ -62,15 +68,15 @@ public class AllCoursesLoader implements Runnable {
                         courses.put(Integer.parseInt(key), Course.parseCourseArray(resultJSON
                                 .getJSONArray(key)));
                     }
-                    synchronized (fromNetwork) {
-                        fromNetwork.clear();
-                        fromNetwork.putAll(courses);
+                    synchronized (fromNetworkLock) {
+                        fromNetwork = courses;
+                        isNetworkLoading = false;
                         if (networkCacheSubscriber != 0) {
                             networkCacheSubscriber = 0;
-                            fromNetwork.notifyAll();
+                            fromNetworkLock.notifyAll();
                         }
                     }
-                    synchronized (context) {
+                    synchronized (LocalCacheLock) {
                         SharedPreferences preferences = context.getSharedPreferences(
                                 SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
@@ -84,19 +90,23 @@ public class AllCoursesLoader implements Runnable {
 
             @Override
             public void onException(NetworkException e) {
-                synchronized (fromNetwork) {
+                fromNetwork = null;
+                isNetworkLoading = false;
+                synchronized (fromNetworkLock) {
                     if (networkCacheSubscriber != 0) {
                         networkCacheSubscriber = 0;
-                        fromNetwork.notifyAll();
+                        fromNetworkLock.notifyAll();
                     }
                 }
             }
 
             @Override
             public void onError(Exception e) {
+                fromNetwork = null;
+                isNetworkLoading = false;
                 if (networkCacheSubscriber != 0) {
                     networkCacheSubscriber = 0;
-                    fromNetwork.notifyAll();
+                    fromNetworkLock.notifyAll();
                 }
             }
         }.run();
@@ -104,16 +114,18 @@ public class AllCoursesLoader implements Runnable {
 
     private void fromLocal() {
         String result;
-        synchronized (context) {
+        synchronized (LocalCacheLock) {
             SharedPreferences preferences = context.getSharedPreferences(SHARED_PREFERENCE_NAME,
                     Context.MODE_PRIVATE);
             result = preferences.getString(SHARED_PREFERENCE_LABEL, "");
         }
-        synchronized (fromLocal) {
+        synchronized (fromLocalLock) {
             if (result.equals("")) {
+                fromLocal = null;
+                isLocalLoading = false;
                 if (localCacheSubscribers != 0) {
                     localCacheSubscribers = 0;
-                    fromLocal.notifyAll();
+                    fromLocalLock.notifyAll();
                 }
             } else {
                 try {
@@ -125,18 +137,20 @@ public class AllCoursesLoader implements Runnable {
                         courses.put(Integer.parseInt(key), Course.parseCourseArray(resultJSON
                                 .getJSONArray(key)));
                     }
-                    synchronized (fromLocal) {
-                        fromLocal.clear();
-                        fromLocal.putAll(courses);
+                    synchronized (fromLocalLock) {
+                        fromLocal = courses;
+                        isLocalLoading = false;
                         if (localCacheSubscribers != 0) {
                             localCacheSubscribers = 0;
-                            fromLocal.notifyAll();
+                            fromLocalLock.notifyAll();
                         }
                     }
                 } catch (JSONException e) {
+                    fromLocal = null;
+                    isLocalLoading = false;
                     if (localCacheSubscribers != 0) {
                         localCacheSubscribers = 0;
-                        fromLocal.notifyAll();
+                        fromLocalLock.notifyAll();
                     }
                 }
             }
@@ -144,32 +158,32 @@ public class AllCoursesLoader implements Runnable {
     }
 
     public HashMap<Integer, ArrayList<Course>> getFromNetwork() {
-        if (!fromNetwork.isEmpty()) {
-            return fromNetwork;
-        }
-        try {
-            synchronized (fromNetwork) {
-                networkCacheSubscriber++;
-                fromNetwork.wait();
+        synchronized (fromNetworkLock) {
+            if (!isNetworkLoading) {
                 return fromNetwork;
             }
-        } catch (InterruptedException e) {
-            return null;
+            try {
+                networkCacheSubscriber++;
+                fromNetworkLock.wait();
+                return fromNetwork;
+            } catch (InterruptedException e) {
+                return null;
+            }
         }
     }
 
     public HashMap<Integer, ArrayList<Course>> getFromLocal() {
-        if (!fromLocal.isEmpty()) {
-            return fromLocal;
-        }
-        try {
-            synchronized (fromLocal) {
-                localCacheSubscribers++;
-                fromLocal.wait();
+        synchronized (fromLocalLock) {
+            if (!isLocalLoading) {
                 return fromLocal;
             }
-        } catch (InterruptedException e) {
-            return null;
+            try {
+                localCacheSubscribers++;
+                fromLocalLock.wait();
+                return fromLocal;
+            } catch (InterruptedException e) {
+                return null;
+            }
         }
     }
 }
