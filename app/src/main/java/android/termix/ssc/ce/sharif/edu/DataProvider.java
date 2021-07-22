@@ -2,6 +2,9 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
+import android.termix.ssc.ce.sharif.edu.model.Course;
+import android.termix.ssc.ce.sharif.edu.model.Session;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -67,8 +70,11 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     private void initData() {
         myListView.clear();
-        for (int i = 1; i <= 15; i++) {
-            myListView.add("ListView item " + i);
+        ArrayList<Course> courses = MySelectionsLoader.getInstance().getFromLocal();
+        for (Course course : courses) {
+            System.out.println(course.getSessionsString());
+            System.out.println(course.getSessions());
+            System.out.println(course.getSessionJSON());
         }
     }
 }
