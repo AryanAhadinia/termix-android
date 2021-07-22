@@ -13,6 +13,7 @@ import android.termix.ssc.ce.sharif.edu.scheduleUI.AllCoursesDialogFragment;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
@@ -30,8 +31,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
-
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,14 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView searchBar;
-
     private ArrayList<DayAdapter> adapters;
-    private final Object adapterLock = new Object();
 
-    private ProgressBar loadingAnimationView;
-    private NestedScrollView scrollView;
-
-    private Handler handler;
+    private ProgressBar progressBar;
+    private NestedScrollView nestedScrollView;
 
     private LoadSource selectionsLoadSource;
     private final Object loadingLock = new Object();
@@ -58,9 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // set status bar color
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        // create handler
-        handler = new Handler();
-        // initialize recycler views
+        // get recycler view
         ArrayList<RecyclerView> recyclerViews = new ArrayList<>();
         recyclerViews.add(findViewById(R.id.recycler_saturday));
         recyclerViews.add(findViewById(R.id.recycler_sunday));
@@ -74,32 +67,31 @@ public class MainActivity extends AppCompatActivity {
             DayAdapter adapter = new DayAdapter();
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
             adapters.add(adapter);
         }
         // initial for loading
         selectionsLoadSource = LoadSource.NOT_LOADED;
+        Handler handler = new Handler();
         // get required views
-        loadingAnimationView = findViewById(R.id.progressBar);
-        scrollView = findViewById(R.id.nestedScrollView);
+        progressBar = findViewById(R.id.progressBar);
+        nestedScrollView = findViewById(R.id.nestedScrollView);
         // load my selections from local
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
-            if (mySelections != null) {
+            Log.i("Selections", "Local fetched");
+            if (!mySelections.isEmpty()) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 synchronized (loadingLock) {
                     if (selectionsLoadSource != LoadSource.NETWORK) {
-                        handler.postAtFrontOfQueue(() -> {
-                            synchronized (loadingLock) {
-                                for (int i = 0; i < adapters.size(); i++) {
-                                    adapters.get(i).rebaseCourseSessionsAndNotify(mySelectionMap.get(i));
-                                }
-                                if (selectionsLoadSource == LoadSource.NOT_LOADED) {
-                                    makeTransactionFromLoading();
-                                }
-                                selectionsLoadSource = LoadSource.LOCAL;
-                            }
-                        });
+                        selectionsLoadSource = LoadSource.LOCAL;
+                        for (int i = 0; i < adapters.size(); i++) {
+                            int finalI = i;
+                            handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+                        }
+                        if (nestedScrollView.getVisibility() != View.VISIBLE) {
+                            handler.post(this::onLoad);
+                        }
                     }
                 }
             }
@@ -107,20 +99,18 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from network
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromNetwork();
-            if (mySelections != null) {
+            Log.i("Selections", "Network fetched");
+            if (!mySelections.isEmpty()) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 synchronized (loadingLock) {
-                    handler.postAtFrontOfQueue(() -> {
-                        synchronized (loadingLock) {
-                            for (int i = 0; i < adapters.size(); i++) {
-                                adapters.get(i).rebaseCourseSessionsAndNotify(mySelectionMap.get(i));
-                            }
-                            if (selectionsLoadSource == LoadSource.NOT_LOADED) {
-                                makeTransactionFromLoading();
-                            }
-                            selectionsLoadSource = LoadSource.NETWORK;
-                        }
-                    });
+                    selectionsLoadSource = LoadSource.NETWORK;
+                    for (int i = 0; i < adapters.size(); i++) {
+                        int finalI = i;
+                        handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+                    }
+                    if (nestedScrollView.getVisibility() != View.VISIBLE) {
+                        handler.post(this::onLoad);
+                    }
                 }
             }
         });
@@ -178,9 +168,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void makeTransactionFromLoading() {
-        loadingAnimationView.setVisibility(View.GONE);
-        scrollView.setAlpha(1);
+    private void onLoad() {
+        nestedScrollView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     enum LoadSource {
