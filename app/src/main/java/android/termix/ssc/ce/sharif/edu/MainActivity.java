@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
             Log.i("Selections", "Local fetched");
-            if (!mySelections.isEmpty()) {
+            if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 synchronized (loadingLock) {
                     if (selectionsLoadSource != LoadSource.NETWORK) {
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromNetwork();
             Log.i("Selections", "Network fetched");
-            if (!mySelections.isEmpty()) {
+            if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 synchronized (loadingLock) {
                     selectionsLoadSource = LoadSource.NETWORK;
