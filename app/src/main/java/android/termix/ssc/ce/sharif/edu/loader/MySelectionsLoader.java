@@ -23,6 +23,8 @@ public class MySelectionsLoader implements Runnable {
     private final ArrayList<Course> fromLocal = new ArrayList<>();
     private int localCacheSubscribers = 0;
 
+    private final Object databaseLock = new Object();
+
     public static MySelectionsLoader getInstance() {
         if (instance == null) {
             instance = new MySelectionsLoader();
@@ -36,7 +38,7 @@ public class MySelectionsLoader implements Runnable {
         App.getExecutorService().execute(this::fromLocal);
     }
 
-    public void fromNetwork() {
+    private void fromNetwork() {
         new GetMySelectionsTask() {
             @Override
             public void onResult(ArrayList<Course.CourseIdentifier> o) {
@@ -60,6 +62,10 @@ public class MySelectionsLoader implements Runnable {
                             networkCacheSubscriber = 0;
                             fromNetwork.notifyAll();
                         }
+                    }
+                    synchronized (databaseLock) {
+                        DatabaseManager.getInstance().deleteData();
+                        DatabaseManager.getInstance().insertCourses(result);
                     }
                 }
             }
@@ -86,9 +92,12 @@ public class MySelectionsLoader implements Runnable {
         }.run();
     }
 
-    public void fromLocal() {
+    private void fromLocal() {
         try {
-            ArrayList<Course> selectedCourses = DatabaseManager.getInstance().loadCourses();
+            ArrayList<Course> selectedCourses;
+            synchronized (databaseLock) {
+                selectedCourses = DatabaseManager.getInstance().loadCourses();
+            }
             synchronized (fromLocal) {
                 fromLocal.clear();
                 fromLocal.addAll(selectedCourses);
@@ -114,7 +123,7 @@ public class MySelectionsLoader implements Runnable {
                 return fromNetwork;
             }
         } catch (InterruptedException e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -129,7 +138,7 @@ public class MySelectionsLoader implements Runnable {
                 return fromLocal;
             }
         } catch (InterruptedException e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 }

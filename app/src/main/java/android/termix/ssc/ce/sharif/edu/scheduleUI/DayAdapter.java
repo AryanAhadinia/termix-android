@@ -60,6 +60,11 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
         notifyDataSetChanged();
     }
 
+    public void rebaseCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+        sessions.clear();
+        insertCourseSessionsAndNotify(courseSessions);
+    }
+
     public void insertCourseSessions(ArrayList<CourseSession> courseSessions) {
         sessions.addAll(courseSessions);
         sessions.sort(CourseSession::compareTo);

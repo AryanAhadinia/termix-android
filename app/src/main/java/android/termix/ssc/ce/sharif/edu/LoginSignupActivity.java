@@ -1,10 +1,9 @@
 package android.termix.ssc.ce.sharif.edu;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -100,6 +99,7 @@ public class LoginSignupActivity extends AppCompatActivity {
     }
 
     public void goToMainActivity() {
+        MySelectionsLoader.getInstance().run();
         Intent intent = new Intent(LoginSignupActivity.this, MainActivity.class);
         startActivity(intent);
     }

@@ -73,13 +73,16 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from local
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
-            ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
-            synchronized (loadingLock) {
-                if (selectionsLoadSource != LoadSource.NETWORK) {
-                    selectionsLoadSource = LoadSource.LOCAL;
-                    for (int i = 0; i < adapters.size(); i++) {
-                        int finalI = i;
-                        handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+            Log.i("Selections", "Local fetched");
+            if (!mySelections.isEmpty()) {
+                ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
+                synchronized (loadingLock) {
+                    if (selectionsLoadSource != LoadSource.NETWORK) {
+                        selectionsLoadSource = LoadSource.LOCAL;
+                        for (int i = 0; i < adapters.size(); i++) {
+                            int finalI = i;
+                            handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+                        }
                     }
                 }
             }
@@ -87,16 +90,18 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from network
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromNetwork();
-            ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
-            synchronized (loadingLock) {
-                selectionsLoadSource = LoadSource.NETWORK;
-                for (int i = 0; i < adapters.size(); i++) {
-                    int finalI = i;
-                    handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+            Log.i("Selections", "Network fetched");
+            if (!mySelections.isEmpty()) {
+                ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
+                synchronized (loadingLock) {
+                    selectionsLoadSource = LoadSource.NETWORK;
+                    for (int i = 0; i < adapters.size(); i++) {
+                        int finalI = i;
+                        handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+                    }
                 }
             }
         });
-
 
         // Get views
         textInputLayout = findViewById(R.id.text_input_layout);
