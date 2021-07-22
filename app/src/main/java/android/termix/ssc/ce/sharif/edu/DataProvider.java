@@ -77,8 +77,8 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         nextSessionsStartAt.clear();
         nextSessionCourseNames.clear();
         Calendar c = Calendar.getInstance();
-        Date currentDate = new Date(System.currentTimeMillis()+846000000L - 600000L); // mock data for testing
-//        Date currentDate = new Date(); // todo: this must be used
+        Date currentDate = new Date(System.currentTimeMillis()+846000000L); // mock data for testing
+//      Date currentDate = new Date(); // todo: this must be used
         c.setTime(currentDate);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK)-1;  // 0 to 6
         int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
@@ -88,23 +88,32 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
             hourOfDay = hourOfDay-23;
             dayOfWeek = 0;
         }
-        ArrayList<ArrayList<CourseSession>> mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+
+        ArrayList<ArrayList<CourseSession>> mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromLocal());
+        if (isMySelectionsEmpty(mySelections)){
+            mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+        }
         mySelections.get(dayOfWeek).sort((courseSession, t1) -> courseSession.getSession().compareTo(t1.getSession()));
         for (CourseSession courseSession : mySelections.get(dayOfWeek)) {
             if (courseSession.getSession().getStartHour()>hourOfDay ||
                     (courseSession.getSession().getStartHour()==hourOfDay && courseSession.getSession().getStartMin() < minute)){
-                nextSessionsStartAt.add(calculateSessionStartsAt(hourOfDay, minute, courseSession.getSession()));
-                nextSessionCourseNames.add(courseSession.getCourse().getTitle());
+                addSession(hourOfDay, minute, courseSession);
             }
         }
         for (int i = dayOfWeek+1; i<6; i++){
             mySelections.get(i).sort((courseSession, t1) -> courseSession.getSession().compareTo(t1.getSession()));
             hourOfDay -= 24;
             for (CourseSession courseSession : mySelections.get(i)) {
-                nextSessionsStartAt.add(calculateSessionStartsAt(hourOfDay, minute, courseSession.getSession()));
-                nextSessionCourseNames.add(courseSession.getCourse().getTitle());
+                addSession(hourOfDay, minute, courseSession);
             }
         }
+    }
+
+    private boolean isMySelectionsEmpty(ArrayList<ArrayList<CourseSession>> mySelections) {
+        for (ArrayList<CourseSession> mySelection : mySelections) {
+            if (!mySelection.isEmpty()) return false;
+        }
+        return true;
     }
 
     private String calculateSessionStartsAt(int hour, int minute, Session session){
@@ -115,5 +124,10 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
             hourDifference -= 1;
         }
         return String.format("%01d:%02d", hourDifference, minuteDifference);
+    }
+
+    private void addSession(int hour, int minute, CourseSession courseSession){
+        nextSessionsStartAt.add(calculateSessionStartsAt(hour, minute, courseSession.getSession()));
+        nextSessionCourseNames.add(courseSession.getCourse().getTitle());
     }
 }
