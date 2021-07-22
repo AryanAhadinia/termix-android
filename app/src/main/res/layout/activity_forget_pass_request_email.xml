@@ -22,6 +22,7 @@
         app:layout_constraintVertical_bias="0.3">
 
         <LinearLayout
+            android:id="@+id/formLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -84,7 +85,6 @@
         android:id="@+id/email_sent_anim"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="@+id/linearLayout"
