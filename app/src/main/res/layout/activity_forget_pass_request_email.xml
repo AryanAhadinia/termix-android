@@ -85,6 +85,7 @@
         android:id="@+id/email_sent_anim"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="@+id/linearLayout"

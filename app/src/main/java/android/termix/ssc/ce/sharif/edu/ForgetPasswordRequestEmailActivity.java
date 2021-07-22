@@ -12,12 +12,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
@@ -42,6 +44,29 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
         animationDrawable.start();
         setUpButtonAnimations();
 
+        LottieAnimationView sentEmail = findViewById(R.id.email_sent_anim);
+        LinearLayout linearLayout = findViewById(R.id.formLayout);
+
+        Animation layoutFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+        layoutFadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                linearLayout.setVisibility(View.INVISIBLE);
+                sentEmail.setVisibility(View.VISIBLE);
+                sentEmail.playAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
         TextInputEditText email = findViewById(R.id.email_new);
         requestSend = findViewById(R.id.request_send_email);
 
@@ -63,8 +88,10 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast toast = Toast.makeText(getBaseContext(), "agsdfhghm", Toast.LENGTH_LONG);
+                            Toast toast = Toast.makeText(getBaseContext(), "agsdfhghm",
+                                    Toast.LENGTH_LONG);
                             toast.show();
+                            linearLayout.startAnimation(layoutFadeOut);
                         }
                     });
                     requestSend.startAnimation(animFadeIn);
