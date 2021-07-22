@@ -1,5 +1,7 @@
 package android.termix.ssc.ce.sharif.edu;
 
+import android.animation.Animator;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,7 +49,9 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
         LottieAnimationView sentEmail = findViewById(R.id.email_sent_anim);
         LinearLayout linearLayout = findViewById(R.id.formLayout);
 
-        Animation layoutFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+        Handler handler = new Handler();
+
+        Animation layoutFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_fast);
         layoutFadeOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -58,6 +62,32 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                 linearLayout.setVisibility(View.INVISIBLE);
                 sentEmail.setVisibility(View.VISIBLE);
                 sentEmail.playAnimation();
+
+                sentEmail.addAnimatorListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        handler.post(() -> {
+                            Intent intent = new Intent(ForgetPasswordRequestEmailActivity.this, LoginSignupActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        });
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
             }
 
             @Override
@@ -66,11 +96,8 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
             }
         });
 
-
         TextInputEditText email = findViewById(R.id.email_new);
         requestSend = findViewById(R.id.request_send_email);
-
-        Handler handler = new Handler();
 
         requestSend.setOnClickListener(v -> {
 //            hideKeyboard(this);
@@ -94,7 +121,6 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                             linearLayout.startAnimation(layoutFadeOut);
                         }
                     });
-                    requestSend.startAnimation(animFadeIn);
                 }
 
                 @Override

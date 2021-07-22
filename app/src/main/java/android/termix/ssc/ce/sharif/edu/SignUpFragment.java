@@ -13,14 +13,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.textfield.TextInputEditText;
-
-import java.util.regex.Pattern;
 
 public class SignUpFragment extends Fragment {
     TextInputEditText emailText;
@@ -28,7 +29,8 @@ public class SignUpFragment extends Fragment {
     Button signUpButton;
     CheckBox checkBox;
     ProgressBar progressBar;
-    Animation animFadeOut, animFadeIn;
+    Animation animFadeOut, animFadeIn, layoutFadeOut;
+    LinearLayout linearLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +45,29 @@ public class SignUpFragment extends Fragment {
 
         emailText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
         passwordText.setOnFocusChangeListener(LoginSignupActivity.getEditTextFocusChangeListener());
+
+        layoutFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_fast);
+        linearLayout = root.findViewById(R.id.linearLayout2);
+        LottieAnimationView sentEmail = root.findViewById(R.id.email_sent_anim);
+        TextView message = root.findViewById(R.id.signup_message);
+        layoutFadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                linearLayout.setVisibility(View.INVISIBLE);
+                sentEmail.setVisibility(View.VISIBLE);
+                sentEmail.playAnimation();
+                message.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         setUpButtonAnimations();
         setUpSignUpButton();
@@ -104,13 +129,7 @@ public class SignUpFragment extends Fragment {
         new SignUpTask(email, password) {
             @Override
             public void onResult(Account o) {
-//                LoginSignupActivity loginSignupActivity = LoginSignupActivity.getLoginSignupActivityWeakReference().get();
-//                if (loginSignupActivity != null) {
-//                    loginSignupActivity.goToMainActivity();
-//                }
-                //TODO: I think this is better
-                handler.post(() -> makeToastAndStartFadeIn("ایمیل خود را تأیید کرده و سپس از صفحه" +
-                        " درون‌شد، وارد برنامه شوید."));
+                linearLayout.startAnimation(layoutFadeOut);
             }
 
             @Override
