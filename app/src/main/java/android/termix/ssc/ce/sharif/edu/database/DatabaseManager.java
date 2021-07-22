@@ -97,6 +97,7 @@ public class DatabaseManager {
                     cursor.getString(indexes.get(DatabaseHelper.COURSE_INFO_MESSAGE)),
                     cursor.getString(indexes.get(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE)));
             courses.add(course);
+            cursor.moveToNext();
         }
         cursor.close();
         return courses;

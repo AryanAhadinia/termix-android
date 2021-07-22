@@ -49,7 +49,7 @@ public class AllCoursesLoader implements Runnable {
         App.getExecutorService().execute(this::fromLocal);
     }
 
-    public void fromNetwork() {
+    private void fromNetwork() {
         new GetAllCoursesTask() {
             @Override
             public void onResult(String o) {
@@ -102,7 +102,7 @@ public class AllCoursesLoader implements Runnable {
         }.run();
     }
 
-    public void fromLocal() {
+    private void fromLocal() {
         String result;
         synchronized (context) {
             SharedPreferences preferences = context.getSharedPreferences(SHARED_PREFERENCE_NAME,
