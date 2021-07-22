@@ -13,8 +13,8 @@ import android.termix.ssc.ce.sharif.edu.scheduleUI.AllCoursesDialogFragment;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.ProgressBar;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -37,7 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView searchBar;
+
     private ArrayList<DayAdapter> adapters;
+    private final Object adapterLock = new Object();
+
+    private ProgressBar loadingAnimationView;
+    private NestedScrollView scrollView;
+
+    private Handler handler;
 
     private LoadSource selectionsLoadSource;
     private final Object loadingLock = new Object();
@@ -49,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // set status bar color
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        // get recycler view
+        // create handler
+        handler = new Handler();
+        // initialize recycler views
         ArrayList<RecyclerView> recyclerViews = new ArrayList<>();
         recyclerViews.add(findViewById(R.id.recycler_saturday));
         recyclerViews.add(findViewById(R.id.recycler_sunday));
@@ -63,28 +72,32 @@ public class MainActivity extends AppCompatActivity {
             DayAdapter adapter = new DayAdapter();
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
             adapters.add(adapter);
         }
         // initial for loading
         selectionsLoadSource = LoadSource.NOT_LOADED;
-        Handler handler = new Handler();
         // get required views
-        LottieAnimationView loadingAnimation = findViewById(R.id.loading_animation);
-        NestedScrollView scrollView = findViewById(R.id.nestedScrollView);
+        loadingAnimationView = findViewById(R.id.progressBar);
+        scrollView = findViewById(R.id.nestedScrollView);
         // load my selections from local
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
-            Log.i("Selections", "Local fetched");
-            if (!mySelections.isEmpty()) {
+            if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 synchronized (loadingLock) {
                     if (selectionsLoadSource != LoadSource.NETWORK) {
-                        selectionsLoadSource = LoadSource.LOCAL;
-                        for (int i = 0; i < adapters.size(); i++) {
-                            int finalI = i;
-                            handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
-                        }
+                        handler.postAtFrontOfQueue(() -> {
+                            synchronized (loadingLock) {
+                                for (int i = 0; i < adapters.size(); i++) {
+                                    adapters.get(i).rebaseCourseSessionsAndNotify(mySelectionMap.get(i));
+                                }
+                                if (selectionsLoadSource == LoadSource.NOT_LOADED) {
+                                    makeTransactionFromLoading();
+                                }
+                                selectionsLoadSource = LoadSource.LOCAL;
+                            }
+                        });
                     }
                 }
             }
@@ -92,15 +105,20 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from network
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromNetwork();
-            Log.i("Selections", "Network fetched");
-            if (!mySelections.isEmpty()) {
+            if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 synchronized (loadingLock) {
-                    selectionsLoadSource = LoadSource.NETWORK;
-                    for (int i = 0; i < adapters.size(); i++) {
-                        int finalI = i;
-                        handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
-                    }
+                    handler.postAtFrontOfQueue(() -> {
+                        synchronized (loadingLock) {
+                            for (int i = 0; i < adapters.size(); i++) {
+                                adapters.get(i).rebaseCourseSessionsAndNotify(mySelectionMap.get(i));
+                            }
+                            if (selectionsLoadSource == LoadSource.NOT_LOADED) {
+                                makeTransactionFromLoading();
+                            }
+                            selectionsLoadSource = LoadSource.NETWORK;
+                        }
+                    });
                 }
             }
         });
@@ -156,6 +174,11 @@ public class MainActivity extends AppCompatActivity {
             DialogFragment dialog = new SettingsDialog();
             dialog.show(getSupportFragmentManager(), "SettingsDialogFragment");
         });
+    }
+
+    private void makeTransactionFromLoading() {
+        loadingAnimationView.setVisibility(View.GONE);
+        scrollView.setAlpha(1);
     }
 
     enum LoadSource {
