@@ -11,6 +11,7 @@ import android.termix.ssc.ce.sharif.edu.network.tasks.SignOutTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,18 @@ public class SettingsDialog extends DialogFragment {
         TextView logout = root.findViewById(R.id.logout);
 
         Handler handler = new Handler();
+
+        notificationTime.setOnClickListener(v -> {
+            DialogFragment dialog = new NumberPickerDialog();
+            dialog.show(getActivity().getSupportFragmentManager(),
+                    "NumberPickerDialogFragment");
+        });
+
+        changePassword.setOnClickListener(v -> {
+            new Thread(() -> DatabaseManager.getInstance().deleteData()).start();
+            Intent intent = new Intent(getActivity(), ServeForgetPasswordActivity.class);
+            startActivity(intent);
+        });
 
         logout.setOnClickListener(v -> new SignOutTask() {
             @Override
