@@ -30,6 +30,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
