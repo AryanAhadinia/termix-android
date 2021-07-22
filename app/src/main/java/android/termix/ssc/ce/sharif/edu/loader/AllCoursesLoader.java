@@ -90,9 +90,9 @@ public class AllCoursesLoader implements Runnable {
 
             @Override
             public void onException(NetworkException e) {
-                fromNetwork = null;
-                isNetworkLoading = false;
                 synchronized (fromNetworkLock) {
+                    fromNetwork = null;
+                    isNetworkLoading = false;
                     if (networkCacheSubscriber != 0) {
                         networkCacheSubscriber = 0;
                         fromNetworkLock.notifyAll();
@@ -102,11 +102,13 @@ public class AllCoursesLoader implements Runnable {
 
             @Override
             public void onError(Exception e) {
-                fromNetwork = null;
-                isNetworkLoading = false;
-                if (networkCacheSubscriber != 0) {
-                    networkCacheSubscriber = 0;
-                    fromNetworkLock.notifyAll();
+                synchronized (fromNetworkLock) {
+                    fromNetwork = null;
+                    isNetworkLoading = false;
+                    if (networkCacheSubscriber != 0) {
+                        networkCacheSubscriber = 0;
+                        fromNetworkLock.notifyAll();
+                    }
                 }
             }
         }.run();
