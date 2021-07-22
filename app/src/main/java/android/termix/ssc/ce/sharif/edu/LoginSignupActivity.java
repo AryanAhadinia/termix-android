@@ -101,6 +101,8 @@ public class LoginSignupActivity extends AppCompatActivity {
     public void goToMainActivity() {
         MySelectionsLoader.getInstance().run();
         Intent intent = new Intent(LoginSignupActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

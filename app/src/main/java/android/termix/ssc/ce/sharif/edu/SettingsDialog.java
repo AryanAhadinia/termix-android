@@ -1,9 +1,18 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
+import android.termix.ssc.ce.sharif.edu.network.NetworkException;
+import android.termix.ssc.ce.sharif.edu.network.tasks.SignOutTask;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,12 +28,44 @@ public class SettingsDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setView(R.layout.settings_dialog);
-        builder.setMessage(R.string.settings).setPositiveButton(R.string.save, (dialog, id) -> {
-            //TODO: save
-        }).setNegativeButton(R.string.cancel, (dialog, id) -> {
-            //TODO: do nothing/ ignore
-        });
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        View root = inflater.inflate(R.layout.settings_dialog, null);
+        TextView notificationTime = root.findViewById(R.id.notification_time);
+        TextView changePassword = root.findViewById(R.id.change_password);
+        TextView logout = root.findViewById(R.id.logout);
+
+        Handler handler = new Handler();
+
+        logout.setOnClickListener(v -> new SignOutTask() {
+            @Override
+            public void onResult(Object o) {
+                new Thread(() -> DatabaseManager.getInstance().deleteData()).start();
+                Intent intent = new Intent(getActivity(), LoginSignupActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onException(NetworkException e) {
+                handler.post(() -> {
+                    Toast toast = Toast.makeText(requireContext(), e.getMessage(),
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                });
+            }
+
+            @Override
+            public void onError(Exception e) {
+                handler.post(() -> {
+                    Toast toast = Toast.makeText(requireContext(), "اینترنت در دسترس نیست",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                });
+            }
+        }.run());
+
+        builder.setView(root);
 
         return builder.create();
     }
