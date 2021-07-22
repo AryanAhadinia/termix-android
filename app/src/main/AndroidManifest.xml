@@ -23,7 +23,7 @@
 
                 <data
                     android:scheme="https"
-                    android:host="f606516dc5cb.ngrok.io"
+                    android:host="37a2295bbbf3.ngrok.io"
                     android:pathPrefix="/api/user/forget_password/serve/" />
             </intent-filter>
         </activity>
