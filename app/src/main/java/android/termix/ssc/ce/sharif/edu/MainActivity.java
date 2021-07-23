@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> finalResults = result.getData()
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 searchBar.setText(Objects.requireNonNull(finalResults).get(0));
+                searchBar.requestFocus();
             }
         }
     });
