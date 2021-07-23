@@ -9,6 +9,8 @@ import android.speech.RecognizerIntent;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView searchBar;
     private ArrayList<DayAdapter> adapters;
+    private SearchResultAdapter coursesAdapter;
 
     private ProgressBar progressBar;
     private LinearLayout mainLinearLayout;
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         // set status bar color
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         // get weekdays recycler view
+        coursesAdapter = new SearchResultAdapter();
+
         ArrayList<RecyclerView> recyclerViews = new ArrayList<>();
         recyclerViews.add(findViewById(R.id.recycler_saturday));
         recyclerViews.add(findViewById(R.id.recycler_sunday));
@@ -130,12 +135,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                coursesAdapter.getFilter().filter(s);
+            }
+        });
+
         searchBar.setOnFocusChangeListener((v, hasFocus) -> {
             isSearching = hasFocus;
             if (searchResultRecyclerView == null) {
                 searchResultRecyclerView = findViewById(R.id.searchResultRecyclerView);
-                SearchResultAdapter adapter = new SearchResultAdapter();
-                AlphaInAnimationAdapter alphaAnimatedAdapter = new AlphaInAnimationAdapter(adapter);
+                AlphaInAnimationAdapter alphaAnimatedAdapter = new AlphaInAnimationAdapter(coursesAdapter);
                 alphaAnimatedAdapter.setFirstOnly(false);
                 ScaleInAnimationAdapter scaleAnimatedAdapter = new ScaleInAnimationAdapter(alphaAnimatedAdapter);
                 scaleAnimatedAdapter.setFirstOnly(false);

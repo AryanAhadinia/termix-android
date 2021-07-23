@@ -1,12 +1,14 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,20 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
-    private ArrayList<Course> showingCourses;
+public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder>
+        implements Filterable {
+    private final ArrayList<Course> showingCourses, allCourses;
 
-    public ArrayList<Course> getShowingCourses() {
-        if (showingCourses == null) {
-            if (AllCoursesLoader.getInstance().getFromNetwork() != null) {
-                showingCourses = AllCoursesLoader.getInstance().getFromNetwork().get(40);
-            } else {
-                showingCourses = AllCoursesLoader.getInstance().getFromLocal().get(40);
-            }
+    public SearchResultAdapter() {
+        if (AllCoursesLoader.getInstance().getFromNetwork() != null) {
+            allCourses = AllCoursesLoader.getInstance().getFromNetwork().get(40);
+        } else {
+            allCourses = AllCoursesLoader.getInstance().getFromLocal().get(40);
         }
-        return showingCourses;
+        showingCourses = new ArrayList<>(allCourses);
     }
 
     @NonNull
@@ -43,14 +46,49 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        Course course = getShowingCourses().get(position);
+        Course course = showingCourses.get(position);
         holder.setCourse(course);
     }
 
     @Override
     public int getItemCount() {
-        return getShowingCourses().size();
+        return showingCourses.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return courseFilter;
+    }
+
+    private final Filter courseFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Course> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(allCourses);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Course course : allCourses) {
+                    if (course.getTitle().toLowerCase().contains(filterPattern) ||
+                    course.getInstructor().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(course);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            Log.e("RIDAM: ", Integer.toString(filteredList.size()));
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            showingCourses.clear();
+            showingCourses.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final View itemView;
