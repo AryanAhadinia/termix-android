@@ -12,7 +12,7 @@ import okhttp3.RequestBody;
  * @since 1
  */
 public abstract class NetworkTask<T> implements Runnable {
-    private static final String SERVER_URL = "http://37a2295bbbf3.ngrok.io";
+    private static final String SERVER_URL = "https://57689843fba7.ngrok.io";
     private static OkHttpClient okHttpClient;
 
     public static String getServerUrl() {
