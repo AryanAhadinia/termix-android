@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         // set status bar color
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         // get weekdays recycler view
-        coursesAdapter = new SearchResultAdapter();
+        coursesAdapter = new SearchResultAdapter(this);
 
         ArrayList<RecyclerView> recyclerViews = new ArrayList<>();
         recyclerViews.add(findViewById(R.id.recycler_saturday));

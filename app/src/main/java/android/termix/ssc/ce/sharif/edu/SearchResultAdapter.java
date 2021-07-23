@@ -17,21 +17,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder>
         implements Filterable {
     private final ArrayList<Course> showingCourses, allCourses;
+    private final Context context;
 
-    public SearchResultAdapter() {
+    public SearchResultAdapter(Context context) {
         if (AllCoursesLoader.getInstance().getFromNetwork() != null) {
-            allCourses = AllCoursesLoader.getInstance().getFromNetwork().get(40);
+            this.allCourses = mergeMapToList(AllCoursesLoader.getInstance().getFromNetwork());
+        } else if (AllCoursesLoader.getInstance().getFromLocal() != null) {
+            this.allCourses = mergeMapToList(AllCoursesLoader.getInstance().getFromLocal());
         } else {
-            allCourses = AllCoursesLoader.getInstance().getFromLocal().get(40);
+            this.allCourses = new ArrayList<>();
         }
-        showingCourses = new ArrayList<>(allCourses);
+        this.showingCourses = new ArrayList<>(allCourses);
+        this.context = context;
     }
 
     @NonNull
@@ -90,7 +94,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
     };
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    private ArrayList<Course> mergeMapToList(HashMap<Integer, ArrayList<Course>> map) {
+        ArrayList<Course> allCourses = new ArrayList<>();
+        for (ArrayList<Course> departmentCourses : map.values()) {
+            allCourses.addAll(departmentCourses);
+        }
+        return allCourses;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         private final View itemView;
 
         private final TextView titleTextView;
@@ -111,6 +123,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.capacityTextView = itemView.findViewById(R.id.capacityTextView);
             this.unitTextView = itemView.findViewById(R.id.unitTextView);
             this.identifierTextView = itemView.findViewById(R.id.courseIdentifierTextView);
+            itemView.setOnLongClickListener(this);
         }
 
         public void setCourse(Course course) {
@@ -137,6 +150,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.unitTextView.setText(String.valueOf(course.getUnit()));
             this.identifierTextView.setText(String.format(Locale.US, "%d, %d",
                     course.getCourseId(), course.getGroupId()));
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
         }
     }
 }
