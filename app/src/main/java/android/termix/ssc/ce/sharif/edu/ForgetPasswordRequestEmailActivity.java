@@ -121,7 +121,6 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                             linearLayout.startAnimation(layoutFadeOut);
                         }
                     });
-                    requestSend.startAnimation(animFadeIn);
                 }
 
                 @Override
