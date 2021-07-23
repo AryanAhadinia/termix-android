@@ -77,9 +77,24 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
         public void setCourse(Course course) {
             this.titleTextView.setText(course.getTitle());
-            this.instructorTextView.setText(course.getInstructor());
-            this.classTimeTextView.setText(course.getSessionsString());
-            this.examTimeTextView.setText(course.getExamTime());
+            if (course.getInstructor().isEmpty()) {
+                this.instructorTextView.setVisibility(View.GONE);
+            } else {
+                this.instructorTextView.setVisibility(View.VISIBLE);
+                this.instructorTextView.setText(course.getInstructor());
+            }
+            if (course.getSessions().isEmpty()) {
+                this.classTimeTextView.setVisibility(View.GONE);
+            } else {
+                this.classTimeTextView.setVisibility(View.VISIBLE);
+                this.classTimeTextView.setText(course.getSessionsString());
+            }
+            if (course.getExamTime().isEmpty()) {
+                this.examTimeTextView.setVisibility(View.GONE);
+            } else {
+                this.examTimeTextView.setVisibility(View.VISIBLE);
+                this.examTimeTextView.setText(course.getExamTime());
+            }
             this.capacityTextView.setText(String.valueOf(course.getCapacity()));
             this.unitTextView.setText(String.valueOf(course.getUnit()));
             this.identifierTextView.setText(String.format(Locale.US, "%d, %d",

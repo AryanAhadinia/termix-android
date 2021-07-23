@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/yekan"
         android:text="@string/searchResultTitle"
+        android:textAlignment="center"
         android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,66 +27,75 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/yekan"
         android:text="@string/searchResultInstructor"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-    <TextView
-        android:id="@+id/classSessionsTextView"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/yekan"
-        android:text="@string/searchResultClassTime"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/examTimeTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/instructorTextView">
 
-    <TextView
-        android:id="@+id/courseIdentifierTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/yekan"
-        android:text="@string/searchResultIdentifier"
-        app:layout_constraintBottom_toBottomOf="@+id/unitTextView"
-        app:layout_constraintStart_toEndOf="@+id/unitTextView"
-        app:layout_constraintTop_toTopOf="@+id/unitTextView" />
+        <TextView
+            android:id="@+id/capacityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/yekan"
+            android:text="@string/searchResultCapacity"
+            android:textColor="@color/white" />
 
-    <TextView
-        android:id="@+id/examTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/yekan"
-        android:text="@string/searchResultExamTime"
-        app:layout_constraintBottom_toBottomOf="@+id/examTextView"
-        app:layout_constraintEnd_toStartOf="@+id/examTextView"
-        app:layout_constraintTop_toTopOf="@+id/examTextView" />
+        <TextView
+            android:id="@+id/unitTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:text="@string/searchResultUnit"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/unitTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/yekan"
-        android:text="@string/searchResultUnit"
-        app:layout_constraintTop_toBottomOf="@+id/classSessionsTextView"
-        tools:layout_editor_absoluteX="87dp" />
+        <TextView
+            android:id="@+id/courseIdentifierTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/yekan"
+            android:text="@string/searchResultIdentifier"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/capacityTextView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/yekan"
-        android:text="@string/searchResultCapacity"
-        app:layout_constraintTop_toBottomOf="@+id/unitTextView"
-        tools:layout_editor_absoluteX="212dp" />
-
-    <TextView
-        android:id="@+id/examTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/yekan"
-        android:text="@string/exam"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructorTextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/examTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:text="@string/searchResultExamTime"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/classSessionsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:text="@string/searchResultClassTime"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

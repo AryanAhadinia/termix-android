@@ -29,6 +29,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
@@ -129,7 +134,12 @@ public class MainActivity extends AppCompatActivity {
             isSearching = hasFocus;
             if (searchResultRecyclerView == null) {
                 searchResultRecyclerView = findViewById(R.id.searchResultRecyclerView);
-                searchResultRecyclerView.setAdapter(new SearchResultAdapter());
+                SearchResultAdapter adapter = new SearchResultAdapter();
+                AlphaInAnimationAdapter alphaAnimatedAdapter = new AlphaInAnimationAdapter(adapter);
+                alphaAnimatedAdapter.setFirstOnly(false);
+                ScaleInAnimationAdapter scaleAnimatedAdapter = new ScaleInAnimationAdapter(alphaAnimatedAdapter);
+                scaleAnimatedAdapter.setFirstOnly(false);
+                searchResultRecyclerView.setAdapter(scaleAnimatedAdapter);
                 searchResultRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
             }
             if (hasFocus) {
