@@ -1,12 +1,14 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.termix.ssc.ce.sharif.edu.model.Session;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,6 +92,9 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         ArrayList<ArrayList<CourseSession>> mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromLocal());
         if (isMySelectionsEmpty(mySelections)) {
             mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+        }
+        if (isMySelectionsEmpty(mySelections)){
+            return;
         }
         mySelections.get(dayOfWeek).sort((courseSession, t1) -> courseSession.getSession().compareTo(t1.getSession()));
         for (CourseSession courseSession : mySelections.get(dayOfWeek)) {

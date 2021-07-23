@@ -1,10 +1,11 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.termix.ssc.ce.sharif.edu.R;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -45,7 +46,14 @@ public class CollectionWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         Toast.makeText(context, "onDisabled called", Toast.LENGTH_LONG).show();
-        appWidgetAlarm.stopAlarm();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisAppWidgetComponentName = new ComponentName(context.getPackageName(), getClass().getName());
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidgetComponentName);
+        if (appWidgetIds.length == 0) {
+            // stop alarm
+            AppWidgetAlarm appWidgetAlarm = new AppWidgetAlarm(context.getApplicationContext());
+            appWidgetAlarm.stopAlarm();
+        }
     }
 
     @Override

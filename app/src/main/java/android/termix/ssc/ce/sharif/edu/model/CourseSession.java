@@ -43,6 +43,7 @@ public class CourseSession implements Comparable<CourseSession> {
         for (int i = 0; i < 6; i++) {
             list.add(new ArrayList<>());
         }
+        if (courses == null) return list;
         for (Course course : courses) {
             for (Session session : course.getSessions()) {
                 list.get(session.getDay()).add(new CourseSession(course, session));
