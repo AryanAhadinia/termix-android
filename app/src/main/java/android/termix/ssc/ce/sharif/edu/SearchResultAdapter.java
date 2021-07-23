@@ -68,10 +68,19 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                 filteredList.addAll(allCourses);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (Course course : allCourses) {
-                    if (course.getTitle().toLowerCase().contains(filterPattern) ||
-                    course.getInstructor().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(course);
+                try {
+                    Integer.parseInt(filterPattern);
+                    for (Course course : allCourses) {
+                        if (String.valueOf(course.getCourseId()).contains(filterPattern)) {
+                            filteredList.add(course);
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    for (Course course : allCourses) {
+                        if (course.getTitle().toLowerCase().contains(filterPattern) ||
+                                course.getInstructor().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(course);
+                        }
                     }
                 }
             }
