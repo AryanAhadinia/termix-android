@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.ChangePasswordTask;
@@ -72,12 +73,24 @@ public class ServeForgetPasswordActivity extends AppCompatActivity {
                 public void onResult(Object o) {
                     // TODO
                     System.out.println("password changed");
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast toast = Toast.makeText(getBaseContext(), "agsdfhghm", Toast.LENGTH_LONG);
-                            toast.show();
+                    handler.post(() -> {
+                        Toast toast;
+                        if (isTaskRoot()) {
+                            toast = Toast.makeText(getBaseContext(),
+                                    "گذرواژه دگرگون شد، اکنون به صفحه اصلی هدایت می‌شوید",
+                                    Toast.LENGTH_LONG);
+                            MySelectionsLoader.getInstance().run();
+                            Intent intent = new Intent(ServeForgetPasswordActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                    Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        } else {
+                            toast = Toast.makeText(getBaseContext(),
+                                    "گذرواژه دگرگون شد.",
+                                    Toast.LENGTH_LONG);
                         }
+                        toast.show();
                     });
                     changePasswordButton.startAnimation(animFadeIn);
                 }

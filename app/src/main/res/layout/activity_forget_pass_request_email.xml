@@ -36,6 +36,7 @@
                 android:fontFamily="@font/yekan"
                 android:gravity="center"
                 android:text="@string/forget_password_request_email_prompt"
+                android:textColor="@color/black"
                 android:textDirection="rtl"
                 android:textSize="18sp" />
 
@@ -80,6 +81,21 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/forget_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/yekan"
+        android:gravity="center"
+        android:text="@string/forget_message"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/email_sent_anim"
+        app:layout_constraintEnd_toEndOf="@id/linearLayout"
+        app:layout_constraintStart_toStartOf="@id/linearLayout"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/email_sent_anim"

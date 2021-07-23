@@ -16,10 +16,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -48,6 +48,7 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
 
         LottieAnimationView sentEmail = findViewById(R.id.email_sent_anim);
         LinearLayout linearLayout = findViewById(R.id.formLayout);
+        TextView message = findViewById(R.id.forget_message);
 
         Handler handler = new Handler();
 
@@ -62,6 +63,7 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                 linearLayout.setVisibility(View.INVISIBLE);
                 sentEmail.setVisibility(View.VISIBLE);
                 sentEmail.playAnimation();
+                message.setVisibility(View.VISIBLE);
 
                 sentEmail.addAnimatorListener(new Animator.AnimatorListener() {
                     @Override
@@ -115,9 +117,6 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast toast = Toast.makeText(getBaseContext(), "agsdfhghm",
-                                    Toast.LENGTH_LONG);
-                            toast.show();
                             linearLayout.startAnimation(layoutFadeOut);
                         }
                     });
