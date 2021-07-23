@@ -22,6 +22,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -73,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             adapters.add(adapter);
         }
-        // get and initial search result recycler view
-        searchResultRecyclerView = findViewById(R.id.searchResultRecyclerView);
         // create handler
         Handler handler = new Handler();
         // get required views
@@ -128,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
 
         searchBar.setOnFocusChangeListener((v, hasFocus) -> {
             isSearching = hasFocus;
+            if (searchResultRecyclerView == null) {
+                searchResultRecyclerView = findViewById(R.id.searchResultRecyclerView);
+                searchResultRecyclerView.setAdapter(new SearchResultAdapter());
+                searchResultRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+            }
             if (hasFocus) {
                 nestedScrollView.setVisibility(View.GONE);
                 searchResultRecyclerView.setVisibility(View.VISIBLE);

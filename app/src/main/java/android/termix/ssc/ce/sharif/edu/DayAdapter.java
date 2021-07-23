@@ -1,6 +1,7 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.view.LayoutInflater;
