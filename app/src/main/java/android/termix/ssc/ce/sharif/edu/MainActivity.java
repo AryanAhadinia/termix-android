@@ -9,11 +9,9 @@ import android.speech.RecognizerIntent;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
-import android.termix.ssc.ce.sharif.edu.scheduleUI.AllCoursesDialogFragment;
 import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
@@ -25,7 +23,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -45,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     private LoadSource selectionsLoadSource;
     private final Object loadingLock = new Object();
+
+    private boolean isSearching;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,18 +69,23 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             adapters.add(adapter);
         }
-        // initial for loading
-        selectionsLoadSource = LoadSource.NOT_LOADED;
+        // create handler
         Handler handler = new Handler();
         // get required views
         progressBar = findViewById(R.id.progressBar);
         nestedScrollView = findViewById(R.id.nestedScrollView);
-        // load my selections from local
+        textInputLayout = findViewById(R.id.text_input_layout);
+        searchBar = findViewById(R.id.search_bar);
+        // load selections
+        selectionsLoadSource = LoadSource.NOT_LOADED;
+        isSearching = false;
+        // load my selections from
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
             Log.i("Selections", "Local fetched");
             if (mySelections != null) {
-                ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
+                ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession
+                        .getWeekdayCourseSessionsMap(mySelections);
                 synchronized (loadingLock) {
                     if (selectionsLoadSource != LoadSource.NETWORK) {
                         selectionsLoadSource = LoadSource.LOCAL;
@@ -114,19 +118,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        // Get views
-        textInputLayout = findViewById(R.id.text_input_layout);
-        searchBar = findViewById(R.id.search_bar);
-        //
-        searchBar.setOnLongClickListener(e -> {
-            DialogFragment dialog = new AllCoursesDialogFragment();
-            dialog.show(getSupportFragmentManager(), "Courses");
-            return true;
+
+        searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                isSearching = true;
+            }
         });
 
         textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
 
         setUpSettings(); // TODO
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isSearching) {
+            isSearching = false;
+        } else {
+            super.onBackPressed();
+        }
+
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
