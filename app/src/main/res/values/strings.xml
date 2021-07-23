@@ -44,6 +44,7 @@
     <string name="set_new_password_prompt">لطفا گذرواژه جدید خود را وارد کنید.</string>
     <string name="send_email_button">بفرست</string>
     <string name="signup_message">ایمیل خود را تأیید کرده و سپس از صفحه درون‌شد، وارد برنامه شوید.</string>
+    <string name="forget_message">ایمیل بازیابی گذرواژه برایتان فرستاده شد.</string>
     <string name="searchResultTitle">برنامه سازی موبایل</string>
     <string name="searchResultInstructor">امید جعفری نژاد</string>
     <string name="searchResultClassTime">شنبه و دوشنبه 16:30 الی 18:00</string>
