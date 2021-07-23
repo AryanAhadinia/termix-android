@@ -1,4 +1,4 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.widget;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

@@ -1,4 +1,4 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.widget;
 
 import android.content.Intent;
 import android.widget.RemoteViewsService;
