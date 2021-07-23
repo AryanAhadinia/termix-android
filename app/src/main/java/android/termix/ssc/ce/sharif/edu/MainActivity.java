@@ -9,10 +9,10 @@ import android.speech.RecognizerIntent;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
-import android.termix.ssc.ce.sharif.edu.scheduleUI.DayAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -38,7 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<DayAdapter> adapters;
 
     private ProgressBar progressBar;
+    private LinearLayout mainLinearLayout;
+
     private NestedScrollView nestedScrollView;
+
+    private RecyclerView searchResultRecyclerView;
 
     private LoadSource selectionsLoadSource;
     private final Object loadingLock = new Object();
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // set status bar color
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        // get recycler view
+        // get weekdays recycler view
         ArrayList<RecyclerView> recyclerViews = new ArrayList<>();
         recyclerViews.add(findViewById(R.id.recycler_saturday));
         recyclerViews.add(findViewById(R.id.recycler_sunday));
@@ -69,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             adapters.add(adapter);
         }
+        // get and initial search result recycler view
+        searchResultRecyclerView = findViewById(R.id.searchResultRecyclerView);
         // create handler
         Handler handler = new Handler();
         // get required views
+        mainLinearLayout = findViewById(R.id.main_linear_layout);
         progressBar = findViewById(R.id.progressBar);
         nestedScrollView = findViewById(R.id.nestedScrollView);
         textInputLayout = findViewById(R.id.text_input_layout);
@@ -93,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                             int finalI = i;
                             handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
                         }
-                        if (nestedScrollView.getVisibility() != View.VISIBLE) {
+                        if (mainLinearLayout.getVisibility() != View.VISIBLE) {
                             handler.post(this::onLoad);
                         }
                     }
@@ -112,17 +119,21 @@ public class MainActivity extends AppCompatActivity {
                         int finalI = i;
                         handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
                     }
-                    if (nestedScrollView.getVisibility() != View.VISIBLE) {
+                    if (mainLinearLayout.getVisibility() != View.VISIBLE) {
                         handler.post(this::onLoad);
                     }
                 }
             }
         });
 
-        searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                isSearching = true;
+        searchBar.setOnFocusChangeListener((v, hasFocus) -> {
+            isSearching = hasFocus;
+            if (hasFocus) {
+                nestedScrollView.setVisibility(View.GONE);
+                searchResultRecyclerView.setVisibility(View.VISIBLE);
+            } else {
+                nestedScrollView.setVisibility(View.VISIBLE);
+                searchResultRecyclerView.setVisibility(View.GONE);
             }
         });
 
@@ -135,10 +146,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (isSearching) {
             isSearching = false;
+            nestedScrollView.setVisibility(View.VISIBLE);
+            searchBar.clearFocus();
         } else {
             super.onBackPressed();
         }
-
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
@@ -181,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onLoad() {
-        nestedScrollView.setVisibility(View.VISIBLE);
+        mainLinearLayout.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
     }
 
