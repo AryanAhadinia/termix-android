@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 searchResultRecyclerView.setVisibility(View.VISIBLE);
             } else {
                 nestedScrollView.setVisibility(View.VISIBLE);
+                searchBar.setText("");
                 searchResultRecyclerView.setVisibility(View.GONE);
             }
         });
