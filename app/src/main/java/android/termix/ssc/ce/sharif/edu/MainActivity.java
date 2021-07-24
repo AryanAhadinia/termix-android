@@ -168,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
                 searchResultRecyclerView.setVisibility(View.VISIBLE);
             } else {
                 nestedScrollView.setVisibility(View.VISIBLE);
-                searchBar.setText("");
                 searchResultRecyclerView.setVisibility(View.GONE);
+                searchBar.setText("");
             }
         });
 
@@ -183,14 +183,25 @@ public class MainActivity extends AppCompatActivity {
         if (isSearching) {
             isSearching = false;
             nestedScrollView.setVisibility(View.VISIBLE);
+            searchResultRecyclerView.setVisibility(View.GONE);
             searchBar.clearFocus();
+            searchBar.setText("");
         } else {
             super.onBackPressed();
         }
     }
 
     public void addCourse(Course course) {
-        System.out.println(course);
+        isSearching = false;
+        nestedScrollView.setVisibility(View.VISIBLE);
+        searchResultRecyclerView.setVisibility(View.GONE);
+        searchBar.clearFocus();
+        searchBar.setText("");
+        ArrayList<CourseSession> courseSessions = CourseSession.getCourseSessions(course);
+        for (CourseSession courseSession : courseSessions) {
+            adapters.get(courseSession.getSession().getDay())
+                    .insertCourseSessionAndNotify(courseSession);
+        }
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
