@@ -88,9 +88,9 @@
         android:id="@+id/course_department"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/departments"
         android:fontFamily="@font/yekan"
         android:padding="16dp"
+        android:text="@string/departments"
         android:textColor="@color/white"
         android:textDirection="rtl"
         android:textSize="16sp"
@@ -115,6 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/yekan"
+        android:gravity="center"
         android:padding="16dp"
         android:text="@string/course_time"
         android:textColor="@color/white"
@@ -122,5 +123,35 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/course_department" />
+
+    <TextView
+        android:id="@+id/register_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/yekan"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/forget_message"
+        android:textColor="@color/white"
+        android:textDirection="rtl"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/course_exam" />
+
+    <TextView
+        android:id="@+id/info_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/yekan"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/forget_message"
+        android:textColor="@color/white"
+        android:textDirection="rtl"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_message" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
