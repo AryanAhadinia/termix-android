@@ -189,6 +189,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void addCourse(Course course) {
+        System.out.println(course);
+    }
+
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
             ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
@@ -212,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onActivityResult: PERMISSION FAILED! (NULL)");
         }
     });
-
 
     private void setUpVoiceSearch() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

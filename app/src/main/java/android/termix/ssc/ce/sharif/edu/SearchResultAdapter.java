@@ -24,9 +24,9 @@ import java.util.Locale;
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder>
         implements Filterable {
     private final ArrayList<Course> showingCourses, allCourses;
-    private final Context context;
+    private final MainActivity context;
 
-    public SearchResultAdapter(Context context) {
+    public SearchResultAdapter(MainActivity context) {
         if (AllCoursesLoader.getInstance().getFromNetwork() != null) {
             this.allCourses = mergeMapToList(AllCoursesLoader.getInstance().getFromNetwork());
         } else if (AllCoursesLoader.getInstance().getFromLocal() != null) {
@@ -51,7 +51,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         Course course = showingCourses.get(position);
-        holder.setCourse(course);
+        holder.set(course, context);
     }
 
     @Override
@@ -111,7 +111,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         return allCourses;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
         private final View itemView;
 
         private final TextView titleTextView;
@@ -121,6 +122,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         private final TextView capacityTextView;
         private final TextView unitTextView;
         private final TextView identifierTextView;
+
+        private Course course;
+
+        private MainActivity mainActivity;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -132,10 +137,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.capacityTextView = itemView.findViewById(R.id.capacityTextView);
             this.unitTextView = itemView.findViewById(R.id.unitTextView);
             this.identifierTextView = itemView.findViewById(R.id.courseIdentifierTextView);
+            itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
 
-        public void setCourse(Course course) {
+        public void set(Course course, MainActivity mainActivity) {
+            this.course = course;
+            this.mainActivity = mainActivity;
             this.titleTextView.setText(course.getTitle());
             if (course.getInstructor().isEmpty()) {
                 this.instructorTextView.setVisibility(View.GONE);
@@ -159,6 +167,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.unitTextView.setText(String.valueOf(course.getUnit()));
             this.identifierTextView.setText(String.format(Locale.US, "%d, %d",
                     course.getCourseId(), course.getGroupId()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            mainActivity.addCourse(course);
         }
 
         @Override
