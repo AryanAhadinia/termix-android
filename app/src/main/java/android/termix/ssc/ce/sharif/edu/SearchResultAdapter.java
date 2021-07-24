@@ -71,7 +71,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(allCourses);
             } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
+                String filterPattern = arabicToDecimal(constraint.toString().toLowerCase().trim());
                 try {
                     Integer.parseInt(filterPattern);
                     for (Course course : allCourses) {
@@ -81,8 +81,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                     }
                 } catch (NumberFormatException nfe) {
                     for (Course course : allCourses) {
-                        if (course.getTitle().toLowerCase().contains(filterPattern) ||
-                                course.getInstructor().toLowerCase().contains(filterPattern)) {
+                        if (arabicToDecimal(course.getTitle().toLowerCase()).contains(filterPattern)
+                                || course.getInstructor().toLowerCase().contains(filterPattern)) {
                             filteredList.add(course);
                         }
                     }
@@ -178,5 +178,18 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         public boolean onLongClick(View v) {
             return false;
         }
+    }
+
+    private static String arabicToDecimal(String number) {
+        char[] chars = new char[number.length()];
+        for(int i=0;i<number.length();i++) {
+            char ch = number.charAt(i);
+            if (ch >= 0x0660 && ch <= 0x0669)
+                ch -= 0x0660 - '0';
+            else if (ch >= 0x06f0 && ch <= 0x06F9)
+                ch -= 0x06f0 - '0';
+            chars[i] = ch;
+        }
+        return new String(chars);
     }
 }
