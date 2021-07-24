@@ -225,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
         }
     });
 
-    private final ActivityResultLauncher<String[]> mPermissionResult = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+    private final ActivityResultLauncher<String[]> mPermissionResult = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(), result -> {
         try {
             if (result.get(Manifest.permission.RECORD_AUDIO)) {
                 setUpVoiceSearch();

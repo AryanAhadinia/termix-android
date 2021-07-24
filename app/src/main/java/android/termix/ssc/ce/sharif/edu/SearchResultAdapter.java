@@ -14,6 +14,7 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -195,13 +196,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
         @Override
         public boolean onLongClick(View v) {
-            return false;
+            DialogFragment dialog = new CourseDialog(course);
+            dialog.show(mainActivity.getSupportFragmentManager(), "CourseDialogFragment");
+            return true;
         }
     }
 
     private static String arabicToDecimal(String number) {
         char[] chars = new char[number.length()];
-        for(int i=0;i<number.length();i++) {
+        for (int i = 0; i < number.length(); i++) {
             char ch = number.charAt(i);
             if (ch >= 0x0660 && ch <= 0x0669)
                 ch -= 0x0660 - '0';

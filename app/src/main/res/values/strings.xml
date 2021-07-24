@@ -52,6 +52,21 @@
     <string name="searchResultUnit">3</string>
     <string name="searchResultCapacity">80</string>
     <string name="exam">آزمون: </string>
+    <string name="choose_department">گزینش دانشکده</string>
+    <string name="civil">مهندسی عمران</string>
+    <string name="computer">مهندسی کامپیوتر</string>
+    <string name="energy">مهندسی انرژی</string>
+    <string name="economics">مدیریت و اقتصاد</string>
+    <string name="industry">مهندسی صنایع</string>
+    <string name="math">علوم ریاضی</string>
+    <string name="chemistry">شیمی</string>
+    <string name="physics">فیزیک</string>
+    <string name="electric">مهندسی برق</string>
+    <string name="oil">مهندسی شیمی و نفت</string>
+    <string name="material">مهندسی و علم مواد</string>
+    <string name="mechanics">مهندسی مکانیک</string>
+    <string name="aerospace">مهندسی هوافضا</string>
+    <string name="choose_your_department">دانشکده خود را برگزینید:</string>
     <string name="delete">حذف</string>
     <string name="undo">بازگشت</string>
 </resources>

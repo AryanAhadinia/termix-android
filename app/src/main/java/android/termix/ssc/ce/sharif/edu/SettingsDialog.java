@@ -34,6 +34,7 @@ public class SettingsDialog extends DialogFragment {
         TextView notificationTime = root.findViewById(R.id.notification_time);
         TextView changePassword = root.findViewById(R.id.change_password);
         TextView logout = root.findViewById(R.id.logout);
+        TextView chooseDepartment = root.findViewById(R.id.department);
 
         Handler handler = new Handler();
 
@@ -47,6 +48,12 @@ public class SettingsDialog extends DialogFragment {
             new Thread(() -> DatabaseManager.getInstance().deleteData()).start();
             Intent intent = new Intent(getActivity(), ServeForgetPasswordActivity.class);
             startActivity(intent);
+        });
+
+        chooseDepartment.setOnClickListener(v -> {
+            DialogFragment dialog = new ChooseDepartmentDialog();
+            dialog.show(getActivity().getSupportFragmentManager(),
+                    "ChooseDepartmentDialogFragment");
         });
 
         logout.setOnClickListener(v -> new SignOutTask() {
