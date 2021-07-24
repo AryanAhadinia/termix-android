@@ -28,12 +28,10 @@ public class CourseSession implements Comparable<CourseSession> {
         return this.session.compareTo(o.session);
     }
 
-    public static ArrayList<CourseSession> getCourseSessions(ArrayList<Course> courses) {
+    public static ArrayList<CourseSession> getCourseSessions(Course course) {
         ArrayList<CourseSession> courseSessions = new ArrayList<>();
-        for (Course course : courses) {
-            for (Session session : course.getSessions()) {
-                courseSessions.add(new CourseSession(course, session));
-            }
+        for (Session session : course.getSessions()) {
+            courseSessions.add(new CourseSession(course, session));
         }
         return courseSessions;
     }

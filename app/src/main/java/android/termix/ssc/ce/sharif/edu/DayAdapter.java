@@ -1,7 +1,6 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.view.LayoutInflater;
@@ -27,7 +26,8 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
     @NonNull
     @NotNull
     @Override
-    public CourseTileViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public CourseTileViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent,
+                                                   int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View courseView = inflater.inflate(R.layout.layout_course_frame, parent, false);
@@ -45,31 +45,35 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
         return this.sessions.size();
     }
 
-    public void insertCourseSessionAndNotify(CourseSession courseSession) {
-        notifyItemInserted(insertCourseSession(courseSession));
-    }
-
     public int insertCourseSession(CourseSession courseSession) {
         sessions.add(courseSession);
         sessions.sort(CourseSession::compareTo);
         return sessions.indexOf(courseSession);
     }
 
-    public void insertCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
-        insertCourseSessions(courseSessions);
-        notifyDataSetChanged();
+    public void insertCourseSessionAndNotify(CourseSession courseSession) {
+        notifyItemInserted(insertCourseSession(courseSession));
     }
 
-    public void rebaseCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
-        sessions.clear();
-        insertCourseSessionsAndNotify(courseSessions);
-    }
-
+    // TODO
     public void insertCourseSessions(ArrayList<CourseSession> courseSessions) {
         sessions.addAll(courseSessions);
         sessions.sort(CourseSession::compareTo);
     }
 
+    // TODO
+    public void insertCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+        insertCourseSessions(courseSessions);
+        notifyDataSetChanged();
+    }
+
+    // TODO
+    public void rebaseCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+        sessions.clear();
+        insertCourseSessionsAndNotify(courseSessions);
+    }
+
+    // TODO
     public static class CourseTileViewHolder extends RecyclerView.ViewHolder
             implements View.OnLongClickListener {
         private CourseSession courseSession;
@@ -103,7 +107,6 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
 
         @Override
         public boolean onLongClick(View v) {
-            System.out.println("SALAMMMMMMMMMMMMMMMMMMM");
             return true;
         }
     }

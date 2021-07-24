@@ -1,6 +1,7 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +27,14 @@ import java.util.Locale;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder>
         implements Filterable {
+    public static final String PREFERENCE_NAME = "myDep";
+    public static final String PREFERENCE_LABEL = "myDep";
+
     private final ArrayList<Course> showingCourses, allCourses;
     private final MainActivity context;
 
     public SearchResultAdapter(MainActivity context) {
+        this.context = context;
         if (AllCoursesLoader.getInstance().getFromNetwork() != null) {
             this.allCourses = mergeMapToList(AllCoursesLoader.getInstance().getFromNetwork());
         } else if (AllCoursesLoader.getInstance().getFromLocal() != null) {
@@ -36,7 +43,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.allCourses = new ArrayList<>();
         }
         this.showingCourses = new ArrayList<>(allCourses);
-        this.context = context;
     }
 
     @NonNull
@@ -105,9 +111,22 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     };
 
     private ArrayList<Course> mergeMapToList(HashMap<Integer, ArrayList<Course>> map) {
+        SharedPreferences sharedPreference = context.getSharedPreferences(PREFERENCE_NAME,
+                Context.MODE_PRIVATE);
+        int depId = sharedPreference.getInt(PREFERENCE_LABEL, 40);
+        ArrayList<Integer> depIds = new ArrayList<>(map.keySet());
+        depIds.sort(Integer::compareTo);
+        depIds.remove(Integer.valueOf(24));
+        depIds.add(0, 24);
+        depIds.remove(Integer.valueOf(22));
+        depIds.add(0, 22);
+        depIds.remove(Integer.valueOf(37));
+        depIds.add(0, 37);
+        depIds.remove(Integer.valueOf(depId));
+        depIds.add(0, depId);
         ArrayList<Course> allCourses = new ArrayList<>();
-        for (ArrayList<Course> departmentCourses : map.values()) {
-            allCourses.addAll(departmentCourses);
+        for (Integer id : depIds) {
+            allCourses.addAll(map.get(id));
         }
         return allCourses;
     }
