@@ -1,8 +1,6 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.view.LayoutInflater;
@@ -53,7 +51,7 @@ public class CourseDialog extends DialogFragment {
         department.setText(Course.getDepartments().get(course.getDepId()));
 
         if (course.getInstructor().isEmpty()) {
-            instructor.setText("View.GONE");
+            instructor.setVisibility(View.GONE);
         } else {
             instructor.setText(course.getInstructor());
         }
