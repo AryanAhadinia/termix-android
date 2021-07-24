@@ -69,4 +69,5 @@
     <string name="choose_your_department">دانشکده خود را برگزینید:</string>
     <string name="delete">حذف</string>
     <string name="undo">بازگشت</string>
+    <string name="number_picker_title">چند دقیقه زودتر از کلاس؟</string>
 </resources>

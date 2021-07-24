@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         // initial recycler views adapter
         adapters = new ArrayList<>();
         for (RecyclerView recyclerView : recyclerViews) {
-            DayAdapter adapter = new DayAdapter();
+            DayAdapter adapter = new DayAdapter(this);
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));

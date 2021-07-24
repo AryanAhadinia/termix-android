@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +20,11 @@ import java.util.Locale;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private final ArrayList<CourseSession> sessions;
+    private final MainActivity mainActivity;
 
-    public DayAdapter() {
+    public DayAdapter(MainActivity mainActivity) {
         this.sessions = new ArrayList<>();
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -38,7 +41,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         CourseSession session = sessions.get(position);
-        holder.setCourseSession(session);
+        holder.setCourseSession(session, mainActivity);
     }
 
     @Override
@@ -78,6 +81,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnLongClickListener {
         private CourseSession courseSession;
+        private MainActivity mainActivity;
 
         private final ConstraintLayout background;
         private final ConstraintLayout foreground;
@@ -99,7 +103,8 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             itemView.setOnLongClickListener(this);
         }
 
-        public void setCourseSession(CourseSession courseSession) {
+        public void setCourseSession(CourseSession courseSession, MainActivity mainActivity) {
+            this.mainActivity = mainActivity;
             this.courseSession = courseSession;
             Course course = courseSession.getCourse();
             this.unitTextView.setText(String.valueOf(course.getUnit()));
@@ -120,6 +125,9 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
         @Override
         public boolean onLongClick(View v) {
+            DialogFragment dialog = new NumberPickerDialog(courseSession.getCourse().getCourseId(),
+                    courseSession.getCourse().getGroupId());
+            dialog.show(mainActivity.getSupportFragmentManager(), "NumberPickerDialogFragment");
             return true;
         }
     }

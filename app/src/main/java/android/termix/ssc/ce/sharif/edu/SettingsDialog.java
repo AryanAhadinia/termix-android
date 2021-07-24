@@ -27,7 +27,7 @@ public class SettingsDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
         LayoutInflater inflater = LayoutInflater.from(requireContext());
         View root = inflater.inflate(R.layout.settings_dialog, null);
@@ -39,8 +39,8 @@ public class SettingsDialog extends DialogFragment {
         Handler handler = new Handler();
 
         notificationTime.setOnClickListener(v -> {
-            DialogFragment dialog = new NumberPickerDialog();
-            dialog.show(getActivity().getSupportFragmentManager(),
+            DialogFragment dialog = new NumberPickerDialog(0, 0);
+            dialog.show(requireActivity().getSupportFragmentManager(),
                     "NumberPickerDialogFragment");
         });
 
