@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHolder> {
+public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private final ArrayList<CourseSession> sessions;
 
     public DayAdapter() {
@@ -26,16 +27,16 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
     @NonNull
     @NotNull
     @Override
-    public CourseTileViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent,
-                                                   int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent,
+                                         int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View courseView = inflater.inflate(R.layout.layout_course_frame, parent, false);
-        return new CourseTileViewHolder(courseView);
+        View courseView = inflater.inflate(R.layout.layout_selection, parent, false);
+        return new ViewHolder(courseView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull CourseTileViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         CourseSession session = sessions.get(position);
         holder.setCourseSession(session);
     }
@@ -74,18 +75,22 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
     }
 
     // TODO
-    public static class CourseTileViewHolder extends RecyclerView.ViewHolder
+    public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnLongClickListener {
         private CourseSession courseSession;
 
+        private final ConstraintLayout background;
+        private final ConstraintLayout foreground;
         private final TextView unitTextView;
         private final TextView idTextView;
         private final TextView titleTextView;
         private final TextView instructorTextView;
         private final TextView timesTextView;
 
-        public CourseTileViewHolder(@NonNull @NotNull View itemView) {
+        public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            this.background = (ConstraintLayout) itemView.findViewById(R.id.selectionBackground);
+            this.foreground = (ConstraintLayout) itemView.findViewById(R.id.selectionForeground);
             this.unitTextView = (TextView) itemView.findViewById(R.id.unit);
             this.idTextView = (TextView) itemView.findViewById(R.id.identifier);
             this.titleTextView = (TextView) itemView.findViewById(R.id.title);
@@ -103,6 +108,14 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.CourseTileViewHo
             this.titleTextView.setText(course.getTitle());
             this.instructorTextView.setText(course.getInstructor());
             this.timesTextView.setText(course.getSessionsString());
+        }
+
+        public ConstraintLayout getBackground() {
+            return background;
+        }
+
+        public ConstraintLayout getForeground() {
+            return foreground;
         }
 
         @Override

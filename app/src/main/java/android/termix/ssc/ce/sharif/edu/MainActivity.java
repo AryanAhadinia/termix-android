@@ -19,14 +19,18 @@ import android.widget.ProgressBar;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -80,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DaySwipeHelper() {
+                @Override
+                public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    System.out.println("salam");
+                }
+            });
+            itemTouchHelper.attachToRecyclerView(recyclerView);
             adapters.add(adapter);
         }
         // create handler
