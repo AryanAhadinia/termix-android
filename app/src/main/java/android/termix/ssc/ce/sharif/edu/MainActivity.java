@@ -190,18 +190,6 @@ public class MainActivity extends AppCompatActivity {
         textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
 
         setUpSettings(); // TODO
-
-
-//        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
-//        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-//
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(System.currentTimeMillis());
-//        calendar.set(Calendar.HOUR_OF_DAY, 23);
-//        calendar.set(Calendar.MINUTE, 16);
-//
-//        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 1, alarmIntent);
     }
 
     @Override
