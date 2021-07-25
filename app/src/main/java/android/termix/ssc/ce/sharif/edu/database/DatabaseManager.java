@@ -53,7 +53,7 @@ public class DatabaseManager {
         values.put(DatabaseHelper.COURSE_CAPACITY, course.getCapacity());
         values.put(DatabaseHelper.COURSE_INSTRUCTOR, course.getInstructor());
         values.put(DatabaseHelper.COURSE_EXAM_TIME, course.getExamTime());
-        values.put(DatabaseHelper.COURSE_SESSIONS_JSON, new Gson().toJson(course.getSessions()));
+        values.put(DatabaseHelper.COURSE_SESSIONS_JSON, course.getSessionParser().getSessionJsonArray().toString());
         values.put(DatabaseHelper.COURSE_INFO_MESSAGE, course.getInfoMessage());
         values.put(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE, course.getOnRegisterMessage());
         database.insert(DatabaseHelper.COURSE_TABLE, null, values);

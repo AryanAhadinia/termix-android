@@ -72,4 +72,7 @@
     <string name="number_picker_title">چند دقیقه زودتر از کلاس؟</string>
     <string name="end_alarm">بسه!</string>
     <string name="signup_verify_waiting_prompt">کمی درنگ کنید تا حساب شما ایجاد شود.</string>
+    <string name="channel_name">alarmChannel</string>
+    <string name="channel_description">reminder</string>
+    <string name="no_class_time">بدون زمان کلاس</string>
 </resources>

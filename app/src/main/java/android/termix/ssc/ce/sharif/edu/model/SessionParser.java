@@ -30,7 +30,7 @@ public class SessionParser {
         if (sessions != null) {
             return;
         }
-        sessions = new ArrayList<>();
+        ArrayList<Session> sessions = new ArrayList<>();
         ArrayList<String> sessionsArray = new ArrayList<>();
         for (int i = 0; i < sessionJsonArray.length(); i++) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -54,20 +54,21 @@ public class SessionParser {
             sessionsArray.add(stringBuilder.toString());
         }
         sessionsSting = String.join(" و ", sessionsArray);
+        this.sessions = sessions;
     }
 
     public JSONArray getSessionJsonArray() {
         return sessionJsonArray;
     }
 
-    public ArrayList<Session> getSessions() throws JSONException {
+    public synchronized ArrayList<Session> getSessions() throws JSONException {
         if (sessions == null) {
             parse();
         }
         return sessions;
     }
 
-    public String getSessionsSting() throws JSONException {
+    public synchronized String getSessionsSting() throws JSONException {
         if (sessionsSting == null) {
             parse();
         }
