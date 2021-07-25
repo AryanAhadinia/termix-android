@@ -13,13 +13,13 @@ import android.widget.NumberPicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 public class NumberPickerDialog extends DialogFragment {
     private final int id, group;
-    private int tmp;
 
     public NumberPickerDialog(int id, int group) {
         this.id = id;
@@ -38,23 +38,24 @@ public class NumberPickerDialog extends DialogFragment {
         NumberPicker minutePicker = root.findViewById(R.id.numberpicker_setting_picker);
         minutePicker.setMinValue(0);
         minutePicker.setMaxValue(30);
-        if (id == 0) {
-            minutePicker.setValue(sharedPreference.getInt(AlarmCenter.PREFERENCE_LABEL, 5));
-        } else {
-            minutePicker.setValue(sharedPreference.getInt(AlarmCenter.PREFERENCE_LABEL + "_" +
-                    id + "_" + group, 5));
-        }
-        tmp = minutePicker.getValue();
 
-        minutePicker.setOnValueChangedListener((picker, oldVal, newVal) -> tmp = newVal);
+        String label;
+        if (id == 0) {
+            label = AlarmCenter.PREFERENCE_LABEL;
+        } else {
+            label = AlarmCenter.PREFERENCE_LABEL + "_" + id + "_" + group;
+        }
+
+        minutePicker.setValue(sharedPreference.getInt(label, 5));
+        SwitchCompat alarmSituation = root.findViewById(R.id.notification_switch);
 
         Button button = root.findViewById(R.id.save_button);
         button.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreference.edit();
-            if (id == 0) {
-                editor.putInt(AlarmCenter.PREFERENCE_LABEL, tmp);
+            if (alarmSituation.isChecked()) {
+                editor.putInt(label, minutePicker.getValue());
             } else {
-                editor.putInt(AlarmCenter.PREFERENCE_LABEL + "_" + id + "_" + group, tmp);
+                editor.putInt(label, -1);
             }
             editor.apply();
             dismiss();

@@ -1,5 +1,6 @@
 package android.termix.ssc.ce.sharif.edu;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,7 +35,7 @@ public class ChooseDepartmentDialog extends DialogFragment {
         super.onResume();
         final float scale = getResources().getDisplayMetrics().density;
         float dip = scale + 0.5f;
-        getDialog().getWindow().setLayout((int) (160 * dip), (int) (495 * dip));
+        getDialog().getWindow().setLayout((int) (160 * dip), ActionBar.LayoutParams.MATCH_PARENT);
     }
 
     private void selectDepartment(int depId) {

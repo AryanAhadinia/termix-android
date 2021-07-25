@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/yekan"
-            android:text="@string/notification"
+            android:text="@string/notification_situation"
             android:layout_weight="1"/>
 
         <Space
