@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
         nestedScrollView.setVisibility(View.VISIBLE);
         searchResultRecyclerView.setVisibility(View.GONE);
         searchBar.clearFocus();
+        hideKeyboard(this);
         searchBar.setText("");
         ArrayList<CourseSession> courseSessions = CourseSession.getCourseSessions(course);
         if (courseSessions.isEmpty()) {
