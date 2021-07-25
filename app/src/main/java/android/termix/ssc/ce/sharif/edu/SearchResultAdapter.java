@@ -46,6 +46,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public void updateList() {
         this.allCourses.clear();
         this.allCourses.addAll(mergeMapToList(AllCoursesLoader.getInstance().getFromLocal()));
+
     }
 
     @NonNull

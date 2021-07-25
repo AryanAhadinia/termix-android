@@ -1,9 +1,14 @@
 package android.termix.ssc.ce.sharif.edu;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.GradientDrawable;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -151,10 +156,18 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             this.titleTextView.setText(course.getTitle());
             this.instructorTextView.setText(course.getInstructor());
             this.timesTextView.setText(course.getSessionsString());
-            if (conflicted) {
-                foreground.setBackgroundColor(Color.GRAY);
-            } else {
-                foreground.setBackgroundColor(Color.RED);
+            GradientDrawable viewColor = (GradientDrawable) foreground.getBackground();
+
+            ColorStateList colorStateList = viewColor.getColor();
+            int colorId = colorStateList.getDefaultColor();
+            Log.e("KASHI: ", String.valueOf(colorId));
+
+            if (conflicted && colorId != mainActivity.getApplicationContext().getResources()
+                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
+                animateConflicted();
+            } else if (!conflicted && colorId != mainActivity.getApplicationContext().getResources()
+                    .getColor(R.color.dark_red, mainActivity.getTheme())) {
+                animateNormal();
             }
         }
 
@@ -176,6 +189,107 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
                     courseSession.getCourse().getGroupId());
             dialog.show(mainActivity.getSupportFragmentManager(), "NumberPickerDialogFragment");
             return true;
+        }
+
+        private void animateConflicted() {
+            ObjectAnimator colorFade = ObjectAnimator.ofObject(foreground, "backgroundColor",
+                    new ArgbEvaluator(),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
+                            mainActivity.getTheme()),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
+                            mainActivity.getTheme()));
+            colorFade.setDuration(2000);
+            ObjectAnimator colorFadeBack = ObjectAnimator.ofObject(foreground,
+                    "backgroundColor", new ArgbEvaluator(),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
+                            mainActivity.getTheme()),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
+                            mainActivity.getTheme()));
+            colorFadeBack.setDuration(2000);
+            colorFadeBack.setStartDelay(2000);
+            ObjectAnimator colorFadeAgain = ObjectAnimator.ofObject(foreground,
+                    "backgroundColor", new ArgbEvaluator(),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
+                            mainActivity.getTheme()),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
+                            mainActivity.getTheme()));
+            colorFadeAgain.setDuration(2000);
+            colorFadeAgain.setStartDelay(4000);
+            colorFade.start();
+            colorFadeBack.start();
+            colorFadeAgain.start();
+            colorFadeAgain.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    foreground.setBackgroundResource(R.drawable
+                            .background_course_frame_conflicted_orange);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+
+        private void animateNormal() {
+            ObjectAnimator colorFade = ObjectAnimator.ofObject(foreground, "backgroundColor",
+                    new ArgbEvaluator(),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
+                            mainActivity.getTheme()),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
+                            mainActivity.getTheme()));
+            colorFade.setDuration(2000);
+            ObjectAnimator colorFadeBack = ObjectAnimator.ofObject(foreground,
+                    "backgroundColor", new ArgbEvaluator(),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
+                            mainActivity.getTheme()),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
+                            mainActivity.getTheme()));
+            colorFadeBack.setDuration(2000);
+            colorFadeBack.setStartDelay(2000);
+            ObjectAnimator colorFadeAgain = ObjectAnimator.ofObject(foreground,
+                    "backgroundColor", new ArgbEvaluator(),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
+                            mainActivity.getTheme()),
+                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
+                            mainActivity.getTheme()));
+            colorFadeAgain.setDuration(2000);
+            colorFadeAgain.setStartDelay(4000);
+            colorFade.start();
+            colorFadeBack.start();
+            colorFadeAgain.start();
+            colorFadeAgain.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    foreground.setBackgroundResource(R.drawable.background_course_frame);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
         }
     }
 }
