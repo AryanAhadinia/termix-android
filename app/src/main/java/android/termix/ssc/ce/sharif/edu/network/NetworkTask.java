@@ -1,5 +1,8 @@
 package android.termix.ssc.ce.sharif.edu.network;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,6 +25,7 @@ public abstract class NetworkTask<T> implements Runnable {
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder().cookieJar(CookieManager.getInstance()).build();
+            Logger.getLogger(OkHttpClient.class.getName()).setLevel(Level.FINE);
         }
         return okHttpClient;
     }

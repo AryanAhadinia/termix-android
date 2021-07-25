@@ -51,6 +51,7 @@ public abstract class SignInTask extends NetworkTask<Account> {
                 try {
                     if (response.isSuccessful()) {
                         onResult(new Account(email, Account.getRole(response.body().string()), true));
+                        response.body().close();
                     } else {
                         final HashMap<Integer, String> errorMessages = new HashMap<>();
                         errorMessages.put(400, "درخواست شما معتبر نیست.");
