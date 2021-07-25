@@ -21,6 +21,8 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     final static String TAG = "homo:DP_";
     List<String> nextSessionsStartAt = new ArrayList<>();
     List<String> nextSessionCourseNames = new ArrayList<>();
+    List<String> nextSessionsInstructor = new ArrayList<>();
+    List<String> nextSessionsCourseCode = new ArrayList<>();
     ArrayList<ArrayList<CourseSession>> cachedSelections = new ArrayList<>();
     Context mContext;
 
@@ -53,6 +55,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         RemoteViews view = new RemoteViews(mContext.getPackageName(), R.layout.widget_single_schedule_item);
         view.setTextViewText(R.id.widget_course_remaining_to_start, nextSessionsStartAt.get(position));
         view.setTextViewText(R.id.widget_course_name, nextSessionCourseNames.get(position));
+        view.setTextViewText(R.id.widget_course_instructor, nextSessionsInstructor.get(position));
         return view;
     }
 
@@ -145,6 +148,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     private void addSession(int hour, int minute, CourseSession courseSession) {
         nextSessionsStartAt.add(calculateSessionStartsAt(hour, minute, courseSession.getSession()));
         nextSessionCourseNames.add(courseSession.getCourse().getTitle());
+        nextSessionsInstructor.add(courseSession.getCourse().getInstructor());
         Log.i(TAG, "addSession: " + nextSessionsStartAt);
     }
 }
