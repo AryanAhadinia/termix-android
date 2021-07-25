@@ -30,14 +30,6 @@ public class ChooseDepartmentDialog extends DialogFragment {
         return builder.create();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        final float scale = getResources().getDisplayMetrics().density;
-        float dip = scale + 0.5f;
-        getDialog().getWindow().setLayout((int) (160 * dip), ActionBar.LayoutParams.MATCH_PARENT);
-    }
-
     private void selectDepartment(int depId) {
         SharedPreferences sharedPreference = requireContext().getSharedPreferences(
                 SearchResultAdapter.PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -45,6 +37,9 @@ public class ChooseDepartmentDialog extends DialogFragment {
         editor.putInt(SearchResultAdapter.PREFERENCE_NAME, depId);
         editor.apply();
         dismiss();
+
+        MainActivity mainActivity = (MainActivity) requireContext();
+        mainActivity.getCoursesAdapter().updateList();
     }
 
     private void setupList(View root) {

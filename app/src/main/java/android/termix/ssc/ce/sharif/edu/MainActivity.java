@@ -275,6 +275,10 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
+    public SearchResultAdapter getCoursesAdapter() {
+        return coursesAdapter;
+    }
+
     enum LoadSource {
         NOT_LOADED,
         LOCAL,
