@@ -8,11 +8,24 @@
     <application
         android:name=".App"
         android:icon="@drawable/termix"
-        android:label="@string/app_name"
+        android:label="aaa"
         android:roundIcon="@drawable/termix_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Termix"
         android:usesCleartextTraffic="true">
+        <activity android:name=".SignupVerifyWaitingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="6e1a630ad44d.ngrok.io"
+                    android:pathPrefix="/api/user/verify/serve/" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".ServeForgetPasswordActivity">
             <intent-filter android:autoVerify="true">
@@ -55,18 +68,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".MainActivity" />
-
         <activity android:name=".LoginSignupActivity" />
-
         <activity android:name=".AccountVerificationActivity" />
 
         <receiver
             android:name=".alarm.AlarmBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
-
     </application>
 
 </manifest>

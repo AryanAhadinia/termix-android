@@ -6,9 +6,9 @@ import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.termix.ssc.ce.sharif.edu.model.Session;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,8 +17,10 @@ import java.util.List;
 
 //com
 public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
+    final static String TAG = "homo:DP_";
     List<String> nextSessionsStartAt = new ArrayList<>();
     List<String> nextSessionCourseNames = new ArrayList<>();
+    //    ArrayList<ArrayList<CourseSession>> cachedSelections = new ArrayList<>();
     Context mContext;
 
     public DataProvider(Context context, Intent intent) {
@@ -42,7 +44,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getCount() {
-        return nextSessionsStartAt.size();
+        return nextSessionCourseNames.size();
     }
 
     @Override
@@ -74,13 +76,13 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     }
 
     private void initData() {
+        Log.i(TAG, "initData: ");
         nextSessionsStartAt.clear();
         nextSessionCourseNames.clear();
         Calendar c = Calendar.getInstance();
-        Date currentDate = new Date(System.currentTimeMillis() + 846000000L); // mock data for testing
-//      Date currentDate = new Date(); // todo: this must be used
+        Date currentDate = new Date();
         c.setTime(currentDate);
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;  // 0 to 6
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
         if (dayOfWeek == 6) { //friday
@@ -89,13 +91,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
             dayOfWeek = 0;
         }
 
-        ArrayList<ArrayList<CourseSession>> mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromLocal());
-        if (isMySelectionsEmpty(mySelections)) {
-            mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
-        }
-        if (isMySelectionsEmpty(mySelections)){
-            return;
-        }
+        ArrayList<ArrayList<CourseSession>> mySelections = initMySelections();
         mySelections.get(dayOfWeek).sort((courseSession, t1) -> courseSession.getSession().compareTo(t1.getSession()));
         for (CourseSession courseSession : mySelections.get(dayOfWeek)) {
             if (courseSession.getSession().getStartHour() > hourOfDay ||
@@ -110,6 +106,23 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
                 addSession(hourOfDay, minute, courseSession);
             }
         }
+    }
+
+    private ArrayList<ArrayList<CourseSession>> initMySelections() {
+        ArrayList<ArrayList<CourseSession>> mySelections = new ArrayList<>();
+        CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromLocal());
+        if (isMySelectionsEmpty(mySelections)) {
+            Log.i(TAG, "initData: local empty");
+            mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+            if (isMySelectionsEmpty(mySelections)) {
+                Log.i(TAG, "initData: network empty");
+                CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+                //mySelections = new ArrayList<>(cachedSelections);
+            }
+            //else cachedSelections = new ArrayList<>(mySelections);
+        }
+        //else cachedSelections = new ArrayList<>(mySelections);
+        return mySelections;
     }
 
     private boolean isMySelectionsEmpty(ArrayList<ArrayList<CourseSession>> mySelections) {
@@ -132,5 +145,6 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     private void addSession(int hour, int minute, CourseSession courseSession) {
         nextSessionsStartAt.add(calculateSessionStartsAt(hour, minute, courseSession.getSession()));
         nextSessionCourseNames.add(courseSession.getCourse().getTitle());
+        Log.i(TAG, "addSession: " + nextSessionsStartAt);
     }
 }
