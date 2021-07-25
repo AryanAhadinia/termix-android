@@ -2,6 +2,7 @@ package android.termix.ssc.ce.sharif.edu.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.termix.ssc.ce.sharif.edu.MainActivity;
 import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
@@ -20,7 +21,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     final static String TAG = "homo:DP_";
     List<String> nextSessionsStartAt = new ArrayList<>();
     List<String> nextSessionCourseNames = new ArrayList<>();
-    //    ArrayList<ArrayList<CourseSession>> cachedSelections = new ArrayList<>();
+    ArrayList<ArrayList<CourseSession>> cachedSelections = new ArrayList<>();
     Context mContext;
 
     public DataProvider(Context context, Intent intent) {
@@ -77,8 +78,6 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     private void initData() {
         Log.i(TAG, "initData: ");
-        nextSessionsStartAt.clear();
-        nextSessionCourseNames.clear();
         Calendar c = Calendar.getInstance();
         Date currentDate = new Date();
         c.setTime(currentDate);
@@ -92,6 +91,9 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         }
 
         ArrayList<ArrayList<CourseSession>> mySelections = initMySelections();
+        if (isMySelectionsEmpty(mySelections)) return;
+        nextSessionsStartAt.clear();
+        nextSessionCourseNames.clear();
         mySelections.get(dayOfWeek).sort((courseSession, t1) -> courseSession.getSession().compareTo(t1.getSession()));
         for (CourseSession courseSession : mySelections.get(dayOfWeek)) {
             if (courseSession.getSession().getStartHour() > hourOfDay ||
@@ -116,12 +118,10 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
             mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
             if (isMySelectionsEmpty(mySelections)) {
                 Log.i(TAG, "initData: network empty");
-                CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
-                //mySelections = new ArrayList<>(cachedSelections);
             }
-            //else cachedSelections = new ArrayList<>(mySelections);
         }
-        //else cachedSelections = new ArrayList<>(mySelections);
+        if (isMySelectionsEmpty(mySelections)) return new ArrayList<>(cachedSelections);
+        cachedSelections = new ArrayList<>(mySelections);
         return mySelections;
     }
 

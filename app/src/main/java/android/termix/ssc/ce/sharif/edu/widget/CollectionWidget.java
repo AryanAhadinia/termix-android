@@ -61,7 +61,6 @@ public class CollectionWidget extends AppWidgetProvider {
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidgetComponentName);
         if (appWidgetIds.length == 0) {
             // stop alarm
-            AppWidgetAlarm appWidgetAlarm = new AppWidgetAlarm(context.getApplicationContext());
             appWidgetAlarm.stopAlarm();
         }
     }
