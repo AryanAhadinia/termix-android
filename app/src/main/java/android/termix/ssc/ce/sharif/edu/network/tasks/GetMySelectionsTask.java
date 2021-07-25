@@ -40,6 +40,7 @@ public abstract class GetMySelectionsTask extends NetworkTask<ArrayList<Course.C
                 try {
                     if (response.isSuccessful()) {
                         JSONArray resultJsonArray = new JSONArray(response.body().string());
+                        response.body().close();
                         ArrayList<Course.CourseIdentifier> courseIdentifiers = new ArrayList<>();
                         for (int i = 0; i < resultJsonArray.length(); i++) {
                             courseIdentifiers.add(new Course.CourseIdentifier(

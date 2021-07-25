@@ -43,10 +43,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         this.showingCourses = new ArrayList<>(allCourses);
     }
 
-    public void updateList() {
+    public void updateList(int myDep) {
         this.allCourses.clear();
-        this.allCourses.addAll(mergeMapToList(AllCoursesLoader.getInstance().getFromLocal()));
-
+        if (AllCoursesLoader.getInstance().getFromNetwork() != null) {
+            this.allCourses.addAll(mergeMapToList(AllCoursesLoader.getInstance().getFromNetwork(), myDep));
+        } else if (AllCoursesLoader.getInstance().getFromLocal() != null) {
+            this.allCourses.addAll(mergeMapToList(AllCoursesLoader.getInstance().getFromLocal(), myDep));
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -114,10 +118,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
     };
 
-    private ArrayList<Course> mergeMapToList(HashMap<Integer, ArrayList<Course>> map) {
-        SharedPreferences sharedPreference = context.getSharedPreferences(PREFERENCE_NAME,
-                Context.MODE_PRIVATE);
-        int depId = sharedPreference.getInt(PREFERENCE_LABEL, 40);
+    private ArrayList<Course> mergeMapToList(HashMap<Integer, ArrayList<Course>> map, int depId) {
         ArrayList<Integer> depIds = new ArrayList<>(map.keySet());
         depIds.sort(Integer::compareTo);
         depIds.remove(Integer.valueOf(24));
@@ -133,6 +134,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             allCourses.addAll(map.get(id));
         }
         return allCourses;
+    }
+
+    private ArrayList<Course> mergeMapToList(HashMap<Integer, ArrayList<Course>> map) {
+        SharedPreferences sharedPreference = context.getSharedPreferences(PREFERENCE_NAME,
+                Context.MODE_PRIVATE);
+        int depId = sharedPreference.getInt(PREFERENCE_LABEL, 40);
+        return mergeMapToList(map, depId);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,

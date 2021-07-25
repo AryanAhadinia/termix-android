@@ -40,6 +40,7 @@ public abstract class GetAllCoursesTask extends NetworkTask<String> {
                 try {
                     if (response.isSuccessful()) {
                         String result = response.body().string();
+                        response.body().close();
                         onResult(result);
                     } else {
                         final HashMap<Integer, String> errorMessages = new HashMap<>();
