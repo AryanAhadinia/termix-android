@@ -8,7 +8,7 @@
     <application
         android:name=".App"
         android:icon="@drawable/termix"
-        android:label="aaa"
+        android:label="@string/app_name"
         android:roundIcon="@drawable/termix_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Termix"

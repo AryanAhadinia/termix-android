@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
-    private final ArrayList<CourseSession> sessions;
+    private final ArrayList<CourseSession> courseSessions;
     private final MainActivity mainActivity;
 
     public DayAdapter(MainActivity mainActivity) {
-        this.sessions = new ArrayList<>();
+        this.courseSessions = new ArrayList<>();
         this.mainActivity = mainActivity;
     }
 
@@ -40,41 +40,49 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        CourseSession session = sessions.get(position);
+        CourseSession session = courseSessions.get(position);
         holder.setCourseSession(session, mainActivity);
     }
 
     @Override
     public int getItemCount() {
-        return this.sessions.size();
+        return this.courseSessions.size();
     }
 
     public int insertCourseSession(CourseSession courseSession) {
-        sessions.add(courseSession);
-        sessions.sort(CourseSession::compareTo);
-        return sessions.indexOf(courseSession);
+        int index = 0;
+        while (index < courseSessions.size()) {
+            if (courseSession.compareTo(courseSessions.get(index)) < 0) {
+                courseSessions.add(index, courseSession);
+                return index;
+            } else {
+                index++;
+            }
+        }
+        courseSessions.add(courseSession);
+        return index;
     }
 
     public void insertCourseSessionAndNotify(CourseSession courseSession) {
         notifyItemInserted(insertCourseSession(courseSession));
     }
 
-    // TODO
     public void insertCourseSessions(ArrayList<CourseSession> courseSessions) {
-        sessions.addAll(courseSessions);
-        sessions.sort(CourseSession::compareTo);
+        for (CourseSession courseSession : courseSessions) {
+            insertCourseSession(courseSession);
+        }
     }
 
-    // TODO
     public void insertCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+        for (CourseSession courseSession : courseSessions) {
+            insertCourseSessionAndNotify(courseSession);
+        }
+    }
+
+    public void rebaseCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+        this.courseSessions.clear();
         insertCourseSessions(courseSessions);
         notifyDataSetChanged();
-    }
-
-    // TODO
-    public void rebaseCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
-        sessions.clear();
-        insertCourseSessionsAndNotify(courseSessions);
     }
 
     // TODO

@@ -2,17 +2,14 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
-import android.termix.ssc.ce.sharif.edu.alarm.AlarmBroadcastReceiver;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
+import android.termix.ssc.ce.sharif.edu.model.Session;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,7 +34,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Objects;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
@@ -82,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerViews.add(findViewById(R.id.recycler_tuesday));
         recyclerViews.add(findViewById(R.id.recycler_wednesday));
         recyclerViews.add(findViewById(R.id.recycler_thursday));
+        recyclerViews.add(findViewById(R.id.recycler_no_class_time));
         // initial recycler views adapter
         adapters = new ArrayList<>();
         for (RecyclerView recyclerView : recyclerViews) {
@@ -116,13 +113,22 @@ public class MainActivity extends AppCompatActivity {
             if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession
                         .getWeekdayCourseSessionsMap(mySelections);
+                ArrayList<CourseSession> noClassCourseSessions = new ArrayList<>();
+                for (Course course : mySelections) {
+                    if (course.getSessionParser().getSessionJsonArray().length() == 0) {
+                        noClassCourseSessions.add(new CourseSession(course, Session.NULL_SESSION));
+                    }
+                }
                 synchronized (loadingLock) {
+                    Log.i("Local", mySelectionMap.toString());
+                    Log.i("Local", noClassCourseSessions.toString());
                     if (selectionsLoadSource != LoadSource.NETWORK) {
                         selectionsLoadSource = LoadSource.LOCAL;
-                        for (int i = 0; i < adapters.size(); i++) {
+                        for (int i = 0; i < adapters.size() - 1; i++) {
                             int finalI = i;
-                            handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+                            handler.post(() -> adapters.get(finalI).rebaseCourseSessionsAndNotify(mySelectionMap.get(finalI)));
                         }
+                        handler.post(() -> adapters.get(adapters.size() - 1).rebaseCourseSessionsAndNotify(noClassCourseSessions));
                         if (mainLinearLayout.getVisibility() != View.VISIBLE) {
                             handler.post(this::onLoad);
                         }
@@ -136,12 +142,21 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Selections", "Network fetched");
             if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
+                ArrayList<CourseSession> noClassCourseSessions = new ArrayList<>();
+                for (Course course : mySelections) {
+                    if (course.getSessionParser().getSessionJsonArray().length() == 0) {
+                        noClassCourseSessions.add(new CourseSession(course, Session.NULL_SESSION));
+                    }
+                }
                 synchronized (loadingLock) {
                     selectionsLoadSource = LoadSource.NETWORK;
-                    for (int i = 0; i < adapters.size(); i++) {
+                    Log.i("Network", mySelectionMap.toString());
+                    Log.i("Network", noClassCourseSessions.toString());
+                    for (int i = 0; i < adapters.size() - 1; i++) {
                         int finalI = i;
-                        handler.post(() -> adapters.get(finalI).insertCourseSessionsAndNotify(mySelectionMap.get(finalI)));
+                        handler.post(() -> adapters.get(finalI).rebaseCourseSessionsAndNotify(mySelectionMap.get(finalI)));
                     }
+                    handler.post(() -> adapters.get(adapters.size() - 1).rebaseCourseSessionsAndNotify(noClassCourseSessions));
                     if (mainLinearLayout.getVisibility() != View.VISIBLE) {
                         handler.post(this::onLoad);
                     }
@@ -212,10 +227,15 @@ public class MainActivity extends AppCompatActivity {
         searchBar.clearFocus();
         searchBar.setText("");
         ArrayList<CourseSession> courseSessions = CourseSession.getCourseSessions(course);
-        for (CourseSession courseSession : courseSessions) {
-            adapters.get(courseSession.getSession().getDay())
-                    .insertCourseSessionAndNotify(courseSession);
+        if (courseSessions.isEmpty()) {
+            adapters.get(adapters.size() - 1).insertCourseSessionAndNotify(new CourseSession(course,
+                    Session.NULL_SESSION));
+        } else {
+            for (CourseSession courseSession : courseSessions) {
+                adapters.get(courseSession.getSession().getDay()).insertCourseSessionAndNotify(courseSession);
+            }
         }
+
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new

@@ -124,6 +124,10 @@ public class Course implements Comparable<Course> {
         return examTime;
     }
 
+    public SessionParser getSessionParser() {
+        return sessionParser;
+    }
+
     public ArrayList<Session> getSessions() {
         try {
             return sessionParser.getSessions();
