@@ -222,11 +222,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addCourse(Course course) {
+        hideKeyboard(this);
         isSearching = false;
         nestedScrollView.setVisibility(View.VISIBLE);
         searchResultRecyclerView.setVisibility(View.GONE);
         searchBar.clearFocus();
-        hideKeyboard(this);
         searchBar.setText("");
         ArrayList<CourseSession> courseSessions = CourseSession.getCourseSessions(course);
         if (courseSessions.isEmpty()) {
@@ -237,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
                 adapters.get(courseSession.getSession().getDay()).insertCourseSessionAndNotify(courseSession);
             }
         }
-
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
