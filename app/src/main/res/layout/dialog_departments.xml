@@ -13,17 +13,12 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/choose_your_department"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/civil"
@@ -33,17 +28,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/civil"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/industry"
@@ -53,17 +43,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/industry"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/math"
@@ -73,17 +58,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/math"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/chemistry"
@@ -93,17 +73,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/chemistry"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/physics"
@@ -113,17 +88,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/physics"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/electricity"
@@ -133,17 +103,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/electric"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/oil"
@@ -153,17 +118,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/oil"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/material"
@@ -173,17 +133,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/material"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/mechanics"
@@ -193,17 +148,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/mechanics"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/computer"
@@ -213,17 +163,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/computer"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/economics"
@@ -233,17 +178,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/economics"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/aerospace"
@@ -253,17 +193,12 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/aerospace"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/energy"
@@ -273,7 +208,7 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         android:text="@string/energy"
         android:textColor="@color/black"
         android:textSize="16sp"

@@ -5,6 +5,7 @@ package android.termix.ssc.ce.sharif.edu.model;
  * @since 1
  */
 public class Session implements Comparable<Session> {
+    public static final Session NULL_SESSION = new Session(-1, 0, 0, 0, 0);
     private final int day;
     private final int startHour;
     private final int startMin;
