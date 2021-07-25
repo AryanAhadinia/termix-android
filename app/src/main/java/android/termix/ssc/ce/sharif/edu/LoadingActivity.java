@@ -16,6 +16,7 @@ import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -80,6 +81,7 @@ public class LoadingActivity extends AppCompatActivity {
                 // Call when server is unreachable
                 @Override
                 public void onError(Exception e) {
+                    Log.i("Network", "error on token check.");
                     // TODO: fallback to local database. show error if data is not reachable
                 }
             }.run();

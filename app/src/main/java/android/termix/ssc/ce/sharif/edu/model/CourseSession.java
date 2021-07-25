@@ -1,6 +1,7 @@
 package android.termix.ssc.ce.sharif.edu.model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author AryanAhadinia
@@ -23,18 +24,23 @@ public class CourseSession implements Comparable<CourseSession> {
         return session;
     }
 
+    public boolean hasConflict(CourseSession other) {
+        return this.getSession().hasConflict(other.getSession());
+    }
+
     @Override
     public int compareTo(CourseSession o) {
         return this.session.compareTo(o.session);
     }
 
-    public static ArrayList<CourseSession> getCourseSessions(Course course) {
+    public static ArrayList<CourseSession> getCourseSession(Course course) {
         ArrayList<CourseSession> courseSessions = new ArrayList<>();
         for (Session session : course.getSessions()) {
             courseSessions.add(new CourseSession(course, session));
         }
         return courseSessions;
     }
+
 
     public static ArrayList<ArrayList<CourseSession>> getWeekdayCourseSessionsMap(ArrayList<Course> courses) {
         ArrayList<ArrayList<CourseSession>> list = new ArrayList<>();
@@ -48,5 +54,19 @@ public class CourseSession implements Comparable<CourseSession> {
             }
         }
         return list;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CourseSession)) return false;
+        CourseSession session1 = (CourseSession) o;
+        return course.equals(session1.course) &&
+                session.equals(session1.session);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(course, session);
     }
 }

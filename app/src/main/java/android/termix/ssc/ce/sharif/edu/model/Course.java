@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * @author AryanAhadinia
@@ -170,6 +171,20 @@ public class Course implements Comparable<Course> {
         return 0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return courseId == course.courseId &&
+                groupId == course.groupId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(courseId, groupId);
+    }
+
     public static class CourseIdentifier {
         private final int courseId;
         private final int groupId;
@@ -185,183 +200,6 @@ public class Course implements Comparable<Course> {
 
         public int getGroupId() {
             return groupId;
-        }
-    }
-
-    public static ArrayList<Course> getTestList() {
-        try {
-            return parseCourseArray(new JSONArray("[\n" +
-                    "    {\n" +
-                    "        \"depId\": 40,\n" +
-                    "        \"courseId\": 40126,\n" +
-                    "        \"groupId\": 1,\n" +
-                    "        \"unit\": 3,\n" +
-                    "        \"title\": \"ساختار و زبان کامپیوتر\",\n" +
-                    "        \"capacity\": 50,\n" +
-                    "        \"instructor\": \"لاله ارشدی\",\n" +
-                    "        \"examTime\": \"1400/04/03 15:30\",\n" +
-                    "        \"classTimeArray\": [\n" +
-                    "            {\n" +
-                    "                \"days\": [\n" +
-                    "                    1,\n" +
-                    "                    3\n" +
-                    "                ],\n" +
-                    "                \"startHour\": 16,\n" +
-                    "                \"startMin\": 30,\n" +
-                    "                \"endHour\": 18,\n" +
-                    "                \"endMin\": 0\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"info\": \"حداکثر ظرفیت برای مقطع کارشناسی دانشکده مهندسی کامپیوتر 100 می باشد.حداکثر ظرفیت برای مقطع کارشناسی 20 می باشد.\",\n" +
-                    "        \"onRegister\": \"\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "        \"depId\": 40,\n" +
-                    "        \"courseId\": 40429,\n" +
-                    "        \"groupId\": 1,\n" +
-                    "        \"unit\": 3,\n" +
-                    "        \"title\": \"برنامه\u200Cسازی موبایل\",\n" +
-                    "        \"capacity\": 60,\n" +
-                    "        \"instructor\": \"امید جعفری نژاد\",\n" +
-                    "        \"examTime\": \"1400/04/12 09:00\",\n" +
-                    "        \"classTimeArray\": [\n" +
-                    "            {\n" +
-                    "                \"days\": [\n" +
-                    "                    0,\n" +
-                    "                    2\n" +
-                    "                ],\n" +
-                    "                \"startHour\": 16,\n" +
-                    "                \"startMin\": 30,\n" +
-                    "                \"endHour\": 18,\n" +
-                    "                \"endMin\": 0\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"info\": \"حداکثر ظرفیت برای مقطع کارشناسی 20 می باشد.حداکثر ظرفیت برای مقطع کارشناسی دانشکده مهندسی کامپیوتر 100 می باشد.\",\n" +
-                    "        \"onRegister\": \"\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "        \"depId\": 24,\n" +
-                    "        \"courseId\": 24012,\n" +
-                    "        \"groupId\": 8,\n" +
-                    "        \"unit\": 3,\n" +
-                    "        \"title\": \"فیزیک ۲\",\n" +
-                    "        \"capacity\": 40,\n" +
-                    "        \"instructor\": \"علی اکبر ابوالحسنی\",\n" +
-                    "        \"examTime\": \"1400/04/10 09:00\",\n" +
-                    "        \"classTimeArray\": [\n" +
-                    "            {\n" +
-                    "                \"days\": [\n" +
-                    "                    0,\n" +
-                    "                    2\n" +
-                    "                ],\n" +
-                    "                \"startHour\": 9,\n" +
-                    "                \"startMin\": 0,\n" +
-                    "                \"endHour\": 10,\n" +
-                    "                \"endMin\": 30\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"info\": \"https://vc.sharif.edu/ch/ali.abolhasani ساعات رفع اشکال: چهار شنبه 13:0 تا 15:0\",\n" +
-                    "        \"onRegister\": \"\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "        \"depId\": 31,\n" +
-                    "        \"courseId\": 31123,\n" +
-                    "        \"groupId\": 16,\n" +
-                    "        \"unit\": 3,\n" +
-                    "        \"title\": \"زبان خارجی\",\n" +
-                    "        \"capacity\": 30,\n" +
-                    "        \"instructor\": \"فرهاد تابنده\",\n" +
-                    "        \"examTime\": \"1300/04/08 13:30\",\n" +
-                    "        \"classTimeArray\": [\n" +
-                    "            {\n" +
-                    "                \"days\": [\n" +
-                    "                    0,\n" +
-                    "                    2\n" +
-                    "                ],\n" +
-                    "                \"startHour\": 10,\n" +
-                    "                \"startMin\": 30,\n" +
-                    "                \"endHour\": 12,\n" +
-                    "                \"endMin\": 0\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"info\": \"\",\n" +
-                    "        \"onRegister\": \"\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "        \"depId\": 33,\n" +
-                    "        \"courseId\": 33018,\n" +
-                    "        \"groupId\": 1,\n" +
-                    "        \"unit\": 1,\n" +
-                    "        \"title\": \"کارگاه عمومی\",\n" +
-                    "        \"capacity\": 100,\n" +
-                    "        \"instructor\": \"رضا یوسفی، نصیری\",\n" +
-                    "        \"examTime\": \"1400/03/25 15:30\",\n" +
-                    "        \"classTimeArray\": [\n" +
-                    "            {\n" +
-                    "                \"days\": [\n" +
-                    "                    3\n" +
-                    "                ],\n" +
-                    "                \"startHour\": 7,\n" +
-                    "                \"startMin\": 30,\n" +
-                    "                \"endHour\": 10,\n" +
-                    "                \"endMin\": 30\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"info\": \"\",\n" +
-                    "        \"onRegister\": \"\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "        \"depId\": 40,\n" +
-                    "        \"courseId\": 40181,\n" +
-                    "        \"groupId\": 1,\n" +
-                    "        \"unit\": 3,\n" +
-                    "        \"title\": \"آمار و احتمال مهندسی\",\n" +
-                    "        \"capacity\": 45,\n" +
-                    "        \"instructor\": \"امیر نجفی\",\n" +
-                    "        \"examTime\": \"1400/04/09 15:30\",\n" +
-                    "        \"classTimeArray\": [\n" +
-                    "            {\n" +
-                    "                \"days\": [\n" +
-                    "                    1,\n" +
-                    "                    3\n" +
-                    "                ],\n" +
-                    "                \"startHour\": 13,\n" +
-                    "                \"startMin\": 30,\n" +
-                    "                \"endHour\": 15,\n" +
-                    "                \"endMin\": 0\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"info\": \"حداکثر ظرفیت برای مقطع کارشناسی دانشکده مهندسی کامپیوتر 100 می باشد.حداکثر ظرفیت برای مقطع کارشناسی 20 می باشد.\",\n" +
-                    "        \"onRegister\": \"\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "        \"depId\": 40,\n" +
-                    "        \"courseId\": 40364,\n" +
-                    "        \"groupId\": 1,\n" +
-                    "        \"unit\": 3,\n" +
-                    "        \"title\": \"طراحی زبان\u200Cهای برنامه\u200Cسازی\",\n" +
-                    "        \"capacity\": 70,\n" +
-                    "        \"instructor\": \"محمد ایزدی\",\n" +
-                    "        \"examTime\": \"1400/04/08 09:00\",\n" +
-                    "        \"classTimeArray\": [\n" +
-                    "            {\n" +
-                    "                \"days\": [\n" +
-                    "                    1,\n" +
-                    "                    3\n" +
-                    "                ],\n" +
-                    "                \"startHour\": 10,\n" +
-                    "                \"startMin\": 30,\n" +
-                    "                \"endHour\": 12,\n" +
-                    "                \"endMin\": 0\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"info\": \"حداکثر ظرفیت برای مقطع کارشناسی دانشکده مهندسی کامپیوتر 100 می باشد.حداکثر ظرفیت برای مقطع کارشناسی 20 می باشد.\",\n" +
-                    "        \"onRegister\": \"\"\n" +
-                    "    }\n" +
-                    "]"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 }

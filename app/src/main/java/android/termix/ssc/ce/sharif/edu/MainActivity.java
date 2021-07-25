@@ -38,6 +38,7 @@ import java.util.Objects;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 import static android.content.ContentValues.TAG;
 
@@ -86,10 +87,11 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setItemAnimator(new LandingAnimator());
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DaySwipeHelper() {
                 @Override
                 public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    System.out.println("salam");
+                    removeWithCourseSession(((DayAdapter.ViewHolder) viewHolder).getCourseSession());
                 }
             });
             itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         searchResultRecyclerView.setVisibility(View.GONE);
         searchBar.clearFocus();
         searchBar.setText("");
-        ArrayList<CourseSession> courseSessions = CourseSession.getCourseSessions(course);
+        ArrayList<CourseSession> courseSessions = CourseSession.getCourseSession(course);
         if (courseSessions.isEmpty()) {
             adapters.get(adapters.size() - 1).insertCourseSessionAndNotify(new CourseSession(course,
                     Session.NULL_SESSION));
@@ -236,6 +238,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void removeWithCourseSession(CourseSession courseSession) {
+        if (courseSession.getSession() == Session.NULL_SESSION) {
+            adapters.get(adapters.size() - 1).remove(courseSession);
+        } else {
+            removeCourse(courseSession.getCourse());
+        }
+    }
+
+    private void removeCourse(Course course) {
+        ArrayList<CourseSession> courseSessions = CourseSession.getCourseSession(course);
+        for (CourseSession courseSession : courseSessions) {
+            adapters.get(courseSession.getSession().getDay()).remove(courseSession);
+        }
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
