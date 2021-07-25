@@ -17,40 +17,6 @@
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/notification_item"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/setting_title">
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/notification_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:checked="true" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_weight="1"
-            android:fontFamily="@font/yekan"
-            android:gravity="center_vertical"
-            android:text="@string/notification"
-            app:drawableEndCompat="@drawable/ic_baseline_timer_24" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/notification_item" />
-
     <TextView
         android:id="@+id/notification_time"
         android:layout_width="match_parent"
@@ -60,11 +26,11 @@
         android:clickable="true"
         android:fontFamily="@font/yekan"
         android:gravity="center_vertical"
-        android:text="@string/notification_time"
+        android:text="@string/notifications"
         app:drawableEndCompat="@drawable/ic_baseline_timer_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification_item" />
+        app:layout_constraintTop_toBottomOf="@id/setting_title" />
 
     <View
         android:id="@+id/view5"
