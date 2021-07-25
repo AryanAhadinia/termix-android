@@ -1,8 +1,10 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +18,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
-    private final ArrayList<CourseSession> courseSessions;
     private final MainActivity mainActivity;
 
+    private final ArrayList<CourseSession> courseSessions;
+    private ArrayList<Pair<CourseSession, CourseSession>> conflictedCourseSessions;
+
+    private final Set<CourseSession> conflictedCourseSessionsCache;
+
     public DayAdapter(MainActivity mainActivity) {
-        this.courseSessions = new ArrayList<>();
         this.mainActivity = mainActivity;
+        this.courseSessions = new ArrayList<>();
+        this.conflictedCourseSessions = new ArrayList<>();
+        this.conflictedCourseSessionsCache = new HashSet<>();
     }
 
     @NonNull
@@ -40,8 +50,9 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        CourseSession session = courseSessions.get(position);
-        holder.setCourseSession(session, mainActivity);
+        CourseSession courseSession = courseSessions.get(position);
+        holder.setCourseSession(courseSession, conflictedCourseSessionsCache.contains(courseSession),
+                mainActivity);
     }
 
     @Override
@@ -49,43 +60,61 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         return this.courseSessions.size();
     }
 
-    public int insertCourseSession(CourseSession courseSession) {
+    public void insertCourseSessionAndNotify(CourseSession courseSession) {
+        conflictedCourseSessionsCache.clear();
+        boolean conflicted = false;
+        for (int i = 0; i < courseSessions.size(); i++) {
+            if (courseSession.hasConflict(courseSessions.get(i))) {
+                conflicted = true;
+                conflictedCourseSessions.add(new Pair<>(courseSession, courseSessions.get(i)));
+                conflictedCourseSessionsCache.add(courseSessions.get(i));
+                notifyItemChanged(i);
+            }
+        }
+        if (conflicted) {
+            conflictedCourseSessionsCache.add(courseSession);
+        }
         int index = 0;
         while (index < courseSessions.size()) {
             if (courseSession.compareTo(courseSessions.get(index)) < 0) {
                 courseSessions.add(index, courseSession);
-                return index;
+                notifyItemInserted(index);
+                return;
             } else {
                 index++;
             }
         }
         courseSessions.add(courseSession);
-        return index;
+        notifyItemInserted(index);
     }
 
-    public void insertCourseSessionAndNotify(CourseSession courseSession) {
-        notifyItemInserted(insertCourseSession(courseSession));
-    }
-
-    public void insertCourseSessions(ArrayList<CourseSession> courseSessions) {
-        for (CourseSession courseSession : courseSessions) {
-            insertCourseSession(courseSession);
-        }
-    }
-
-    public void insertCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+    public void rebaseCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
+        this.courseSessions.clear();
+        notifyDataSetChanged();
         for (CourseSession courseSession : courseSessions) {
             insertCourseSessionAndNotify(courseSession);
         }
     }
 
-    public void rebaseCourseSessionsAndNotify(ArrayList<CourseSession> courseSessions) {
-        this.courseSessions.clear();
-        insertCourseSessions(courseSessions);
-        notifyDataSetChanged();
+    public void remove(CourseSession courseSession) {
+        conflictedCourseSessionsCache.clear();
+        int index = courseSessions.indexOf(courseSession);
+        courseSessions.remove(index);
+        notifyItemRemoved(index);
+        ArrayList<Pair<CourseSession, CourseSession>> newConflictedCourseSession = new ArrayList<>();
+        for (Pair<CourseSession, CourseSession>
+                conflictedCourseSessionPair : conflictedCourseSessions) {
+            if (!(conflictedCourseSessionPair.first.equals(courseSession) ||
+                    conflictedCourseSessionPair.second.equals(courseSession))) {
+                newConflictedCourseSession.add(conflictedCourseSessionPair);
+                conflictedCourseSessionsCache.add(conflictedCourseSessionPair.first);
+                conflictedCourseSessionsCache.add(conflictedCourseSessionPair.second);
+            }
+        }
+        this.conflictedCourseSessions = newConflictedCourseSession;
+//        notifyDataSetChanged();
     }
 
-    // TODO
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnLongClickListener {
         private CourseSession courseSession;
@@ -93,6 +122,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
         private final ConstraintLayout background;
         private final ConstraintLayout foreground;
+
         private final TextView unitTextView;
         private final TextView idTextView;
         private final TextView titleTextView;
@@ -111,7 +141,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             itemView.setOnLongClickListener(this);
         }
 
-        public void setCourseSession(CourseSession courseSession, MainActivity mainActivity) {
+        public void setCourseSession(CourseSession courseSession, boolean conflicted, MainActivity mainActivity) {
             this.mainActivity = mainActivity;
             this.courseSession = courseSession;
             Course course = courseSession.getCourse();
@@ -121,6 +151,11 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             this.titleTextView.setText(course.getTitle());
             this.instructorTextView.setText(course.getInstructor());
             this.timesTextView.setText(course.getSessionsString());
+            if (conflicted) {
+                foreground.setBackgroundColor(Color.GRAY);
+            } else {
+                foreground.setBackgroundColor(Color.RED);
+            }
         }
 
         public ConstraintLayout getBackground() {
@@ -129,6 +164,10 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
         public ConstraintLayout getForeground() {
             return foreground;
+        }
+
+        public CourseSession getCourseSession() {
+            return courseSession;
         }
 
         @Override

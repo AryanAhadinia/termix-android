@@ -39,6 +39,7 @@ public abstract class GetMyAccountTask extends NetworkTask<Account> {
                 try {
                     if (response.isSuccessful()) {
                         JSONObject resultJsonObject = new JSONObject(response.body().string());
+                        response.body().close();
                         Account account = new Account(
                                 resultJsonObject.getString("email"),
                                 Account.getRole(resultJsonObject.getString("role")),

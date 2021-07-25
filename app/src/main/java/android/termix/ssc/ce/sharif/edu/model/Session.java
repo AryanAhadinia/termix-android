@@ -1,5 +1,7 @@
 package android.termix.ssc.ce.sharif.edu.model;
 
+import java.util.Objects;
+
 /**
  * @author AryanAhadinia
  * @since 1
@@ -44,6 +46,22 @@ public class Session implements Comparable<Session> {
         return (((endHour * 60) + endMin) - ((startHour * 60) + startMin)) /(float) 60;
     }
 
+    public boolean hasConflict(Session other) {
+        if (this.getDay() != other.getDay()) {
+            return false;
+        }
+        return compareTime(this.getStartHour(), this.getStartMin(), other.getEndHour(), other.getEndMin()) < 0
+                && compareTime(this.getEndHour(), this.getEndMin(), other.getStartHour(), other.getStartMin()) > 0;
+    }
+
+    public static int compareTime(int firstHour, int firstMin, int secondHour, int secondMin) {
+        if (firstHour < secondHour) {
+            return -1;
+        } else if (firstHour > secondHour) {
+            return 1;
+        } else return Integer.compare(firstMin, secondMin);
+    }
+
     @Override
     public int compareTo(Session o) {
         if (this.day < o.day) {
@@ -63,5 +81,22 @@ public class Session implements Comparable<Session> {
         } else if (this.endHour > o.endHour) {
             return 1;
         } else return Integer.compare(this.endMin, o.endMin);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Session session = (Session) o;
+        return day == session.day &&
+                startHour == session.startHour &&
+                startMin == session.startMin &&
+                endHour == session.endHour &&
+                endMin == session.endMin;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(day, startHour, startMin, endHour, endMin);
     }
 }
