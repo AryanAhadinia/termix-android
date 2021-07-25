@@ -117,7 +117,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             }
         }
         this.conflictedCourseSessions = newConflictedCourseSession;
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
@@ -162,12 +162,24 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             int colorId = colorStateList.getDefaultColor();
             Log.e("KASHI: ", String.valueOf(colorId));
 
-            if (conflicted && colorId != mainActivity.getApplicationContext().getResources()
-                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
-                animateConflicted();
-            } else if (!conflicted && colorId != mainActivity.getApplicationContext().getResources()
-                    .getColor(R.color.dark_red, mainActivity.getTheme())) {
-                animateNormal();
+//            if (conflicted && colorId == mainActivity.getApplicationContext().getResources()
+//                    .getColor(R.color.dark_red, mainActivity.getTheme())) {
+//                animateToConflicted();
+//            } else if (conflicted && colorId == mainActivity.getApplicationContext().getResources()
+//                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
+//                foreground.setBackgroundResource(R.drawable
+//                        .background_course_frame_conflicted_orange);
+//            } else if (!conflicted && colorId == mainActivity.getApplicationContext().getResources()
+//                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
+//                animateToNormal();
+//            } else {
+//                foreground.setBackgroundResource(R.drawable.background_course_frame);
+//            }
+
+            if (conflicted) {
+                animateToConflicted();
+            } else {
+                animateToNormal();
             }
         }
 
@@ -191,7 +203,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             return true;
         }
 
-        private void animateConflicted() {
+        private void animateToConflicted() {
             ObjectAnimator colorFade = ObjectAnimator.ofObject(foreground, "backgroundColor",
                     new ArgbEvaluator(),
                     mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
@@ -242,7 +254,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             });
         }
 
-        private void animateNormal() {
+        private void animateToNormal() {
             ObjectAnimator colorFade = ObjectAnimator.ofObject(foreground, "backgroundColor",
                     new ArgbEvaluator(),
                     mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
