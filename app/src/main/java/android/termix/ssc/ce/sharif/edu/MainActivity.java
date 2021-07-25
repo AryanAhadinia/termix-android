@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -223,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addCourse(Course course) {
+        hideKeyboard(this);
         isSearching = false;
         nestedScrollView.setVisibility(View.VISIBLE);
         searchResultRecyclerView.setVisibility(View.GONE);
@@ -237,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
                 adapters.get(courseSession.getSession().getDay()).insertCourseSessionAndNotify(courseSession);
             }
         }
-
     }
 
     public void removeWithCourseSession(CourseSession courseSession) {
@@ -263,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 searchBar.setText(Objects.requireNonNull(finalResults).get(0));
                 searchBar.requestFocus();
+                hideKeyboard(this);
             }
         }
     });
@@ -298,6 +300,21 @@ public class MainActivity extends AppCompatActivity {
     private void onLoad() {
         mainLinearLayout.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    public SearchResultAdapter getCoursesAdapter() {
+        return coursesAdapter;
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     enum LoadSource {

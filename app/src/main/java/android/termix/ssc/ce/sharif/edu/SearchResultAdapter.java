@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +41,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.allCourses = new ArrayList<>();
         }
         this.showingCourses = new ArrayList<>(allCourses);
+    }
+
+    public void updateList() {
+        this.allCourses.clear();
+        this.allCourses.addAll(mergeMapToList(AllCoursesLoader.getInstance().getFromLocal()));
     }
 
     @NonNull

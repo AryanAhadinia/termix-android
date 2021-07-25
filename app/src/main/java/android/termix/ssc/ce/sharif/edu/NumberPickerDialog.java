@@ -45,9 +45,16 @@ public class NumberPickerDialog extends DialogFragment {
         } else {
             label = AlarmCenter.PREFERENCE_LABEL + "_" + id + "_" + group;
         }
-
-        minutePicker.setValue(sharedPreference.getInt(label, 5));
         SwitchCompat alarmSituation = root.findViewById(R.id.notification_switch);
+
+        int value = sharedPreference.getInt(label, 5);
+        if (value == -1) {
+            minutePicker.setValue(5);
+            alarmSituation.setChecked(false);
+        } else {
+            minutePicker.setValue(value);
+            alarmSituation.setChecked(true);
+        }
 
         Button button = root.findViewById(R.id.save_button);
         button.setOnClickListener(v -> {
