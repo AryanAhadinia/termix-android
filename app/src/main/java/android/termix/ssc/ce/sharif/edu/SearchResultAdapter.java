@@ -27,6 +27,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         implements Filterable {
     public static final String PREFERENCE_NAME = "myDep";
     public static final String PREFERENCE_LABEL = "myDep";
+    private String searchWord;
 
     private final ArrayList<Course> showingCourses, allCourses;
     private final MainActivity context;
@@ -50,6 +51,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         } else if (AllCoursesLoader.getInstance().getFromLocal() != null) {
             this.allCourses.addAll(mergeMapToList(AllCoursesLoader.getInstance().getFromLocal(), myDep));
         }
+        this.getFilter().filter(searchWord);
         notifyDataSetChanged();
     }
 
@@ -82,6 +84,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     private final Filter courseFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            searchWord = String.valueOf(constraint);
             List<Course> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(allCourses);
