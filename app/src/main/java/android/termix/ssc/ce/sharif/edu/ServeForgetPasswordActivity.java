@@ -9,7 +9,6 @@ import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.ChangePasswordTask;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -65,14 +64,15 @@ public class ServeForgetPasswordActivity extends AppCompatActivity {
             changePasswordButton.startAnimation(animFadeOut);
             String passwordText = password.getText().toString();
             if (!LoginSignupActivity.isPasswordValid(passwordText)) {
-                Log.i("ForgetPass", "Email is not valid");
-                // TODO: toast
+                handler.post(() -> {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "رایانامه معتبر نیست.", Toast.LENGTH_SHORT);
+                    toast.show();
+                });
             }
             App.getExecutorService().execute(new ChangePasswordTask(passwordText) {
                 @Override
                 public void onResult(Object o) {
-                    // TODO
-                    System.out.println("password changed");
                     handler.post(() -> {
                         Toast toast;
                         if (isTaskRoot()) {
@@ -97,15 +97,21 @@ public class ServeForgetPasswordActivity extends AppCompatActivity {
 
                 @Override
                 public void onException(NetworkException e) {
-                    // TODO: toast
-                    System.out.println("ex sent");
+                    handler.post(() -> {
+                        Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(),
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    });
                     changePasswordButton.startAnimation(animFadeIn);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    // TODO: toast
-                    System.out.println("err sent");
+                    handler.post(() -> {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "اینترنت در دسترس نیست.", Toast.LENGTH_SHORT);
+                        toast.show();
+                    });
                     changePasswordButton.startAnimation(animFadeIn);
                 }
             });

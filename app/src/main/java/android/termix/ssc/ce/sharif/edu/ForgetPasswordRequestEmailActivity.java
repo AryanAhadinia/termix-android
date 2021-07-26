@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.RequestForgetPasswordTask;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -17,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -106,33 +106,35 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
             requestSend.startAnimation(animFadeOut);
             String emailText = email.getText().toString();
             if (!LoginSignupActivity.isEmailValid(emailText)) {
-                Log.i("ForgetPass", "Email is not valid");
-                // TODO: toast
+                handler.post(() -> {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "رایانامه معتبر نیست.", Toast.LENGTH_SHORT);
+                    toast.show();
+                });
             }
             App.getExecutorService().execute(new RequestForgetPasswordTask(emailText) {
                 @Override
                 public void onResult(Object o) {
-                    // TODO
-                    System.out.println("email sent");
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            linearLayout.startAnimation(layoutFadeOut);
-                        }
-                    });
+                    handler.post(() -> linearLayout.startAnimation(layoutFadeOut));
                 }
 
                 @Override
                 public void onException(NetworkException e) {
-                    // TODO: toast
-                    System.out.println("ex sent");
+                    handler.post(() -> {
+                        Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(),
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    });
                     requestSend.startAnimation(animFadeIn);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    // TODO: toast
-                    System.out.println("err sent");
+                    handler.post(() -> {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "اینترنت در دسترس نیست.", Toast.LENGTH_SHORT);
+                        toast.show();
+                    });
                     requestSend.startAnimation(animFadeIn);
                 }
             });
