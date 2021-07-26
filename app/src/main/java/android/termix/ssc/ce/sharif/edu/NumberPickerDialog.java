@@ -1,10 +1,8 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.termix.ssc.ce.sharif.edu.alarm.AlarmCenter;
+import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -31,8 +29,6 @@ public class NumberPickerDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        SharedPreferences sharedPreference = requireContext().getSharedPreferences(
-                AlarmCenter.PREFERENCE_NAME, Context.MODE_PRIVATE);
         LayoutInflater inflater = LayoutInflater.from(requireContext());
         View root = inflater.inflate(R.layout.numberpicker_setting_time, null);
         NumberPicker minutePicker = root.findViewById(R.id.numberpicker_setting_picker);
@@ -44,15 +40,9 @@ public class NumberPickerDialog extends DialogFragment {
         }
         minutePicker.setDisplayedValues(minuteValues);
 
-        String label;
-        if (id == 0) {
-            label = AlarmCenter.PREFERENCE_LABEL;
-        } else {
-            label = AlarmCenter.PREFERENCE_LABEL + "_" + id + "_" + group;
-        }
         SwitchCompat alarmSituation = root.findViewById(R.id.notification_switch);
 
-        int value = sharedPreference.getInt(label, 5);
+        int value = readPreference();
         if (value == -1) {
             minutePicker.setValue(1);
             alarmSituation.setChecked(false);
@@ -63,17 +53,31 @@ public class NumberPickerDialog extends DialogFragment {
 
         Button button = root.findViewById(R.id.save_button);
         button.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreference.edit();
             if (alarmSituation.isChecked()) {
-                editor.putInt(label, minutePicker.getValue() * 5);
+                writePreference(minutePicker.getValue() * 5);
             } else {
-                editor.putInt(label, -1);
+                writePreference(-1);
             }
-            editor.apply();
             dismiss();
         });
 
         builder.setView(root);
         return builder.create();
+    }
+
+    private int readPreference() {
+        if (id == 0) {
+            return PreferenceManager.getInstance(requireContext().getApplicationContext()).readAlarmOffset();
+        } else {
+            return PreferenceManager.getInstance(requireContext().getApplicationContext()).readAlarmOffset(id , group);
+        }
+    }
+
+    private void writePreference(int offset) {
+        if (id == 0) {
+            PreferenceManager.getInstance(requireContext().getApplicationContext()).writeAlarmOffset(offset);
+        } else {
+            PreferenceManager.getInstance(requireContext().getApplicationContext()).writeAlarmOffset(offset, id, group);
+        }
     }
 }

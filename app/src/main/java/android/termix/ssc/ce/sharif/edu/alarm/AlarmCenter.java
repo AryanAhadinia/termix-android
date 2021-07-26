@@ -8,9 +8,6 @@ import android.content.Intent;
 import java.util.Calendar;
 
 public class AlarmCenter {
-    public static final String PREFERENCE_NAME = "alarm"; // TODO
-    public static final String PREFERENCE_LABEL = "alarmOffset"; // "alarmOffset_40429_1  // TODO
-
     private static final int INTERVAL_MILLIS = 1000 * 60 * 2; // one minute
 
     private final Context context;
