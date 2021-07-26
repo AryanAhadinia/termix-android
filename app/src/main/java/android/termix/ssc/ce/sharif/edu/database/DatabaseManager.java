@@ -6,8 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.SessionParser;
-
-import com.google.gson.Gson;
+import android.termix.ssc.ce.sharif.edu.myCourseManager.MyCourseManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +71,7 @@ public class DatabaseManager {
         return database.delete(DatabaseHelper.COURSE_TABLE, where, whereArgs) > 0;
     }
 
+    @Deprecated
     public boolean deleteCourse(Course course) {
         return deleteCourse(course.getCourseId(), course.getGroupId());
     }
@@ -127,6 +127,59 @@ public class DatabaseManager {
                 cursor.getColumnIndex(DatabaseHelper.COURSE_INFO_MESSAGE));
         indexes.put(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE,
                 cursor.getColumnIndex(DatabaseHelper.COURSE_ON_REGISTER_MESSAGE));
+        return indexes;
+    }
+
+    public void insertTask(MyCourseManager.Task task) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.TASK_ACTION, task.getAction());
+        values.put(DatabaseHelper.TASK_COURSE_ID, task.getCourseId());
+        values.put(DatabaseHelper.TASK_GROUP_ID, task.getGroupId());
+        values.put(DatabaseHelper.TASK_TIME_STAMP, System.currentTimeMillis());
+        database.insert(DatabaseHelper.TASK_TABLE, null, values);
+    }
+
+    public boolean removeTask(MyCourseManager.Task task) {
+        String where = String.format(Locale.US, "%s=? AND %s=? AND %s=?",
+                DatabaseHelper.TASK_ACTION,
+                DatabaseHelper.TASK_COURSE_ID,
+                DatabaseHelper.TASK_GROUP_ID);
+        String[] whereArgs = new String[]{
+                String.valueOf(task.getAction()),
+                String.valueOf(task.getCourseId()),
+                String.valueOf(task.getGroupId())};
+        return database.delete(DatabaseHelper.COURSE_TABLE, where, whereArgs) > 0;
+    }
+
+    public ArrayList<MyCourseManager.Task> loadTasks() {
+        ArrayList<MyCourseManager.Task> tasks = new ArrayList<>();
+        Cursor cursor = this.database.query(DatabaseHelper.TASK_TABLE, null, null,
+                new String[]{}, null, null,
+                DatabaseHelper.TASK_TIME_STAMP);
+        cursor.moveToFirst();
+        HashMap<String, Integer> indexes = getTaskIndexes(cursor);
+        while (!cursor.isAfterLast()) {
+            MyCourseManager.Task task = new MyCourseManager.Task(
+                    cursor.getInt(indexes.get(DatabaseHelper.TASK_COURSE_ID)),
+                    cursor.getInt(indexes.get(DatabaseHelper.TASK_GROUP_ID)),
+                    cursor.getInt(indexes.get(DatabaseHelper.TASK_ACTION)));
+            tasks.add(task);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return tasks;
+    }
+
+    private HashMap<String, Integer> getTaskIndexes(Cursor cursor) {
+        HashMap<String, Integer> indexes = new HashMap<>();
+        indexes.put(DatabaseHelper.TASK_ACTION,
+                cursor.getColumnIndex(DatabaseHelper.TASK_ACTION));
+        indexes.put(DatabaseHelper.TASK_COURSE_ID,
+                cursor.getColumnIndex(DatabaseHelper.TASK_COURSE_ID));
+        indexes.put(DatabaseHelper.TASK_GROUP_ID,
+                cursor.getColumnIndex(DatabaseHelper.TASK_GROUP_ID));
+        indexes.put(DatabaseHelper.TASK_TIME_STAMP,
+                cursor.getColumnIndex(DatabaseHelper.TASK_TIME_STAMP));
         return indexes;
     }
 }
