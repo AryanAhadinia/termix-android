@@ -8,7 +8,7 @@ import android.content.Intent;
 import java.util.Calendar;
 
 public class AlarmCenter {
-    private static final int INTERVAL_MILLIS = 1000 * 60 * 2; // one minute
+    private static final int INTERVAL_MILLIS = 1000 * 60; // one minute
 
     private final Context context;
 
