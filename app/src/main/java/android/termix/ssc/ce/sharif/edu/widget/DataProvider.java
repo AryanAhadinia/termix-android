@@ -1,7 +1,9 @@
 package android.termix.ssc.ce.sharif.edu.widget;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.termix.ssc.ce.sharif.edu.LoadingActivity;
 import android.termix.ssc.ce.sharif.edu.MainActivity;
 import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
@@ -99,7 +101,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         nextSessionCourseNames.clear();
         mySelections.get(dayOfWeek).sort((courseSession, t1) -> courseSession.getSession().compareTo(t1.getSession()));
         for (CourseSession courseSession : mySelections.get(dayOfWeek)) {
-            if (courseSession.getSession().getStartHour() > hourOfDay ||
+            if (courseSession.getSession().getEndHour() > hourOfDay ||
                     (courseSession.getSession().getStartHour() == hourOfDay && courseSession.getSession().getStartMin() < minute)) {
                 addSession(hourOfDay, minute, courseSession);
             }
@@ -121,6 +123,8 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
             mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
             if (isMySelectionsEmpty(mySelections)) {
                 Log.i(TAG, "initData: network empty");
+                MySelectionsLoader.getInstance().run();
+                mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
             }
         }
         if (isMySelectionsEmpty(mySelections)) return new ArrayList<>(cachedSelections);
@@ -142,6 +146,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
             minuteDifference += 60;
             hourDifference -= 1;
         }
+        if (hourDifference<=0 || minuteDifference<=0) return mContext.getString(R.string.in_progress);
         return String.format("%01d:%02d", hourDifference, minuteDifference);
     }
 

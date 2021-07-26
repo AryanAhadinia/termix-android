@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView searchResultRecyclerView;
 
+    private ArrayList<Course> myCurrentSelections;
     private LoadSource selectionsLoadSource;
     private final Object loadingLock = new Object();
 
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 synchronized (loadingLock) {
                     if (selectionsLoadSource != LoadSource.NETWORK) {
                         selectionsLoadSource = LoadSource.LOCAL;
+                        myCurrentSelections = mySelections;
                         for (int i = 0; i < adapters.size() - 1; i++) {
                             int finalI = i;
                             handler.post(() -> adapters.get(finalI).rebaseCourseSessionsAndNotify(mySelectionMap.get(finalI)));
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 synchronized (loadingLock) {
                     selectionsLoadSource = LoadSource.NETWORK;
+                    myCurrentSelections = mySelections;
                     for (int i = 0; i < adapters.size() - 1; i++) {
                         int finalI = i;
                         handler.post(() -> adapters.get(finalI).rebaseCourseSessionsAndNotify(mySelectionMap.get(finalI)));
@@ -236,6 +239,18 @@ public class MainActivity extends AppCompatActivity {
         searchResultRecyclerView.setVisibility(View.GONE);
         searchBar.clearFocus();
         searchBar.setText("");
+        synchronized (loadingLock) {
+            for (Course selection : myCurrentSelections) {
+                if (selection.equals(course)) {
+                    Toast.makeText(this, "شما قبلا در این درس ثبت نام کرده اید.", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (selection.getExamTime().equals(course.getExamTime())) {
+                    Toast.makeText(this, "درس انتخابی شما تداخل زمان آزمون دارد.", Toast.LENGTH_SHORT).show();
+                } else if (selection.getCourseId() == course.getCourseId()) {
+                    Toast.makeText(this, "شما قبلا در گروه دیگری از این درس ثبت نام کرده اید.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
         ArrayList<CourseSession> courseSessions = CourseSession.getCourseSession(course);
         if (courseSessions.isEmpty()) {
             adapters.get(adapters.size() - 1).insertCourseSessionAndNotify(new CourseSession(course,

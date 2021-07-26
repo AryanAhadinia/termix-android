@@ -37,6 +37,7 @@
     <string name="settings">تنظیمات</string>
     <string name="save">ذخیره</string>
     <string name="cancel">لغو</string>
+    <string name="in_progress">در جریان</string>
     <string name="password_forgot">فراموشی گذرواژه</string>
     <string name="your_next_courses">کلاس های بعدی شما:</string>
     <string name="forget_password_request_email_prompt">لطفا رایانامه خود را وارد کنید که پیوند بازنشانی گذرواژه برای شما فرستاده شود.</string>
