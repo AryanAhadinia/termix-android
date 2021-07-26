@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
+import android.termix.ssc.ce.sharif.edu.myCourseManager.MyCourseManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.SignOutTask;
 import android.util.Log;
@@ -60,6 +61,7 @@ public class SettingsDialog extends DialogFragment {
             @Override
             public void onResult(Object o) {
                 new Thread(() -> DatabaseManager.getInstance().deleteData()).start();
+                MyCourseManager.getInstance().rebase();
                 Intent intent = new Intent(getActivity(), LoginSignupActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |
                         Intent.FLAG_ACTIVITY_NEW_TASK);

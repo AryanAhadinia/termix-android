@@ -42,7 +42,7 @@ public class DatabaseManager {
         databaseHelper.rebase(database);
     }
 
-    private void insertCourse(Course course) {
+    public void insertCourse(Course course) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COURSE_DEP_ID, course.getDepId());
         values.put(DatabaseHelper.COURSE_ID, course.getCourseId());
@@ -71,7 +71,6 @@ public class DatabaseManager {
         return database.delete(DatabaseHelper.COURSE_TABLE, where, whereArgs) > 0;
     }
 
-    @Deprecated
     public boolean deleteCourse(Course course) {
         return deleteCourse(course.getCourseId(), course.getGroupId());
     }
