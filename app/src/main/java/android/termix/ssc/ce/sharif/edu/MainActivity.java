@@ -271,16 +271,16 @@ public class MainActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<String[]> mPermissionResult = registerForActivityResult(
             new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-        try {
-            if (result.get(Manifest.permission.RECORD_AUDIO)) {
-                setUpVoiceSearch();
-            } else {
-                Log.e(TAG, "onActivityResult: RECORD AUDIO PERMISSION REJECTED!");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "onActivityResult: PERMISSION FAILED! (NULL)");
-        }
-    });
+                try {
+                    if (result.get(Manifest.permission.RECORD_AUDIO)) {
+                        setUpVoiceSearch();
+                    } else {
+                        Log.e(TAG, "onActivityResult: RECORD AUDIO PERMISSION REJECTED!");
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "onActivityResult: PERMISSION FAILED! (NULL)");
+                }
+            });
 
     private void setUpVoiceSearch() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

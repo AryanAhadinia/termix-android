@@ -36,6 +36,7 @@ public abstract class TestTokenTask extends NetworkTask<Object> {
                 } else {
                     onException(null);
                 }
+                response.body().close();
             }
         });
     }

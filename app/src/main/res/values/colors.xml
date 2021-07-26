@@ -17,6 +17,6 @@
     <color name="dark_pink">#864B64</color>
     <color name="dark_red">#B92037</color>
     <color name="hover">#DDDDDD</color>
-    <color name="stripe_start">#B3FF8C00</color>
+    <color name="stripe_start">#FF6500</color>
     <color name="stripe_end">#B3B92037</color>
 </resources>
