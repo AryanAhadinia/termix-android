@@ -21,9 +21,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
-                    android:host="6e1a630ad44d.ngrok.io"
-                    android:pathPrefix="/api/user/verify/serve/" />
+                    android:host="@string/server_url"
+                    android:pathPrefix="/api/user/verify/serve/"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity android:name=".ChangePasswordActivity" />
@@ -35,7 +35,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="6e1a630ad44d.ngrok.io"
+                    android:host="@string/server_url"
                     android:pathPrefix="/api/user/forget_password/serve/"
                     android:scheme="https" />
             </intent-filter>
