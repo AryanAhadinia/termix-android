@@ -1,5 +1,6 @@
-package android.termix.ssc.ce.sharif.edu.activities;
+package android.termix.ssc.ce.sharif.edu.alarm;
 //Reminder Activity
+
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
@@ -8,7 +9,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.termix.ssc.ce.sharif.edu.R;
-import android.termix.ssc.ce.sharif.edu.alarm.Alarm;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,11 +25,11 @@ public class AlarmActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate: ____________________");
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: ");
         setContentView(R.layout.activity_alarm);
-
+        for (String s : getIntent().getExtras().keySet()) {
+            Log.i(TAG, "onCreate: " + getIntent().getExtras().get(s));
+        }
         setWindowFlags();
         setUpLabels();
         setUpButtons();
@@ -49,11 +49,11 @@ public class AlarmActivity extends AppCompatActivity {
 
     private void setUpLabels() {
         TextView title = findViewById(R.id.course_name);
-        title.setText("نام درس");
+        title.setText((String) getIntent().getExtras().get("course_name"));
         TextView instructor = findViewById(R.id.course_instructor);
-        instructor.setText("استاد");
+        instructor.setText((String) getIntent().getExtras().get("course_instructor"));
         TextView time = findViewById(R.id.course_time);
-        time.setText("زمان شروع");
+        time.setText((String) getIntent().getExtras().get("course_start_time"));
     }
 
     private void setWindowFlags() {
@@ -74,8 +74,9 @@ public class AlarmActivity extends AppCompatActivity {
 
     private void setUpButtons() {
         Button endAlarm = findViewById(R.id.end_alarm);
-        endAlarm.setOnClickListener((onClickListener)->{
+        endAlarm.setOnClickListener((onClickListener) -> {
             finishActivity();
+            destroyEffects();
         });
     }
 
@@ -89,26 +90,31 @@ public class AlarmActivity extends AppCompatActivity {
         );
     }
 
-    private void playMedia(){
+    private void playMedia() {
         Uri myUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); //default alarm sound
-        try{
+        try {
             mediaPlayer.setDataSource(getApplicationContext(), myUri);
             mediaPlayer.prepare();
             mediaPlayer.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    void destroyEffects(){
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = null;
+    void destroyEffects() {
+        try {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        } catch (Exception e) {
+            Log.i(TAG, "destroyEffects: mediaPlayer was null");
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        destroyEffects();
         finishActivity();
     }
 
@@ -118,9 +124,8 @@ public class AlarmActivity extends AppCompatActivity {
         finishActivity();
     }
 
-    void finishActivity(){
+    void finishActivity() {
         scheduleNextAlarm(alarm);
-        destroyEffects();
         finish();
         overridePendingTransition(0, 0);
     }
