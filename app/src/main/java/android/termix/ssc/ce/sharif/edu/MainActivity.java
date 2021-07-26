@@ -2,6 +2,7 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.termix.ssc.ce.sharif.edu.model.Session;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +24,7 @@ import android.widget.ProgressBar;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
@@ -40,6 +43,7 @@ import java.util.Objects;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
 
 import static android.content.ContentValues.TAG;
 
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setItemAnimator(new LandingAnimator());
+            recyclerView.setItemAnimator(new ScaleInAnimator());
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DaySwipeHelper() {
                 @Override
                 public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
@@ -178,6 +182,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (coursesAdapter == null) {
+                    coursesAdapter = new SearchResultAdapter(MainActivity.this);
+                }
                 coursesAdapter.getFilter().filter(s);
             }
         });
