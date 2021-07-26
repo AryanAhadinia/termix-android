@@ -8,7 +8,6 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,20 +103,30 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     public void remove(CourseSession courseSession) {
         conflictedCourseSessionsCache.clear();
         int index = courseSessions.indexOf(courseSession);
+        notifyItemChanged(index);
         courseSessions.remove(index);
         notifyItemRemoved(index);
         ArrayList<Pair<CourseSession, CourseSession>> newConflictedCourseSession = new ArrayList<>();
-        for (Pair<CourseSession, CourseSession>
-                conflictedCourseSessionPair : conflictedCourseSessions) {
-            if (!(conflictedCourseSessionPair.first.equals(courseSession) ||
-                    conflictedCourseSessionPair.second.equals(courseSession))) {
+        HashSet<CourseSession> wasConflicting = new HashSet<>();
+        HashSet<CourseSession> stillConflicting = new HashSet<>();
+        for (Pair<CourseSession, CourseSession> conflictedCourseSessionPair : conflictedCourseSessions) {
+            if (conflictedCourseSessionPair.first.equals(courseSession)) {
+                wasConflicting.add(conflictedCourseSessionPair.second);
+            } else if (conflictedCourseSessionPair.second.equals(courseSession)) {
+                wasConflicting.add(conflictedCourseSessionPair.first);
+            } else {
                 newConflictedCourseSession.add(conflictedCourseSessionPair);
-                conflictedCourseSessionsCache.add(conflictedCourseSessionPair.first);
-                conflictedCourseSessionsCache.add(conflictedCourseSessionPair.second);
+                stillConflicting.add(conflictedCourseSessionPair.first);
+                stillConflicting.add(conflictedCourseSessionPair.second);
             }
         }
         this.conflictedCourseSessions = newConflictedCourseSession;
-        notifyDataSetChanged();
+        wasConflicting.removeAll(stillConflicting);
+        for (int i = 0; i < courseSessions.size(); i++) {
+            if (wasConflicting.contains(courseSessions.get(i))) {
+                notifyItemChanged(i);
+            }
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
@@ -157,29 +166,22 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             this.instructorTextView.setText(course.getInstructor());
             this.timesTextView.setText(course.getSessionsString());
             GradientDrawable viewColor = (GradientDrawable) foreground.getBackground();
-
+//
             ColorStateList colorStateList = viewColor.getColor();
             int colorId = colorStateList.getDefaultColor();
-            Log.e("KASHI: ", String.valueOf(colorId));
 
-//            if (conflicted && colorId == mainActivity.getApplicationContext().getResources()
-//                    .getColor(R.color.dark_red, mainActivity.getTheme())) {
-//                animateToConflicted();
-//            } else if (conflicted && colorId == mainActivity.getApplicationContext().getResources()
-//                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
-//                foreground.setBackgroundResource(R.drawable
-//                        .background_course_frame_conflicted_orange);
-//            } else if (!conflicted && colorId == mainActivity.getApplicationContext().getResources()
-//                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
-//                animateToNormal();
-//            } else {
-//                foreground.setBackgroundResource(R.drawable.background_course_frame);
-//            }
-
-            if (conflicted) {
+            if (conflicted && colorId == mainActivity.getApplicationContext().getResources()
+                    .getColor(R.color.dark_red, mainActivity.getTheme())) {
                 animateToConflicted();
-            } else {
+            } else if (conflicted && colorId == mainActivity.getApplicationContext().getResources()
+                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
+                foreground.setBackgroundResource(R.drawable
+                        .background_course_frame_conflicted_orange);
+            } else if (!conflicted && colorId == mainActivity.getApplicationContext().getResources()
+                    .getColor(R.color.stripe_start, mainActivity.getTheme())) {
                 animateToNormal();
+            } else {
+                foreground.setBackgroundResource(R.drawable.background_course_frame);
             }
         }
 
@@ -203,105 +205,55 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             return true;
         }
 
-        private void animateToConflicted() {
-            ObjectAnimator colorFade = ObjectAnimator.ofObject(foreground, "backgroundColor",
-                    new ArgbEvaluator(),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
+        private ObjectAnimator buildColorFade(int startColorId, int endColorId) {
+            ObjectAnimator colorFade = ObjectAnimator.ofObject(foreground,
+                    "backgroundColor", new ArgbEvaluator(),
+                    mainActivity.getApplicationContext().getResources().getColor(startColorId,
                             mainActivity.getTheme()),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
+                    mainActivity.getApplicationContext().getResources().getColor(endColorId,
                             mainActivity.getTheme()));
             colorFade.setDuration(2000);
-            ObjectAnimator colorFadeBack = ObjectAnimator.ofObject(foreground,
-                    "backgroundColor", new ArgbEvaluator(),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
-                            mainActivity.getTheme()),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
-                            mainActivity.getTheme()));
-            colorFadeBack.setDuration(2000);
-            colorFadeBack.setStartDelay(2000);
-            ObjectAnimator colorFadeAgain = ObjectAnimator.ofObject(foreground,
-                    "backgroundColor", new ArgbEvaluator(),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
-                            mainActivity.getTheme()),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
-                            mainActivity.getTheme()));
-            colorFadeAgain.setDuration(2000);
-            colorFadeAgain.setStartDelay(4000);
-            colorFade.start();
-            colorFadeBack.start();
-            colorFadeAgain.start();
-            colorFadeAgain.addListener(new Animator.AnimatorListener() {
+            colorFade.setStartDelay(0);
+            return colorFade;
+        }
+
+        private Animator.AnimatorListener setAnimatorListenerForFinalBackground(int backgroundId) {
+            return new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    foreground.setBackgroundResource(R.drawable
-                            .background_course_frame_conflicted_orange);
+                    foreground.setBackgroundResource(backgroundId);
                 }
 
                 @Override
                 public void onAnimationCancel(Animator animation) {
-
                 }
 
                 @Override
                 public void onAnimationRepeat(Animator animation) {
-
                 }
-            });
+            };
+        }
+
+        private void animateToConflicted() {
+            ObjectAnimator colorFade = buildColorFade(R.color.dark_red, R.color.stripe_start);
+
+            colorFade.addListener(setAnimatorListenerForFinalBackground(R.drawable
+                    .background_course_frame_conflicted_orange));
+
+            colorFade.start();
         }
 
         private void animateToNormal() {
-            ObjectAnimator colorFade = ObjectAnimator.ofObject(foreground, "backgroundColor",
-                    new ArgbEvaluator(),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
-                            mainActivity.getTheme()),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
-                            mainActivity.getTheme()));
-            colorFade.setDuration(2000);
-            ObjectAnimator colorFadeBack = ObjectAnimator.ofObject(foreground,
-                    "backgroundColor", new ArgbEvaluator(),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
-                            mainActivity.getTheme()),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
-                            mainActivity.getTheme()));
-            colorFadeBack.setDuration(2000);
-            colorFadeBack.setStartDelay(2000);
-            ObjectAnimator colorFadeAgain = ObjectAnimator.ofObject(foreground,
-                    "backgroundColor", new ArgbEvaluator(),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.stripe_start,
-                            mainActivity.getTheme()),
-                    mainActivity.getApplicationContext().getResources().getColor(R.color.dark_red,
-                            mainActivity.getTheme()));
-            colorFadeAgain.setDuration(2000);
-            colorFadeAgain.setStartDelay(4000);
+            ObjectAnimator colorFade = buildColorFade(R.color.stripe_start, R.color.dark_red);
+
+            colorFade.addListener(setAnimatorListenerForFinalBackground(R.drawable
+                    .background_course_frame));
+
             colorFade.start();
-            colorFadeBack.start();
-            colorFadeAgain.start();
-            colorFadeAgain.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    foreground.setBackgroundResource(R.drawable.background_course_frame);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
         }
     }
 }

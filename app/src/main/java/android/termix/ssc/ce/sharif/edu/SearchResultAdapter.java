@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         implements Filterable {
     public static final String PREFERENCE_NAME = "myDep";
     public static final String PREFERENCE_LABEL = "myDep";
+    private String searchWord;
 
     private final ArrayList<Course> showingCourses, allCourses;
     private final MainActivity context;
@@ -50,6 +50,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         } else if (AllCoursesLoader.getInstance().getFromLocal() != null) {
             this.allCourses.addAll(mergeMapToList(AllCoursesLoader.getInstance().getFromLocal(), myDep));
         }
+        this.getFilter().filter(searchWord);
         notifyDataSetChanged();
     }
 
@@ -82,6 +83,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     private final Filter courseFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            searchWord = String.valueOf(constraint);
             List<Course> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(allCourses);
@@ -105,15 +107,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;
-
-            Log.e("RIDAM: ", Integer.toString(filteredList.size()));
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             showingCourses.clear();
-            showingCourses.addAll((List) results.values);
+            showingCourses.addAll((List<Course>) results.values);
             notifyDataSetChanged();
         }
     };
@@ -210,7 +210,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         public boolean onLongClick(View v) {
             DialogFragment dialog = new CourseDialog(course);
             dialog.show(mainActivity.getSupportFragmentManager(), "CourseDialogFragment");
-            return true;
+            return true; // TODO
         }
     }
 

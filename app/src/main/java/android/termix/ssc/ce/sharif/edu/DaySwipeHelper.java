@@ -51,6 +51,7 @@ public abstract class DaySwipeHelper extends ItemTouchHelper.SimpleCallback {
     public void clearView(@NonNull @NotNull RecyclerView recyclerView,
                           @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
         final View foregroundView = ((DayAdapter.ViewHolder) viewHolder).getForeground();
+        foregroundView.setBackgroundResource(R.drawable.background_course_frame);
         getDefaultUIUtil().clearView(foregroundView);
     }
 

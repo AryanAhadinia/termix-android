@@ -4,6 +4,7 @@ import android.app.Application;
 import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
 import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
+import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;
 
 import java.sql.Time;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,6 +25,7 @@ public class App extends Application {
         CookieManager.init(getApplicationContext());
         DatabaseManager.init(getApplicationContext());
         AllCoursesLoader.init(getApplicationContext());
+        PreferenceManager.init(getApplicationContext());
         // loading all courses immediately
         AllCoursesLoader.getInstance().run();
     }

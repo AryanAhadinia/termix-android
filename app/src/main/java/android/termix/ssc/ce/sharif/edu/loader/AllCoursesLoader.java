@@ -1,11 +1,11 @@
 package android.termix.ssc.ce.sharif.edu.loader;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.termix.ssc.ce.sharif.edu.App;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.GetAllCoursesTask;
+import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,9 +19,6 @@ import java.util.Iterator;
  * @since 1
  */
 public class AllCoursesLoader implements Runnable {
-    private static final String SHARED_PREFERENCE_LABEL = "allCourses";
-    private static final String SHARED_PREFERENCE_NAME = "allCourses";
-
     private static AllCoursesLoader instance;
 
     private HashMap<Integer, ArrayList<Course>> fromNetwork;
@@ -77,11 +74,7 @@ public class AllCoursesLoader implements Runnable {
                         }
                     }
                     synchronized (LocalCacheLock) {
-                        SharedPreferences preferences = context.getSharedPreferences(
-                                SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString(SHARED_PREFERENCE_LABEL, o);
-                        editor.apply();
+                        PreferenceManager.getInstance(context).writeAllCourses(o);
                     }
                 } catch (JSONException e) {
                     onError(e);
@@ -117,9 +110,7 @@ public class AllCoursesLoader implements Runnable {
     private void fromLocal() {
         String result;
         synchronized (LocalCacheLock) {
-            SharedPreferences preferences = context.getSharedPreferences(SHARED_PREFERENCE_NAME,
-                    Context.MODE_PRIVATE);
-            result = preferences.getString(SHARED_PREFERENCE_LABEL, "");
+            result = PreferenceManager.getInstance(context).readAllCourses();
         }
         synchronized (fromLocalLock) {
             if (result.equals("")) {
