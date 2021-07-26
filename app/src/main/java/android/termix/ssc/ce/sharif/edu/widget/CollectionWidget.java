@@ -1,10 +1,12 @@
 package android.termix.ssc.ce.sharif.edu.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.termix.ssc.ce.sharif.edu.LoadingActivity;
 import android.termix.ssc.ce.sharif.edu.R;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -78,6 +80,5 @@ public class CollectionWidget extends AppWidgetProvider {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(thisAppWidget),
                     R.id.widget_list);
         }
-        super.onReceive(context, intent);
     }
 }
