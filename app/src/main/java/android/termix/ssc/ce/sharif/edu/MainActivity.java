@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AlarmCenter(getBaseContext()).startAlarms(2);
+        new AlarmCenter(getApplicationContext()).startAlarms();
         // set view
         setContentView(R.layout.activity_main);
         // set status bar color

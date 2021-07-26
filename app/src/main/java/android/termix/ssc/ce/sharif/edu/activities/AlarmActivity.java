@@ -1,4 +1,4 @@
-package android.termix.ssc.ce.sharif.edu.alarm;
+package android.termix.ssc.ce.sharif.edu.activities;
 //Reminder Activity
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -8,6 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.alarm.Alarm;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;

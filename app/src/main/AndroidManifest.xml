@@ -72,19 +72,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginSignupActivity" />
         <activity android:name=".AccountVerificationActivity" />
 
         <receiver
-            android:name=".alarm.AlarmBroadcastReceiver"
+            android:name=".alarm.AlarmReceiver"
             android:enabled="true"
-            android:exported="true"
-            android:process=":remote">
-            <intent-filter>
-                <action android:name="ALARM_SUPER_CHANNEL"/>
-            </intent-filter>
+            android:exported="true">
         </receiver>
+
     </application>
 
 </manifest>

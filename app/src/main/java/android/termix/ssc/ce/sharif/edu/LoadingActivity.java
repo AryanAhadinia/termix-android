@@ -6,10 +6,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.termix.ssc.ce.sharif.edu.alarm.AlarmBroadcastReceiver;
+import android.termix.ssc.ce.sharif.edu.alarm.AlarmReceiver;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
@@ -94,7 +93,7 @@ public class LoadingActivity extends AppCompatActivity {
         });
         // Start alarm manager to handle alarms
         AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
+        Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
