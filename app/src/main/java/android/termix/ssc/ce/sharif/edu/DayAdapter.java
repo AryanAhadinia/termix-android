@@ -168,7 +168,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             this.instructorTextView.setText(course.getInstructor());
             this.timesTextView.setText(course.getSessionsString());
             GradientDrawable viewColor = (GradientDrawable) foreground.getBackground();
-
+//
             ColorStateList colorStateList = viewColor.getColor();
             int colorId = colorStateList.getDefaultColor();
             Log.e("KASHI: ", String.valueOf(colorId));

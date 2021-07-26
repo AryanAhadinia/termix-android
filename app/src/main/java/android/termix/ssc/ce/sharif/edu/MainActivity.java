@@ -71,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
         // set status bar color
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         // get weekdays recycler view
-        coursesAdapter = new SearchResultAdapter(this);
-
         ArrayList<RecyclerView> recyclerViews = new ArrayList<>();
         recyclerViews.add(findViewById(R.id.recycler_saturday));
         recyclerViews.add(findViewById(R.id.recycler_sunday));
@@ -188,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             isSearching = hasFocus;
             if (searchResultRecyclerView == null) {
                 searchResultRecyclerView = findViewById(R.id.searchResultRecyclerView);
+                coursesAdapter = new SearchResultAdapter(this);
                 AlphaInAnimationAdapter alphaAnimatedAdapter = new AlphaInAnimationAdapter(coursesAdapter);
                 alphaAnimatedAdapter.setFirstOnly(false);
                 ScaleInAnimationAdapter scaleAnimatedAdapter = new ScaleInAnimationAdapter(alphaAnimatedAdapter);

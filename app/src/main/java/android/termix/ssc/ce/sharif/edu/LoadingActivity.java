@@ -6,21 +6,18 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.termix.ssc.ce.sharif.edu.alarm.AlarmBroadcastReceiver;
-import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
-import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
-import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.TestTokenTask;
+import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,9 +28,6 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        System.out.println(System.currentTimeMillis()); // TODO: remove this line
-
         // set status bar color
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -60,10 +54,14 @@ public class LoadingActivity extends AppCompatActivity {
                 // Call when both network and token are OK
                 @Override
                 public void onResult(Object o) {
+                    Log.i("Token Check", "Token accepted. Going to main activity");
                     App.getExecutorService().execute(MySelectionsLoader.getInstance());
                     handler.post(() -> {
-                        Intent intent = new Intent(LoadingActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent intent = new Intent(LoadingActivity.this,
+                                MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     });
                 }
@@ -71,9 +69,13 @@ public class LoadingActivity extends AppCompatActivity {
                 // Call when network is OK but token is not accepted
                 @Override
                 public void onException(NetworkException e) {
+                    Log.i("Token Check", "Token not proved. Going to LoginSignupActivity");
                     handler.post(() -> {
-                        Intent intent = new Intent(LoadingActivity.this, LoginSignupActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent intent = new Intent(LoadingActivity.this,
+                                LoginSignupActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     });
                 }
@@ -81,12 +83,14 @@ public class LoadingActivity extends AppCompatActivity {
                 // Call when server is unreachable
                 @Override
                 public void onError(Exception e) {
-                    Log.i("Network", "error on token check.");
-                    // TODO: fallback to local database. show error if data is not reachable
+                    Log.i("Token Check", "Network not found. Fallback to local");
+                    if (PreferenceManager.getInstance(getApplicationContext()).containsAllCourses()) {
+
+                    } else {
+                        scaleDown.cancel();
+                    }
                 }
             }.run();
-            //Intent intent = new Intent(LoadingActivity.this, ForgetPassRequestEmailActivity.class);
-            //startActivity(intent);
         });
         // Start alarm manager to handle alarms
         AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -96,19 +100,7 @@ public class LoadingActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 2, alarmIntent);
-        // ATTENTION: This was auto-generated to handle app links.
-        Intent appLinkIntent = getIntent();
-        String appLinkAction = appLinkIntent.getAction();
-        Uri appLinkData = appLinkIntent.getData();
-        if (appLinkData != null){
-            String token = appLinkData.getLastPathSegment();
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(context, token, duration);
-            toast.show();
-            System.out.println(token);
-        }
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 2, alarmIntent);
     }
 }
