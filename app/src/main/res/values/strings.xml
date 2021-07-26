@@ -77,4 +77,5 @@
     <string name="channel_description">reminder</string>
     <string name="no_class_time">بدون زمان کلاس</string>
     <string name="server_url">ce419d0e99e3.ngrok.io</string>
+    <string name="retry">اینترنت در دسترس نیست. برای بررسی مجدد صفحه را لمس کنید.</string>
 </resources>
