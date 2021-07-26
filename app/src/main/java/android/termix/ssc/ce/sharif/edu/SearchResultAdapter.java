@@ -108,8 +108,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;
-
-            Log.e("RIDAM: ", Integer.toString(filteredList.size()));
             return results;
         }
 
