@@ -31,7 +31,7 @@ public class AlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm);
 
         setWindowFlags();
-        setUpLables();
+        setUpLabels();
         setUpButtons();
         setUpBackGround();
         setUpMediaPlayer();
@@ -47,7 +47,7 @@ public class AlarmActivity extends AppCompatActivity {
         animationDrawable.start();
     }
 
-    private void setUpLables() {
+    private void setUpLabels() {
         TextView title = findViewById(R.id.course_name);
         title.setText("نام درس");
         TextView instructor = findViewById(R.id.course_instructor);
