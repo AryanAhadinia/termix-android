@@ -11,6 +11,8 @@ import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.termix.ssc.ce.sharif.edu.model.Session;
+import android.termix.ssc.ce.sharif.edu.network.NetworkException;
+import android.termix.ssc.ce.sharif.edu.network.tasks.SelectTask;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -114,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
-            Log.i("Selections", "Local fetched");
             if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession
                         .getWeekdayCourseSessionsMap(mySelections);
@@ -125,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 synchronized (loadingLock) {
-                    Log.i("Local", mySelectionMap.toString());
-                    Log.i("Local", noClassCourseSessions.toString());
                     if (selectionsLoadSource != LoadSource.NETWORK) {
                         selectionsLoadSource = LoadSource.LOCAL;
                         for (int i = 0; i < adapters.size() - 1; i++) {
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from network
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromNetwork();
-            Log.i("Selections", "Network fetched");
             if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 ArrayList<CourseSession> noClassCourseSessions = new ArrayList<>();
@@ -155,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 synchronized (loadingLock) {
                     selectionsLoadSource = LoadSource.NETWORK;
-                    Log.i("Network", mySelectionMap.toString());
-                    Log.i("Network", noClassCourseSessions.toString());
                     for (int i = 0; i < adapters.size() - 1; i++) {
                         int finalI = i;
                         handler.post(() -> adapters.get(finalI).rebaseCourseSessionsAndNotify(mySelectionMap.get(finalI)));
@@ -212,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
+
+
 
         setUpSettings(); // TODO
     }
