@@ -147,7 +147,7 @@ public class SignupVerifyWaitingActivity extends AppCompatActivity {
                     tick.playAnimation();
                 } else {
                     cross.setVisibility(View.VISIBLE);
-                    cross.startAnimation(tickFadeIn);
+                    cross.startAnimation(crossFadeIn);
                     cross.playAnimation();
                     message.setTextColor(Color.RED);
                 }
