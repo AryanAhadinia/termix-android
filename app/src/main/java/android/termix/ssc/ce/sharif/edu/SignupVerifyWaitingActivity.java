@@ -1,7 +1,6 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -149,7 +148,6 @@ public class SignupVerifyWaitingActivity extends AppCompatActivity {
                     cross.setVisibility(View.VISIBLE);
                     cross.startAnimation(crossFadeIn);
                     cross.playAnimation();
-                    message.setTextColor(Color.RED);
                 }
             }
         });
