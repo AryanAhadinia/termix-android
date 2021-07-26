@@ -5,6 +5,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
@@ -165,10 +166,15 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             this.titleTextView.setText(course.getTitle());
             this.instructorTextView.setText(course.getInstructor());
             this.timesTextView.setText(course.getSessionsString());
-            GradientDrawable viewColor = (GradientDrawable) foreground.getBackground();
-//
-            ColorStateList colorStateList = viewColor.getColor();
-            int colorId = colorStateList.getDefaultColor();
+            int colorId;
+            try {
+                GradientDrawable viewColor = (GradientDrawable) foreground.getBackground();
+                ColorStateList colorStateList = viewColor.getColor();
+                colorId = colorStateList.getDefaultColor();
+            } catch (Exception e) {
+                ColorDrawable viewColor = (ColorDrawable) foreground.getBackground();
+                colorId = viewColor.getColor();
+            }
 
             if (conflicted && colorId == mainActivity.getApplicationContext().getResources()
                     .getColor(R.color.dark_red, mainActivity.getTheme())) {
