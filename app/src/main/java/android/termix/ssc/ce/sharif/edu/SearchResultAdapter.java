@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,7 +113,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             showingCourses.clear();
-            showingCourses.addAll((List) results.values);
+            showingCourses.addAll((List<Course>) results.values);
             notifyDataSetChanged();
         }
     };
@@ -211,7 +210,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         public boolean onLongClick(View v) {
             DialogFragment dialog = new CourseDialog(course);
             dialog.show(mainActivity.getSupportFragmentManager(), "CourseDialogFragment");
-            return true;
+            return true; // TODO
         }
     }
 

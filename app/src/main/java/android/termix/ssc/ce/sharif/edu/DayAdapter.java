@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -104,20 +105,30 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     public void remove(CourseSession courseSession) {
         conflictedCourseSessionsCache.clear();
         int index = courseSessions.indexOf(courseSession);
+        notifyItemChanged(index);
         courseSessions.remove(index);
         notifyItemRemoved(index);
         ArrayList<Pair<CourseSession, CourseSession>> newConflictedCourseSession = new ArrayList<>();
-        for (Pair<CourseSession, CourseSession>
-                conflictedCourseSessionPair : conflictedCourseSessions) {
-            if (!(conflictedCourseSessionPair.first.equals(courseSession) ||
-                    conflictedCourseSessionPair.second.equals(courseSession))) {
+        HashSet<CourseSession> wasConflicting = new HashSet<>();
+        HashSet<CourseSession> stillConflicting = new HashSet<>();
+        for (Pair<CourseSession, CourseSession> conflictedCourseSessionPair : conflictedCourseSessions) {
+            if (conflictedCourseSessionPair.first.equals(courseSession)) {
+                wasConflicting.add(conflictedCourseSessionPair.second);
+            } else if (conflictedCourseSessionPair.second.equals(courseSession)) {
+                wasConflicting.add(conflictedCourseSessionPair.first);
+            } else {
                 newConflictedCourseSession.add(conflictedCourseSessionPair);
-                conflictedCourseSessionsCache.add(conflictedCourseSessionPair.first);
-                conflictedCourseSessionsCache.add(conflictedCourseSessionPair.second);
+                stillConflicting.add(conflictedCourseSessionPair.first);
+                stillConflicting.add(conflictedCourseSessionPair.second);
             }
         }
         this.conflictedCourseSessions = newConflictedCourseSession;
-        notifyDataSetChanged();
+        wasConflicting.removeAll(stillConflicting);
+        for (int i = 0; i < courseSessions.size(); i++) {
+            if (wasConflicting.contains(courseSessions.get(i))) {
+                notifyItemChanged(i);
+            }
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
