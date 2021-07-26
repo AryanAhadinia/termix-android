@@ -75,7 +75,6 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginSignupActivity" />
-        <activity android:name=".AccountVerificationActivity" />
 
         <receiver
             android:name=".alarm.AlarmReceiver"
