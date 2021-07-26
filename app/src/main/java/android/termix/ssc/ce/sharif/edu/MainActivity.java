@@ -2,13 +2,12 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
-import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
 import android.termix.ssc.ce.sharif.edu.alarm.AlarmCenter;
+import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
@@ -280,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void removeCourse(Course course) {
         ArrayList<CourseSession> courseSessions = CourseSession.getCourseSession(course);
+        myCurrentSelections.remove(course);
         for (CourseSession courseSession : courseSessions) {
             adapters.get(courseSession.getSession().getDay()).remove(courseSession);
         }

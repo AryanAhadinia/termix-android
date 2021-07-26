@@ -17,12 +17,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.Calendar;
 
 public class LoadingActivity extends AppCompatActivity {
+
+    private ConstraintLayout mainLayout;
+    private TextView errorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,18 @@ public class LoadingActivity extends AppCompatActivity {
         scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
         scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
         scaleDown.start();
+        // get layouts
+        mainLayout = findViewById(R.id.main);
+        errorText = findViewById(R.id.errorText);
+        // set click listener
+        mainLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(LoadingActivity.this,
+                    LoadingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        });
         // Handler
         Handler handler = new Handler();
         // Async tasks
@@ -84,9 +101,19 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onError(Exception e) {
                     Log.i("Token Check", "Network not found. Fallback to local");
                     if (PreferenceManager.getInstance(getApplicationContext()).containsAllCourses()) {
-
+                        MySelectionsLoader.getInstance().run();
+                        Intent intent = new Intent(LoadingActivity.this,
+                                MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                     } else {
-                        scaleDown.cancel();
+                        handler.post(() -> {
+                            scaleDown.cancel();
+                            mainLayout.setClickable(true);
+                            errorText.setVisibility(View.VISIBLE);
+                        });
                     }
                 }
             }.run();
