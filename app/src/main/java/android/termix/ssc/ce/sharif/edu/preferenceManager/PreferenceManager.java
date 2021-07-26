@@ -9,9 +9,11 @@ public class PreferenceManager {
     private static final String ALL_COURSES_NAME = "allCourses";
     private static final String ALL_COURSES_KEY = "allCourses";
 
-    public static final String PREFERENCE_NAME = "alarm";
-    public static final String PREFERENCE_LABEL = "alarmOffset"; // "alarmOffset_40429_1
+    public static final String ALARM_OFFSET_NAME = "alarm";
+    public static final String ALARM_OFFSET_KEY = "alarmOffset";
 
+    public static final String DEPARTMENT_NAME = "myDep";
+    public static final String DEPARTMENT_KEY = "myDep";
 
     private static PreferenceManager instance;
 
@@ -59,25 +61,42 @@ public class PreferenceManager {
     }
 
     public int readAlarmOffset() {
-        return getPreferences(PREFERENCE_NAME).getInt(PREFERENCE_LABEL, 5);
+        return getPreferences(ALARM_OFFSET_NAME).getInt(ALARM_OFFSET_KEY, 5);
     }
 
     public int readAlarmOffset(int courseId, int groupId) {
-        String key = String.format(Locale.US, "%s_%d_%d", PREFERENCE_LABEL, courseId, groupId);
-        SharedPreferences preferences = getPreferences(PREFERENCE_NAME);
-        return preferences.getInt(key, preferences.getInt(PREFERENCE_LABEL, 5));
+        String key = String.format(Locale.US, "%s_%d_%d", ALARM_OFFSET_KEY, courseId, groupId);
+        SharedPreferences preferences = getPreferences(ALARM_OFFSET_NAME);
+        return preferences.getInt(key, preferences.getInt(ALARM_OFFSET_KEY, 5));
     }
 
     public void writeAlarmOffset(int offset) {
-        SharedPreferences.Editor editor = getEditor(PREFERENCE_NAME);
-        editor.putInt(PREFERENCE_LABEL, offset);
+        SharedPreferences.Editor editor = getEditor(ALARM_OFFSET_NAME);
+        editor.putInt(ALARM_OFFSET_KEY, offset);
         editor.apply();
     }
 
     public void writeAlarmOffset(int offset, int courseId, int groupId) {
-        SharedPreferences.Editor editor = getEditor(PREFERENCE_NAME);
-        String key = String.format(Locale.US, "%s_%d_%d", PREFERENCE_LABEL, courseId, groupId);
+        SharedPreferences.Editor editor = getEditor(ALARM_OFFSET_NAME);
+        String key = String.format(Locale.US, "%s_%d_%d", ALARM_OFFSET_KEY, courseId, groupId);
         editor.putInt(key, offset);
+        editor.apply();
+    }
+
+    public void removeAlarmOffset(int courseId, int groupId) {
+        SharedPreferences.Editor editor = getEditor(ALARM_OFFSET_NAME);
+        String key = String.format(Locale.US, "%s_%d_%d", ALARM_OFFSET_KEY, courseId, groupId);
+        editor.remove(key);
+        editor.apply();
+    }
+
+    public int readDepartment() {
+        return getPreferences(DEPARTMENT_NAME).getInt(DEPARTMENT_KEY, 40);
+    }
+
+    public void writeDepartment(int depId) {
+        SharedPreferences.Editor editor = getEditor(DEPARTMENT_NAME);
+        editor.putInt(DEPARTMENT_KEY, depId);
         editor.apply();
     }
 }

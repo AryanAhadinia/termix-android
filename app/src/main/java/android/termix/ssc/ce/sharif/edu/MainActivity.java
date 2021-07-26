@@ -13,6 +13,7 @@ import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.termix.ssc.ce.sharif.edu.model.Session;
 import android.termix.ssc.ce.sharif.edu.myCourseManager.MyCourseManager;
+import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -280,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
     private void removeCourse(Course course) {
         ArrayList<CourseSession> courseSessions = CourseSession.getCourseSession(course);
         myCurrentSelections.remove(course);
+        PreferenceManager.getInstance(getApplicationContext()).removeAlarmOffset(course.getCourseId(), course.getGroupId());
         for (CourseSession courseSession : courseSessions) {
             adapters.get(courseSession.getSession().getDay()).remove(courseSession);
         }

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -60,11 +61,7 @@ public class ChooseDepartmentDialog extends DialogFragment {
     }
 
     private void selectDepartment(int depId) {
-        SharedPreferences sharedPreference = requireContext().getSharedPreferences(
-                SearchResultAdapter.PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreference.edit();
-        editor.putInt(SearchResultAdapter.PREFERENCE_NAME, depId);
-        editor.apply();
+        PreferenceManager.getInstance().writeDepartment(depId);
         dismiss();
 
         MainActivity mainActivity = (MainActivity) requireContext();

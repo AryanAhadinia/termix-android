@@ -1,9 +1,9 @@
 package android.termix.ssc.ce.sharif.edu;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
+import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +24,6 @@ import java.util.Locale;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder>
         implements Filterable {
-    public static final String PREFERENCE_NAME = "myDep";
-    public static final String PREFERENCE_LABEL = "myDep";
     private String searchWord;
 
     private final ArrayList<Course> showingCourses, allCourses;
@@ -137,9 +135,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     private ArrayList<Course> mergeMapToList(HashMap<Integer, ArrayList<Course>> map) {
-        SharedPreferences sharedPreference = context.getSharedPreferences(PREFERENCE_NAME,
-                Context.MODE_PRIVATE);
-        int depId = sharedPreference.getInt(PREFERENCE_LABEL, 40);
+        int depId = PreferenceManager.getInstance().readDepartment();
         return mergeMapToList(map, depId);
     }
 
