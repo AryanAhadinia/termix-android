@@ -7,27 +7,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
+import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
 import android.termix.ssc.ce.sharif.edu.alarm.AlarmCenter;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.termix.ssc.ce.sharif.edu.model.Session;
-import android.termix.ssc.ce.sharif.edu.network.NetworkException;
-import android.termix.ssc.ce.sharif.edu.network.tasks.SelectTask;
+import android.termix.ssc.ce.sharif.edu.myCourseManager.MyCourseManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
@@ -45,7 +44,6 @@ import java.util.Objects;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
 
 import static android.content.ContentValues.TAG;
@@ -67,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
     private LoadSource selectionsLoadSource;
     private final Object loadingLock = new Object();
+
+    private Handler handler;
 
     private boolean isSearching;
 
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             adapters.add(adapter);
         }
         // create handler
-        Handler handler = new Handler();
+        handler = new Handler();
         // get required views
         mainLinearLayout = findViewById(R.id.main_linear_layout);
         progressBar = findViewById(R.id.progressBar);
@@ -245,6 +245,14 @@ public class MainActivity extends AppCompatActivity {
                 adapters.get(courseSession.getSession().getDay()).insertCourseSessionAndNotify(courseSession);
             }
         }
+        App.getExecutorService().execute(() -> {
+            boolean status = MyCourseManager.getInstance().select(course.getCourseId(), course.getGroupId());
+            if (!status) {
+                handler.post(() -> Toast.makeText(MainActivity.this, "شبکه در دسترس نیست.", Toast.LENGTH_SHORT).show());
+
+            }
+            DatabaseManager.getInstance().insertCourse(course);
+        });
     }
 
     public void removeWithCourseSession(CourseSession courseSession) {
@@ -260,6 +268,13 @@ public class MainActivity extends AppCompatActivity {
         for (CourseSession courseSession : courseSessions) {
             adapters.get(courseSession.getSession().getDay()).remove(courseSession);
         }
+        App.getExecutorService().execute(() -> {
+            boolean status = MyCourseManager.getInstance().unselect(course.getCourseId(), course.getGroupId());
+            if (!status) {
+                handler.post(() -> Toast.makeText(MainActivity.this, "شبکه در دسترس نیست.", Toast.LENGTH_SHORT).show());
+            }
+            DatabaseManager.getInstance().deleteCourse(course);
+        });
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new
