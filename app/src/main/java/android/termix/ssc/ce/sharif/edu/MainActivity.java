@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
+import android.termix.ssc.ce.sharif.edu.alarm.AlarmCenter;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AlarmCenter(getBaseContext()).startAlarms(2);
         // set view
         setContentView(R.layout.activity_main);
         // set status bar color

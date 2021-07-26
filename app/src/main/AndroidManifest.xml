@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:name=".App"
@@ -75,7 +79,12 @@
         <receiver
             android:name=".alarm.AlarmBroadcastReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="ALARM_SUPER_CHANNEL"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

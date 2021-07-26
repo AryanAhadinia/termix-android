@@ -69,8 +69,7 @@ public class CollectionWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Log.i(TAG, "ACTION_AUTO_UPDATE = " + intent.getAction());
-        if (intent.getAction().equals(ACTION_AUTO_UPDATE) ||
-                intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
+        if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
             Log.i(TAG, "onReceive: ACTION_AUTO_UPDATE");
             Intent i = new Intent(context, CollectionWidget.class);
             i.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
