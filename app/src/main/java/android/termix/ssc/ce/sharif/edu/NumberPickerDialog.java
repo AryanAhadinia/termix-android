@@ -37,7 +37,12 @@ public class NumberPickerDialog extends DialogFragment {
         View root = inflater.inflate(R.layout.numberpicker_setting_time, null);
         NumberPicker minutePicker = root.findViewById(R.id.numberpicker_setting_picker);
         minutePicker.setMinValue(0);
-        minutePicker.setMaxValue(30);
+        minutePicker.setMaxValue(12);
+        String[] minuteValues = new String[13];
+        for (int i = 0; i < 13; i++) {
+            minuteValues[i] = Integer.toString(i * 5);
+        }
+        minutePicker.setDisplayedValues(minuteValues);
 
         String label;
         if (id == 0) {
@@ -49,10 +54,10 @@ public class NumberPickerDialog extends DialogFragment {
 
         int value = sharedPreference.getInt(label, 5);
         if (value == -1) {
-            minutePicker.setValue(5);
+            minutePicker.setValue(1);
             alarmSituation.setChecked(false);
         } else {
-            minutePicker.setValue(value);
+            minutePicker.setValue(value / 5);
             alarmSituation.setChecked(true);
         }
 
@@ -60,7 +65,7 @@ public class NumberPickerDialog extends DialogFragment {
         button.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreference.edit();
             if (alarmSituation.isChecked()) {
-                editor.putInt(label, minutePicker.getValue());
+                editor.putInt(label, minutePicker.getValue() * 5);
             } else {
                 editor.putInt(label, -1);
             }
