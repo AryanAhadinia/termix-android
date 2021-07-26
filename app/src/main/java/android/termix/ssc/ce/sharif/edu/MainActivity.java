@@ -2,6 +2,7 @@ package android.termix.ssc.ce.sharif.edu;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,8 +11,11 @@ import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.termix.ssc.ce.sharif.edu.model.Session;
+import android.termix.ssc.ce.sharif.edu.network.NetworkException;
+import android.termix.ssc.ce.sharif.edu.network.tasks.SelectTask;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +26,7 @@ import android.widget.ProgressBar;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
@@ -40,6 +45,7 @@ import java.util.Objects;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
 
 import static android.content.ContentValues.TAG;
 
@@ -86,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             recyclerView.setNestedScrollingEnabled(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setItemAnimator(new LandingAnimator());
+            recyclerView.setItemAnimator(new ScaleInAnimator());
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DaySwipeHelper() {
                 @Override
                 public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
@@ -110,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromLocal();
-            Log.i("Selections", "Local fetched");
             if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession
                         .getWeekdayCourseSessionsMap(mySelections);
@@ -121,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 synchronized (loadingLock) {
-                    Log.i("Local", mySelectionMap.toString());
-                    Log.i("Local", noClassCourseSessions.toString());
                     if (selectionsLoadSource != LoadSource.NETWORK) {
                         selectionsLoadSource = LoadSource.LOCAL;
                         for (int i = 0; i < adapters.size() - 1; i++) {
@@ -140,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         // load my selections from network
         App.getExecutorService().execute(() -> {
             ArrayList<Course> mySelections = MySelectionsLoader.getInstance().getFromNetwork();
-            Log.i("Selections", "Network fetched");
             if (mySelections != null) {
                 ArrayList<ArrayList<CourseSession>> mySelectionMap = CourseSession.getWeekdayCourseSessionsMap(mySelections);
                 ArrayList<CourseSession> noClassCourseSessions = new ArrayList<>();
@@ -151,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 synchronized (loadingLock) {
                     selectionsLoadSource = LoadSource.NETWORK;
-                    Log.i("Network", mySelectionMap.toString());
-                    Log.i("Network", noClassCourseSessions.toString());
                     for (int i = 0; i < adapters.size() - 1; i++) {
                         int finalI = i;
                         handler.post(() -> adapters.get(finalI).rebaseCourseSessionsAndNotify(mySelectionMap.get(finalI)));
@@ -178,6 +178,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (coursesAdapter == null) {
+                    coursesAdapter = new SearchResultAdapter(MainActivity.this);
+                }
                 coursesAdapter.getFilter().filter(s);
             }
         });
@@ -205,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
+
+
 
         setUpSettings(); // TODO
     }

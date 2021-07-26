@@ -68,7 +68,9 @@ public class ChooseDepartmentDialog extends DialogFragment {
         dismiss();
 
         MainActivity mainActivity = (MainActivity) requireContext();
-        mainActivity.getCoursesAdapter().updateList(depId);
+        if (mainActivity.getCoursesAdapter() != null) {
+            mainActivity.getCoursesAdapter().updateList(depId);
+        }
     }
 
     private void setupList(View root) {
