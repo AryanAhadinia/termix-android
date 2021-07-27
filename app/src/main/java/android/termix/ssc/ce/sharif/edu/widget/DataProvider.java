@@ -1,10 +1,7 @@
 package android.termix.ssc.ce.sharif.edu.widget;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.termix.ssc.ce.sharif.edu.LoadingActivity;
-import android.termix.ssc.ce.sharif.edu.MainActivity;
 import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
@@ -17,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 //com
 public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
@@ -142,9 +140,9 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     private String calculateSessionStartsAt(int hour, int minute, Session session) {
         int hourDifference = session.getStartHour() - hour;
         int minuteDifference = session.getStartMin() - minute;
-        int difference = 60*hourDifference + minuteDifference;
-        if (difference<=0) return mContext.getString(R.string.in_progress);
-        return String.format(difference/60 +"ساعت و" + difference%60 + "دقیقه مانده");
+        int difference = 60 * hourDifference + minuteDifference;
+        if (difference <= 0) return mContext.getString(R.string.in_progress);
+        return String.format(Locale.US, difference / 60 + " ساعت و " + difference % 60 + " دقیقه مانده");
     }
 
     private void addSession(int hour, int minute, CourseSession courseSession) {

@@ -3,7 +3,6 @@
     android:id="@+id/widget_single_item_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
     android:background="@drawable/widget_item_bg"
     android:gravity="center_horizontal"
     android:layoutDirection="rtl"
