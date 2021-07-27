@@ -28,120 +28,35 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
-    private Animation animFadeIn, animFadeOut;
+    private Animation animFadeIn, animFadeOut, layoutFadeOut;
     private ProgressBar progressBar;
     private Button requestSend;
+    private LinearLayout linearLayout;
+    private LottieAnimationView sentEmail;
+    private TextView message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        makeRootFullScreen();
         setContentView(R.layout.activity_forget_pass_request_email);
-
-        ConstraintLayout constraintLayout = findViewById(R.id.forget_password_layout);
         progressBar = findViewById(R.id.progress_forget);
-        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(0);
-        animationDrawable.setExitFadeDuration(2000);
-        animationDrawable.start();
         setUpButtonAnimations();
+        setupBackgroundAnimation();
 
-        LottieAnimationView sentEmail = findViewById(R.id.email_sent_anim);
-        LinearLayout linearLayout = findViewById(R.id.formLayout);
-        TextView message = findViewById(R.id.forget_message);
+        sentEmail = findViewById(R.id.email_sent_anim);
+        linearLayout = findViewById(R.id.formLayout);
+        message = findViewById(R.id.forget_message);
 
         Handler handler = new Handler();
 
-        Animation layoutFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_fast);
-        layoutFadeOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                linearLayout.setVisibility(View.INVISIBLE);
-                sentEmail.setVisibility(View.VISIBLE);
-                sentEmail.playAnimation();
-                message.setVisibility(View.VISIBLE);
-
-                sentEmail.addAnimatorListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        handler.post(() -> {
-                            Intent intent = new Intent(ForgetPasswordRequestEmailActivity.this, LoginSignupActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+        layoutFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_fast);
+        setSentEmailAnimation(handler);
 
         TextInputEditText email = findViewById(R.id.email_new);
         requestSend = findViewById(R.id.request_send_email);
-
-        requestSend.setOnClickListener(v -> {
-//            hideKeyboard(this);
-            requestSend.startAnimation(animFadeOut);
-            String emailText = email.getText().toString();
-            if (!LoginSignupActivity.isEmailValid(emailText)) {
-                handler.post(() -> {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "رایانامه معتبر نیست.", Toast.LENGTH_SHORT);
-                    toast.show();
-                });
-            }
-            App.getExecutorService().execute(new RequestForgetPasswordTask(emailText) {
-                @Override
-                public void onResult(Object o) {
-                    handler.post(() -> linearLayout.startAnimation(layoutFadeOut));
-                }
-
-                @Override
-                public void onException(NetworkException e) {
-                    handler.post(() -> {
-                        Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(),
-                                Toast.LENGTH_SHORT);
-                        toast.show();
-                    });
-                    requestSend.startAnimation(animFadeIn);
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    handler.post(() -> {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "اینترنت در دسترس نیست.", Toast.LENGTH_SHORT);
-                        toast.show();
-                    });
-                    requestSend.startAnimation(animFadeIn);
-                }
-            });
-        });
+        setupLayoutFadeOut();
+        requestSend.setOnClickListener(v -> buttonFunction(handler, email));
     }
 
     public static void hideKeyboard(AppCompatActivity activity) {
@@ -198,5 +113,105 @@ public class ForgetPasswordRequestEmailActivity extends AppCompatActivity {
     private void setUpButtonAnimations() {
         setUpFadeInAnimation();
         setUpFadeOutAnimation();
+    }
+
+    private void makeRootFullScreen() {
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    }
+
+    private void setupBackgroundAnimation() {
+        ConstraintLayout constraintLayout = findViewById(R.id.forget_password_layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(0);
+        animationDrawable.setExitFadeDuration(2000);
+        animationDrawable.start();
+    }
+
+    private void setSentEmailAnimation(Handler handler) {
+        sentEmail.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                handler.post(() -> {
+                    Intent intent = new Intent(ForgetPasswordRequestEmailActivity.this, LoginSignupActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+    }
+
+    private void checkEmail(String email, Handler handler) {
+        if (!LoginSignupActivity.isEmailValid(email)) {
+            handler.post(() -> {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "رایانامه معتبر نیست.", Toast.LENGTH_SHORT);
+                toast.show();
+            });
+        }
+    }
+
+    private void makeToast(String message) {
+        Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void setupLayoutFadeOut() {
+        layoutFadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                linearLayout.setVisibility(View.INVISIBLE);
+                sentEmail.setVisibility(View.VISIBLE);
+                sentEmail.playAnimation();
+                message.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    private void buttonFunction(Handler handler, TextView email) {
+        requestSend.startAnimation(animFadeOut);
+        String emailText = email.getText().toString();
+        checkEmail(emailText, handler);
+        App.getExecutorService().execute(new RequestForgetPasswordTask(emailText) {
+            @Override
+            public void onResult(Object o) {
+                handler.post(() -> linearLayout.startAnimation(layoutFadeOut));
+            }
+
+            @Override
+            public void onException(NetworkException e) {
+                handler.post(() -> makeToast(e.getMessage()));
+                requestSend.startAnimation(animFadeIn);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                handler.post(() -> makeToast("اینترنت در دسترس نیست."));
+                requestSend.startAnimation(animFadeIn);
+            }
+        });
     }
 }

@@ -32,20 +32,39 @@ public class LoadingActivity extends AppCompatActivity {
 
     private ConstraintLayout mainLayout;
     private TextView errorText;
+    private ObjectAnimator scaleDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // set status bar color
+        makeRootFullScreen();
+        // set content view
+        setContentView(R.layout.activity_loading);
+        // animating logo as progress bar
+        setScaleDown();
+        // get layouts
+        mainLayout = findViewById(R.id.main);
+        errorText = findViewById(R.id.errorText);
+        // set click listener
+        mainLayout.setOnClickListener(v -> goToLoadingActivity());
+        // Handler
+        Handler handler = new Handler();
+        // Async tasks
+        decideNextState(handler);
+        setAlarm();
+    }
+
+    private void makeRootFullScreen() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        // set content view
-        setContentView(R.layout.activity_loading);
-        // animating logo as progress bar
+    }
+
+    private void setScaleDown() {
         ImageView logo = findViewById(R.id.logo);
-        ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(
+        scaleDown = ObjectAnimator.ofPropertyValuesHolder(
                 logo,
                 PropertyValuesHolder.ofFloat("scaleX", 1.2f),
                 PropertyValuesHolder.ofFloat("scaleY", 1.2f));
@@ -53,21 +72,47 @@ public class LoadingActivity extends AppCompatActivity {
         scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
         scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
         scaleDown.start();
-        // get layouts
-        mainLayout = findViewById(R.id.main);
-        errorText = findViewById(R.id.errorText);
-        // set click listener
-        mainLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(LoadingActivity.this,
-                    LoadingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                    Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        });
-        // Handler
-        Handler handler = new Handler();
-        // Async tasks
+    }
+
+    private void goToLoadingActivity() {
+        Intent intent = new Intent(LoadingActivity.this,
+                LoadingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void setAlarm() {
+        // Start alarm manager to handle alarms
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 2, alarmIntent);
+    }
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(LoadingActivity.this,
+                MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void goToLoginSignupActivity() {
+        Intent intent = new Intent(LoadingActivity.this,
+                LoginSignupActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void decideNextState(Handler handler) {
         App.getExecutorService().execute(() -> {
             // Check network and token
             new TestTokenTask() {
@@ -76,28 +121,14 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onResult(Object o) {
                     Log.i("Token Check", "Token accepted. Going to main activity");
                     App.getExecutorService().execute(MySelectionsLoader.getInstance());
-                    handler.post(() -> {
-                        Intent intent = new Intent(LoadingActivity.this,
-                                MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    });
+                    handler.post(() -> goToMainActivity());
                 }
 
                 // Call when network is OK but token is not accepted
                 @Override
                 public void onException(NetworkException e) {
                     Log.i("Token Check", "Token not proved. Going to LoginSignupActivity");
-                    handler.post(() -> {
-                        Intent intent = new Intent(LoadingActivity.this,
-                                LoginSignupActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    });
+                    handler.post(() -> goToLoginSignupActivity());
                 }
 
                 // Call when server is unreachable
@@ -106,12 +137,7 @@ public class LoadingActivity extends AppCompatActivity {
                     Log.i("Token Check", "Network not found. Fallback to local");
                     if (PreferenceManager.getInstance(getApplicationContext()).containsAllCourses()) {
                         MySelectionsLoader.getInstance().run();
-                        Intent intent = new Intent(LoadingActivity.this,
-                                MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        goToMainActivity();
                     } else {
                         handler.post(() -> {
                             scaleDown.cancel();
@@ -122,15 +148,5 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }.run();
         });
-        // Start alarm manager to handle alarms
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 * 2, alarmIntent);
     }
 }

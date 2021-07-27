@@ -3,9 +3,9 @@ package android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.fragment
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.activities.changePasswordActivity.ForgetPasswordRequestEmailActivity;
 import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
-import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.model.Account;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.SignInTask;
@@ -97,7 +97,6 @@ public class LoginFragment extends Fragment {
     }
 
 
-
     private void makeToastAndStartFadeIn(String message) {
         Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT);
         toast.show();
@@ -126,7 +125,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void setUpForgetPasswordTV(){
+    private void setUpForgetPasswordTV() {
         forgetPasswordTV.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), ForgetPasswordRequestEmailActivity.class);
             startActivity(intent);

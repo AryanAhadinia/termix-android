@@ -2,8 +2,8 @@ package android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.fragment
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
 import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
 import android.termix.ssc.ce.sharif.edu.model.Account;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.SignUpTask;

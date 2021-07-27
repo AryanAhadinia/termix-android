@@ -19,10 +19,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class NumberPickerDialog extends DialogFragment {
     private final int id, group;
+    private NumberPicker minutePicker;
+    private View root;
 
     public NumberPickerDialog(int id, int group) {
         this.id = id;
         this.group = group;
+    }
+
+    private void setNumberPicker() {
+        minutePicker = root.findViewById(R.id.numberpicker_setting_picker);
+        minutePicker.setMinValue(0);
+        minutePicker.setMaxValue(12);
+        String[] minuteValues = new String[13];
+        for (int i = 0; i < 13; i++) {
+            minuteValues[i] = Integer.toString(i * 5);
+        }
+        minutePicker.setDisplayedValues(minuteValues);
     }
 
     @NonNull
@@ -31,15 +44,9 @@ public class NumberPickerDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         LayoutInflater inflater = LayoutInflater.from(requireContext());
-        View root = inflater.inflate(R.layout.numberpicker_setting_time, null);
-        NumberPicker minutePicker = root.findViewById(R.id.numberpicker_setting_picker);
-        minutePicker.setMinValue(0);
-        minutePicker.setMaxValue(12);
-        String[] minuteValues = new String[13];
-        for (int i = 0; i < 13; i++) {
-            minuteValues[i] = Integer.toString(i * 5);
-        }
-        minutePicker.setDisplayedValues(minuteValues);
+        root = inflater.inflate(R.layout.numberpicker_setting_time, null);
+
+        setNumberPicker();
 
         SwitchCompat alarmSituation = root.findViewById(R.id.notification_switch);
 
@@ -70,7 +77,7 @@ public class NumberPickerDialog extends DialogFragment {
         if (id == 0) {
             return PreferenceManager.getInstance(requireContext().getApplicationContext()).readAlarmOffset();
         } else {
-            return PreferenceManager.getInstance(requireContext().getApplicationContext()).readAlarmOffset(id , group);
+            return PreferenceManager.getInstance(requireContext().getApplicationContext()).readAlarmOffset(id, group);
         }
     }
 
