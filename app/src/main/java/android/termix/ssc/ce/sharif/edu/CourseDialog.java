@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.MessageFormat;
 
 public class CourseDialog extends DialogFragment {
-    private Course course;
+    private final Course course;
 
     public CourseDialog(Course course) {
         this.course = course;
@@ -27,7 +27,7 @@ public class CourseDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         LayoutInflater inflater = LayoutInflater.from(requireContext());
         View root = inflater.inflate(R.layout.course_page, null);
 
@@ -51,33 +51,34 @@ public class CourseDialog extends DialogFragment {
         department.setText(Course.getDepartments().get(course.getDepId()));
 
         if (course.getInstructor().isEmpty()) {
-            instructor.setVisibility(View.GONE);
+            instructor.setText("بدون استاد");
         } else {
-            instructor.setText(course.getInstructor());
+            instructor.setText(MessageFormat.format("استاد: {0}", course.getInstructor()));
         }
 
         if (course.getSessions().isEmpty()) {
-            time.setVisibility(View.GONE);
+            time.setText("بدون کلاس");
         } else {
-            time.setText(course.getSessionsString());
+            time.setText(MessageFormat.format("زمان کلاس: {0}", course.getSessionsString()));
         }
 
         if (course.getExamTime().isEmpty()) {
-            exam.setVisibility(View.GONE);
+            exam.setText("بدون آزمون");
         } else {
-            exam.setText(course.getExamTime());
+            exam.setText(MessageFormat.format("زمان آزمون: {0}", course.getExamTime()));
         }
 
         if (course.getOnRegisterMessage().isEmpty()) {
-            register.setVisibility(View.GONE);
+            register.setText("بدون پیام نام‌نویسی");
         } else {
-            register.setText(course.getOnRegisterMessage());
+            register.setText(MessageFormat.format("پیام نام‌نویسی: {0}",
+                    course.getOnRegisterMessage()));
         }
 
         if (course.getInfoMessage().isEmpty()) {
-            info.setVisibility(View.GONE);
+            info.setText("بدون پیام افزونه");
         } else {
-            info.setText(course.getInfoMessage());
+            info.setText(MessageFormat.format("پیام افزونه: {0}", course.getInfoMessage()));
         }
 
         builder.setView(root);
