@@ -211,12 +211,8 @@ public class MainActivity extends AppCompatActivity {
                 searchBar.setText("");
             }
         });
-
         textInputLayout.setStartIconOnClickListener(e -> mPermissionResult.launch(PERMISSIONS));
-
-
-
-        setUpSettings(); // TODO
+        setUpSettings();
     }
 
     @Override

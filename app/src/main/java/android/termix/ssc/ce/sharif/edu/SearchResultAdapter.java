@@ -206,7 +206,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         public boolean onLongClick(View v) {
             DialogFragment dialog = new CourseDialog(course);
             dialog.show(mainActivity.getSupportFragmentManager(), "CourseDialogFragment");
-            return true; // TODO
+            return true;
         }
     }
 
