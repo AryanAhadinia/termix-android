@@ -144,7 +144,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         int minuteDifference = session.getStartMin() - minute;
         int difference = 60*hourDifference + minuteDifference;
         if (difference<=0) return mContext.getString(R.string.in_progress);
-        return String.format("%01d:%02d", difference/60, difference%60);
+        return String.format(difference/60 +"ساعت و" + difference%60 + "دقیقه مانده");
     }
 
     private void addSession(int hour, int minute, CourseSession courseSession) {
