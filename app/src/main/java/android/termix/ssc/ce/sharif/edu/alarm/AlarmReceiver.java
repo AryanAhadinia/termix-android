@@ -60,14 +60,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         int minute = calendar.get(Calendar.MINUTE);
         int minutesDifference = (courseSession.getSession().getStartHour() - hourOfDay) * 60
                 + courseSession.getSession().getStartMin() - minute;
-        return minutesDifference < alarmMargin && minutesDifference > 0 && System.currentTimeMillis() - lastAlarm < alarmMargin * 60 * 1000;
+        Log.i(TAG, "isAlarmTime: minutes difference:" + minutesDifference);
+        Log.i(TAG, "isAlarmTime: last alarm: " + lastAlarm);
+        return minutesDifference < alarmMargin && minutesDifference > 0 && System.currentTimeMillis() - lastAlarm > alarmMargin * 60 * 1000;
     }
 
     private Intent setUpAlarmIntent(Context context, CourseSession courseSession) {
         Intent alarmIntent = new Intent(context, AlarmActivity.class);
         alarmIntent.putExtra("course_name", courseSession.getCourse().getTitle());
         alarmIntent.putExtra("course_start_time",
-                Integer.toString(courseSession.getSession().getStartHour()) + courseSession.getSession().getStartMin());
+                String.format("%01d:%02d", courseSession.getSession().getStartHour(),
+                        courseSession.getSession().getStartMin()));
         alarmIntent.putExtra("course_instructor", courseSession.getCourse().getInstructor());
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return alarmIntent;
