@@ -12,28 +12,48 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    private static long lastAlarm = System.currentTimeMillis();
+    private static long lastAlarm = 0;
+    static String TAG = " homo alarm ";
     int alarmMargin = 0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e("KASHI: ", "BAH BAH");
-
+        Log.i(TAG, "onReceive: ");
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
-
-        ArrayList<ArrayList<CourseSession>> mySelections =
-                CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+        MySelectionsLoader.getInstance().run();
+        ArrayList<ArrayList<CourseSession>> mySelections = getMySelections();
+        Log.i(TAG, "onReceive: " + mySelections);
         for (CourseSession courseSession : mySelections.get(dayOfWeek)) {
             alarmMargin = PreferenceManager.getInstance(context).
                     readAlarmOffset(courseSession.getCourse().getCourseId(), courseSession.getCourse().getGroupId());
+            Log.i(TAG, "onReceive: margin " + alarmMargin);
             if (isAlarmTime(calendar, courseSession, alarmMargin)) {
+                Log.i(TAG, "RANG: ");
                 lastAlarm = System.currentTimeMillis();
                 Intent alarmIntent = setUpAlarmIntent(context, courseSession);
                 context.startActivity(alarmIntent);
             }
         }
+    }
+
+    private ArrayList<ArrayList<CourseSession>> getMySelections() {
+        ArrayList<ArrayList<CourseSession>> mySelections;
+        mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromLocal());
+        if (!isMySelectionsEmpty(mySelections)) return mySelections;
+        mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+        if (!isMySelectionsEmpty(mySelections)) return mySelections;
+        MySelectionsLoader.getInstance().run();
+        mySelections = CourseSession.getWeekdayCourseSessionsMap(MySelectionsLoader.getInstance().getFromNetwork());
+        return mySelections;
+    }
+
+    private boolean isMySelectionsEmpty(ArrayList<ArrayList<CourseSession>> selections){
+        for (ArrayList<CourseSession> selection : selections) {
+            if (!selection.isEmpty()) return false;
+        }
+        return true;
     }
 
     private boolean isAlarmTime(Calendar calendar, CourseSession courseSession, int alarmMargin) {

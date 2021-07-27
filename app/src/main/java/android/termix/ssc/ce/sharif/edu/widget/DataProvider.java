@@ -24,7 +24,6 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     List<String> nextSessionsStartAt = new ArrayList<>();
     List<String> nextSessionCourseNames = new ArrayList<>();
     List<String> nextSessionsInstructor = new ArrayList<>();
-    List<String> nextSessionsCourseCode = new ArrayList<>();
     ArrayList<ArrayList<CourseSession>> cachedSelections = new ArrayList<>();
     Context mContext;
 
@@ -99,10 +98,11 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         if (isMySelectionsEmpty(mySelections)) return;
         nextSessionsStartAt.clear();
         nextSessionCourseNames.clear();
+        nextSessionsInstructor.clear();
         mySelections.get(dayOfWeek).sort((courseSession, t1) -> courseSession.getSession().compareTo(t1.getSession()));
         for (CourseSession courseSession : mySelections.get(dayOfWeek)) {
             if (courseSession.getSession().getEndHour() > hourOfDay ||
-                    (courseSession.getSession().getStartHour() == hourOfDay && courseSession.getSession().getStartMin() < minute)) {
+                    (courseSession.getSession().getEndHour() == hourOfDay && courseSession.getSession().getEndMin() > minute)) {
                 addSession(hourOfDay, minute, courseSession);
             }
         }
@@ -132,7 +132,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         return mySelections;
     }
 
-    private boolean isMySelectionsEmpty(ArrayList<ArrayList<CourseSession>> mySelections) {
+    public static boolean isMySelectionsEmpty(ArrayList<ArrayList<CourseSession>> mySelections) {
         for (ArrayList<CourseSession> mySelection : mySelections) {
             if (!mySelection.isEmpty()) return false;
         }
@@ -142,12 +142,9 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
     private String calculateSessionStartsAt(int hour, int minute, Session session) {
         int hourDifference = session.getStartHour() - hour;
         int minuteDifference = session.getStartMin() - minute;
-        if (minuteDifference < 0) {
-            minuteDifference += 60;
-            hourDifference -= 1;
-        }
-        if (hourDifference<=0 || minuteDifference<=0) return mContext.getString(R.string.in_progress);
-        return String.format("%01d:%02d", hourDifference, minuteDifference);
+        int difference = 60*hourDifference + minuteDifference;
+        if (difference<=0) return mContext.getString(R.string.in_progress);
+        return String.format("%01d:%02d", difference/60, difference%60);
     }
 
     private void addSession(int hour, int minute, CourseSession courseSession) {
