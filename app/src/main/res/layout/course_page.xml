@@ -16,6 +16,7 @@
         android:textDirection="rtl"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -43,7 +44,7 @@
         android:textDirection="rtl"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/course_name" />
 
     <TextView
         android:id="@+id/course_group"
@@ -55,9 +56,10 @@
         android:textColor="@color/white"
         android:textDirection="rtl"
         android:textSize="16sp"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/course_id" />
+        app:layout_constraintEnd_toStartOf="@+id/course_capacity"
+        app:layout_constraintHorizontal_bias="0.314"
+        app:layout_constraintStart_toEndOf="@+id/course_id"
+        app:layout_constraintTop_toBottomOf="@+id/course_name" />
 
     <TextView
         android:id="@+id/course_unit"
@@ -71,7 +73,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/course_capacity"
         app:layout_constraintStart_toEndOf="@+id/course_group"
-        app:layout_constraintTop_toBottomOf="@+id/course_id" />
+        app:layout_constraintTop_toBottomOf="@+id/course_name" />
 
     <TextView
         android:id="@+id/course_instructor"
@@ -112,7 +114,7 @@
         android:textDirection="rtl"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/course_id" />
+        app:layout_constraintTop_toBottomOf="@+id/course_name" />
 
     <TextView
         android:id="@+id/course_exam"
