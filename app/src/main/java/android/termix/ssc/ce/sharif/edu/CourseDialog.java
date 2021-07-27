@@ -84,4 +84,10 @@ public class CourseDialog extends DialogFragment {
         builder.setView(root);
         return builder.create();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setBackgroundDrawableResource(R.drawable.background_course_frame);
+    }
 }
