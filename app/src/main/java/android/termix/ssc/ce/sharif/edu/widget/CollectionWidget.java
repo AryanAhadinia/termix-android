@@ -1,12 +1,10 @@
 package android.termix.ssc.ce.sharif.edu.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.termix.ssc.ce.sharif.edu.LoadingActivity;
 import android.termix.ssc.ce.sharif.edu.R;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -14,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-//com
 public class CollectionWidget extends AppWidgetProvider {
     public static final String ACTION_AUTO_UPDATE = "android.appwidget.action.APPWIDGET_UPDATE";
     final static String TAG = "homo:CW_";
