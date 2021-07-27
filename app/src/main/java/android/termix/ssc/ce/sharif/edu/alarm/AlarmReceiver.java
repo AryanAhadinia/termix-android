@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    private static long lastAlarm = 0;
     static String TAG = " homo alarm ";
+    private static long lastAlarm = 0;
     int alarmMargin = 0;
 
     @Override
@@ -29,12 +29,16 @@ public class AlarmReceiver extends BroadcastReceiver {
                     readAlarmOffset(courseSession.getCourse().getCourseId(), courseSession.getCourse().getGroupId());
             Log.i(TAG, "onReceive: margin " + alarmMargin);
             if (isAlarmTime(calendar, courseSession, alarmMargin)) {
-                Log.i(TAG, "RANG: ");
-                lastAlarm = System.currentTimeMillis();
-                Intent alarmIntent = setUpAlarmIntent(context, courseSession);
-                context.startActivity(alarmIntent);
+                ring(context, courseSession);
             }
         }
+    }
+
+    private void ring(Context context, CourseSession courseSession) {
+        Log.i(TAG, "RANG: ");
+        lastAlarm = System.currentTimeMillis();
+        Intent alarmIntent = setUpAlarmIntent(context, courseSession);
+        context.startActivity(alarmIntent);
     }
 
     private ArrayList<ArrayList<CourseSession>> getMySelections() {
@@ -48,7 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         return mySelections;
     }
 
-    private boolean isMySelectionsEmpty(ArrayList<ArrayList<CourseSession>> selections){
+    private boolean isMySelectionsEmpty(ArrayList<ArrayList<CourseSession>> selections) {
         for (ArrayList<CourseSession> selection : selections) {
             if (!selection.isEmpty()) return false;
         }
@@ -69,7 +73,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent alarmIntent = new Intent(context, AlarmActivity.class);
         alarmIntent.putExtra("course_name", courseSession.getCourse().getTitle());
         alarmIntent.putExtra("course_start_time",
-                String.format("%01d:%02d", courseSession.getSession().getStartHour(),
+                String.format("%02d:%02d", courseSession.getSession().getStartHour(),
                         courseSession.getSession().getStartMin()));
         alarmIntent.putExtra("course_instructor", courseSession.getCourse().getInstructor());
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

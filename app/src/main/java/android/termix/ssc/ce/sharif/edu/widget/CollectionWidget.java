@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-//com
 public class CollectionWidget extends AppWidgetProvider {
     public static final String ACTION_AUTO_UPDATE = "android.appwidget.action.APPWIDGET_UPDATE";
     final static String TAG = "homo:CW_";

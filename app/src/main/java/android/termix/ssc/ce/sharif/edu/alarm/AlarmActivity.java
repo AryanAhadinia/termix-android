@@ -21,7 +21,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 public class AlarmActivity extends AppCompatActivity {
     static String TAG = "homo alarm : AlarmActivity:";
     MediaPlayer mediaPlayer;
-    Alarm alarm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,6 @@ public class AlarmActivity extends AppCompatActivity {
         setUpBackGround();
         setUpMediaPlayer();
         playMedia();
-        int id = getIntent().getIntExtra("alarm_id", -1); // todo
     }
 
     private void setUpBackGround() {
@@ -57,7 +55,6 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     private void setWindowFlags() {
-        //todo clean the deprecated ones
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -125,12 +122,7 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     void finishActivity() {
-        scheduleNextAlarm(alarm);
         finish();
         overridePendingTransition(0, 0);
-    }
-
-    private void scheduleNextAlarm(Alarm alarm) {
-        //todo: set next alarm
     }
 }
