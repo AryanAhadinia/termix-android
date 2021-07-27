@@ -1,10 +1,14 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.changePasswordActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.App;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.MainActivity;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.network.CookieManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;

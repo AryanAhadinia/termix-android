@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:clickable="false"
-    tools:context=".LoadingActivity">
+    tools:context=".activities.loadingActivity.LoadingActivity">
 
     <ImageView
         android:id="@+id/logo"

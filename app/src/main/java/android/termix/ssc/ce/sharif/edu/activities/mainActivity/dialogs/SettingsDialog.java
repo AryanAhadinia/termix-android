@@ -1,18 +1,18 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.mainActivity.dialogs;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.changePasswordActivity.ServeForgetPasswordActivity;
 import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
 import android.termix.ssc.ce.sharif.edu.myCourseManager.MyCourseManager;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.SignOutTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 

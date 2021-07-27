@@ -1,9 +1,13 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.verificationActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.termix.ssc.ce.sharif.edu.App;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.MainActivity;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.VerifyAccountTask;

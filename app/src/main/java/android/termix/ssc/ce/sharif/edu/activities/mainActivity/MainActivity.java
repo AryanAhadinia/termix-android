@@ -1,4 +1,4 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.mainActivity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -6,6 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
+import android.termix.ssc.ce.sharif.edu.App;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.adapters.DayAdapter;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.adapters.DaySwipeHelper;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.adapters.SearchResultAdapter;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.dialogs.SettingsDialog;
 import android.termix.ssc.ce.sharif.edu.alarm.AlarmCenter;
 import android.termix.ssc.ce.sharif.edu.database.DatabaseManager;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;

@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Termix"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SignupVerifyWaitingActivity">
+        <activity android:name=".activities.verificationActivity.SignupVerifyWaitingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -31,7 +31,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".ServeForgetPasswordActivity">
+        <activity android:name=".activities.changePasswordActivity.ServeForgetPasswordActivity">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -44,7 +44,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".ForgetPasswordRequestEmailActivity" />
+        <activity android:name=".activities.changePasswordActivity.ForgetPasswordRequestEmailActivity" />
 
         <receiver android:name=".widget.CollectionWidget">
             <intent-filter>
@@ -64,7 +64,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
-            android:name=".LoadingActivity"
+            android:name=".activities.loadingActivity.LoadingActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,8 +73,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginSignupActivity" />
+        <activity android:name=".activities.mainActivity.MainActivity" />
+        <activity android:name=".activities.loginSignUpActivity.LoginSignupActivity" />
         <activity android:name=".alarm.AlarmActivity"/>
 
         <receiver

@@ -1,10 +1,13 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.changePasswordActivity;
 
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.App;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.RequestForgetPasswordTask;
 import android.view.View;

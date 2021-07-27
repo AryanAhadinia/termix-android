@@ -1,6 +1,9 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.mainActivity.adapters;
 
 import android.content.Context;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.dialogs.CourseDialog;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.MainActivity;
 import android.termix.ssc.ce.sharif.edu.loader.AllCoursesLoader;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.preferenceManager.PreferenceManager;

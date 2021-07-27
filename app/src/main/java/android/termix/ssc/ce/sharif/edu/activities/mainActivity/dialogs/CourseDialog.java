@@ -1,7 +1,8 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.mainActivity.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.view.LayoutInflater;
 import android.view.View;

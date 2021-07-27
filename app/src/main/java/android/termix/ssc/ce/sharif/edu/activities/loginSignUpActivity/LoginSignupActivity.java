@@ -1,8 +1,12 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.fragments.LoginFragment;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.fragments.SignUpFragment;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.MainActivity;
 import android.termix.ssc.ce.sharif.edu.loader.MySelectionsLoader;
 import android.view.View;
 import android.view.WindowManager;

@@ -1,8 +1,11 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.termix.ssc.ce.sharif.edu.activities.changePasswordActivity.ForgetPasswordRequestEmailActivity;
+import android.termix.ssc.ce.sharif.edu.activities.loginSignUpActivity.LoginSignupActivity;
+import android.termix.ssc.ce.sharif.edu.R;
 import android.termix.ssc.ce.sharif.edu.model.Account;
 import android.termix.ssc.ce.sharif.edu.network.NetworkException;
 import android.termix.ssc.ce.sharif.edu.network.tasks.SignInTask;
@@ -19,8 +22,6 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
-
-import java.util.regex.Pattern;
 
 public class LoginFragment extends Fragment {
     private TextInputEditText emailText;

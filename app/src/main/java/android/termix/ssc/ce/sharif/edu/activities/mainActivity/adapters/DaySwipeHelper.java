@@ -1,6 +1,8 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.mainActivity.adapters;
 
 import android.graphics.Canvas;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.adapters.DayAdapter;
 import android.view.View;
 
 import androidx.annotation.NonNull;

@@ -1,4 +1,4 @@
-package android.termix.ssc.ce.sharif.edu;
+package android.termix.ssc.ce.sharif.edu.activities.mainActivity.adapters;
 
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.dialogs.NumberPickerDialog;
+import android.termix.ssc.ce.sharif.edu.R;
+import android.termix.ssc.ce.sharif.edu.activities.mainActivity.MainActivity;
 import android.termix.ssc.ce.sharif.edu.model.Course;
 import android.termix.ssc.ce.sharif.edu.model.CourseSession;
 import android.util.Pair;

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_animation"
-    tools:context=".SignupVerifyWaitingActivity">
+    tools:context=".activities.verificationActivity.SignupVerifyWaitingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
